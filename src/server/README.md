@@ -39,3 +39,13 @@ or
 ```
 git commit -n -m 'demo commit message'
 ```
+
+## Security
+
+### Embrace of Linter Security Rules
+
+We employ security ESLint plugin such as [eslint-plugin-security](https://github.com/nodesecurity/eslint-plugin-security) to make code security checks based on a number of known vulnerabilities, such as unsafe RegEx, unsafe use of eval(), and non-literal filenames being used when accessing the file system within an application.
+
+You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin-security#rules).
+
+- [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
