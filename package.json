@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "server:format-and-lint": "cd src/server && npm run format && npm run lint",
+    "server:format-and-lint": "cd server && npm run format && npm run lint",
     "prepare": "husky install"
   },
   "repository": {

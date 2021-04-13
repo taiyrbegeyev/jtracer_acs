@@ -10,6 +10,12 @@ We follow [Airbnb's ESLint config](https://www.npmjs.com/package/eslint-config-a
 
 - [How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier)
 
+## Documentation
+
+We use [TSDoc](https://tsdoc.org) to standardize the doc comments used in our codebase. It is a specification of how to comment our TypeScript code to help create API documentation and metadata.
+
+We use [eslint-plugin-tsdoc](https://www.npmjs.com/package/eslint-plugin-tsdoc) plugin to provide a rule for validating that TypeScript doc comments conform to the TSDoc specification.
+
 ## Git Hooks
 
 We use git hooks to ensure tests are run, code is formatted, and etc., before even pull requests are created. The article followed is [here](https://khalilstemmler.com/blogs/tooling/enforcing-husky-precommit-hooks/).
