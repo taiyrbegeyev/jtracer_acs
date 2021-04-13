@@ -3,6 +3,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
+    "eslint-plugin-tsdoc",
     "prettier",
     "security"
   ],
@@ -18,6 +19,8 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "prettier/prettier": 2
+    "tsdoc/syntax": "warn",
+    "prettier/prettier": 2,
+    "import/prefer-default-export": "off"
   }
 }
