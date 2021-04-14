@@ -1,64 +1,52 @@
-## MongoDB
+## Docker
 
-There are two different MongoDB server editions: Community and Enterprise. Since MongoDB Community edition is free to use and open source, we will be using it along the journey. Since we try to minimize external cloud services usage, we will set up our deployment locally as part of the Digital Ocean Infrastructure.
+Docker is one of the prerequisites to make the application up and running. Make sure to install on your machine. We used the following guide to install Docker on our Digital Ocean droplet:
 
-We followed the official Digital Ocean's [tutorial](https://www.mongodb.com/digital-ocean) to make MongoDB up and running on our droplet.
+- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
-### Installing MongoDB on Droplet Server for Ubuntu - Community Edition
-
-<ol>
-  <li>Import MongoDB</li>
-
-    wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-
-  <li>Create a list file for MongoDB</li>
-
-Since our Digital Ocean droplet runs on Ubuntu 20.04 LTS:
-
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-
-  <li>Reload the local package database</li>
-
-    sudo apt-get update
-
-  <li>Install MongoDB</li>
-
-    sudo apt-get install -y mongodb-org
-
-</ol>
-
-### Running MongoDB on Ubuntu - Community Edition
-
-<ol>
-  <li>Start MongoDB</li>
-
-    sudo systemctl start mongod
-
-  <li>Verify if MongoDB is successfully installed.</li>
-
-    sudo systemctl status mongod
-
-  <li>Stop MongoDB</li>
-
-    sudo systemctl stop mongod
-
-  <li>Restart MongoDB</li>
-
-    sudo systemctl restart mongod
-
-  <li>Starting MongoDB</li>
-
-    mongo
-
-</ol>
-
-Read more about how to set Up MongoDB Authentication and Firewall Configuration:
-
-- https://www.mongodb.com/digital-ocean
+Create a file `.env` with the following variables:
 
 ```
-mongo -u USERNAME -p --authenticationDatabase admin
+MONGO_INITDB_ROOT_USERNAME=
+MONGO_INITDB_ROOT_PASSWORD=
+APP_USER=
+APP_PWD=
+DB_NAME=
+MONGO_HOSTNAME=
+MONGO_PORT=
 ```
+
+In order to run all components of the system run:
+
+```
+$ docker-compose up -d
+
+```
+
+It will run the ReactJS, Express.js, and MongoDB containers in the background.
+
+Create a username and password for the `jtracer_mongodb` MongoDB container:
+
+```
+$ docker exec -it jtracer_mongodb mongo -u root -p --authenticationDatabase admin
+
+$ use admin
+
+$ db.createUser(
+  {
+    user: "ENTER_YOUR_USERNAME",
+    pwd: "ENTER_YOUR_PWD",
+    roles: [
+      { role: "readWrite", db: "jtracer" }
+    ]
+  }
+)
+
+$ exit
+
+```
+
+Assign `ENTER_YOUR_USERNAME` and `ENTER_YOUR_PWD` to the `APP_USER` and `APP_PWD` env variables accordingly.
 
 ## Linter and Formatter
 
@@ -84,7 +72,7 @@ We use git hooks to ensure tests are run, code is formatted, and etc., before ev
 
 We manage hooks using a package called [husky](https://www.npmjs.com/package/husky). Essentially, before commiting code, make sure that you run the following command in the `src/server` directory:
 
-````
+```
 
 npm run format && npm run lint
 
@@ -125,5 +113,11 @@ We employ security ESLint plugin such as [eslint-plugin-security](https://github
 You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin-security#rules).
 
 - [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
+
 ```
-````
+
+```
+
+```
+
+```
