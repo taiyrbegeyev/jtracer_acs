@@ -1,13 +1,5 @@
-import express from 'express';
-import { log } from './utils/logger';
+import App from './app';
 
-const app = express();
-const PORT = 8000;
+const app = new App([]);
 
-app.use(express.json());
-
-app.get('/', (req, res) => res.send('Express + TypeScript Server'));
-
-app.listen(PORT, () => {
-  log.info(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-});
+app.listen();
