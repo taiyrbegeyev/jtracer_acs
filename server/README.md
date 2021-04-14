@@ -48,6 +48,9 @@ $ exit
 
 Assign `ENTER_YOUR_USERNAME` and `ENTER_YOUR_PWD` to the `APP_USER` and `APP_PWD` env variables accordingly.
 
+- https://offhourscoding.com/secure-mongodb-with-docker/
+- https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019
+
 ## Linter and Formatter
 
 We use [ESLint](https://eslint.org) to enforce a set of style, formatting, and coding standards for our codebase.
