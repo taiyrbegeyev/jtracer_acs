@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import Controller from 'interfaces/controller';
 import mongoose from 'mongoose';
-import { log } from './utils/logger';
+import { log } from 'utils/logger';
 
 dotenv.config();
 
