@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # nodejs:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: nodejs
+  #   container_name: nodejs
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   environment:
+  #     - MONGO_USERNAME=$DATABASE_USERNAME
+  #     - MONGO_PASSWORD=$DATABASE_PASSWORD
+  #     - MONGO_HOST=db
+  #     - MONGO_PORT=$DATABASE_PORT
+  #     - MONGO_DB=$DATABASE
+  #   ports:
+  #     - '3000:3000'
+  #   networks:
+  #     - jtracer-network
+  #   links:
+  #     - mongo
+  mongo:
+    image: mongo
+    container_name: jtracer_mongodb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+      - DB_NAME=$DB_NAME
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+    volumes:
+      - ~/data/db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - jtracer-network
+
+networks:
+  jtracer-network:
+    driver: bridge
