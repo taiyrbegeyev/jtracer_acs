@@ -1,16 +1,23 @@
-import { cleanEnv, port, str, host } from 'envalid';
+import { cleanEnv, makeValidator, port, host } from 'envalid';
 
-function validateEnv(): void {
+const nonEmptryStr = makeValidator((x) => {
+  if (x.length > 0) {
+    return x;
+  }
+  throw new Error('Expected non-empty String');
+});
+
+const validateEnv = (): void => {
   cleanEnv(process.env, {
     PORT: port(),
-    MONGO_INITDB_ROOT_USERNAME: str(),
-    MONGO_INITDB_ROOT_PASSWORD: str(),
-    APP_USER: str(),
-    APP_PWD: str(),
-    DB_NAME: str(),
+    MONGO_INITDB_ROOT_USERNAME: nonEmptryStr(),
+    MONGO_INITDB_ROOT_PASSWORD: nonEmptryStr(),
+    APP_USER: nonEmptryStr(),
+    APP_PWD: nonEmptryStr(),
+    DB_NAME: nonEmptryStr(),
     MONGO_HOSTNAME: host(),
     MONGO_PORT: port()
   });
-}
+};
 
 export default validateEnv;
