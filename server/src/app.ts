@@ -46,8 +46,15 @@ class App {
   }
 
   private static connectToTheDatabase() {
-    const { APP_USER, APP_PWD, DB_NAME } = process.env;
-    const MONGO_URI = `mongodb://${APP_USER}:${APP_PWD}@127.0.0.1:27017/${DB_NAME}?authSource=admin`;
+    const {
+      APP_USER,
+      APP_PWD,
+      DB_NAME,
+      MONGO_HOSTNAME,
+      MONGO_PORT
+    } = process.env;
+
+    const MONGO_URI = `mongodb://${APP_USER}:${APP_PWD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${DB_NAME}?authSource=admin`;
     try {
       mongoose.connect(MONGO_URI, {
         useNewUrlParser: true,

@@ -7,6 +7,7 @@ Docker is one of the prerequisites to make the application up and running. Make 
 Create a file `.env` with the following variables:
 
 ```
+PORT=
 MONGO_INITDB_ROOT_USERNAME=
 MONGO_INITDB_ROOT_PASSWORD=
 APP_USER=
