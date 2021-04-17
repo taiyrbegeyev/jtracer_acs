@@ -6,7 +6,7 @@ export interface ICheckIn {
 }
 
 interface ICheckInData {
-  eventName: String;
+  eventId: String;
   email: String;
   isGuest: Boolean;
   phoneNumber: String;
@@ -16,7 +16,10 @@ interface ICheckInData {
 }
 
 const checkInDataSchema: mongoose.Schema = new mongoose.Schema({
-  eventName: String,
+  eventId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  },
   email: String,
   isGuest: Boolean,
   phoneNumber: String,
