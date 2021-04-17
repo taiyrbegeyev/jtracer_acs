@@ -1,3 +1,57 @@
+## Docker
+
+Docker is one of the prerequisites to make the application up and running. Make sure to install on your machine. We used the following guide to install Docker on our Digital Ocean droplet:
+
+- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+
+Create a file `.env` with the following variables:
+
+```
+PORT=
+MONGO_INITDB_ROOT_USERNAME=
+MONGO_INITDB_ROOT_PASSWORD=
+APP_USER=
+APP_PWD=
+DB_NAME=
+MONGO_HOSTNAME=
+MONGO_PORT=
+```
+
+In order to run all components of the system run:
+
+```
+$ docker-compose up -d
+
+```
+
+It will run the ReactJS, Express.js, and MongoDB containers in the background.
+
+Create a username and password for the `jtracer_mongodb` MongoDB container:
+
+```
+$ docker exec -it jtracer_mongodb mongo -u root -p --authenticationDatabase admin
+
+$ use admin
+
+$ db.createUser(
+  {
+    user: "ENTER_YOUR_USERNAME",
+    pwd: "ENTER_YOUR_PWD",
+    roles: [
+      { role: "readWrite", db: "jtracer" }
+    ]
+  }
+)
+
+$ exit
+
+```
+
+Assign `ENTER_YOUR_USERNAME` and `ENTER_YOUR_PWD` to the `APP_USER` and `APP_PWD` env variables accordingly.
+
+- https://offhourscoding.com/secure-mongodb-with-docker/
+- https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019
+
 ## Linter and Formatter
 
 We use [ESLint](https://eslint.org) to enforce a set of style, formatting, and coding standards for our codebase.
@@ -23,13 +77,17 @@ We use git hooks to ensure tests are run, code is formatted, and etc., before ev
 We manage hooks using a package called [husky](https://www.npmjs.com/package/husky). Essentially, before commiting code, make sure that you run the following command in the `src/server` directory:
 
 ```
+
 npm run format && npm run lint
+
 ```
 
 or, otherwise, run:
 
 ```
+
 npm run server:format-and-lint
+
 ```
 
 in the root.
@@ -37,13 +95,17 @@ in the root.
 ### How to skip execution
 
 ```
+
 git commit --no-verify -m 'demo commit message'
+
 ```
 
 or
 
 ```
+
 git commit -n -m 'demo commit message'
+
 ```
 
 ## Security
@@ -55,3 +117,11 @@ We employ security ESLint plugin such as [eslint-plugin-security](https://github
 You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin-security#rules).
 
 - [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
+
+```
+
+```
+
+```
+
+```
