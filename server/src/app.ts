@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import Controller from 'interfaces/controller';
 import mongoose from 'mongoose';
+import Routes from 'routes';
+import { errorHandler } from 'middlewares/error_handler';
 import { log } from 'utils/logger';
 
 dotenv.config();
@@ -9,13 +10,13 @@ dotenv.config();
 class App {
   public app: express.Application;
 
-  constructor(controllers: Controller[]) {
+  constructor() {
     this.app = express();
 
     App.connectToTheDatabase();
     this.initializeMiddlewares();
-    this.initializeControllers(controllers);
-    // this.initializeErrorHandling();
+    this.initializeRoutes();
+    this.initializeErrorHandling();
   }
 
   public listen(): void {
@@ -35,14 +36,12 @@ class App {
     // this.app.use(cookieParser());
   }
 
-  // private initializeErrorHandling() {
-  //   // this.app.use(errorMiddleware);
-  // }
+  private initializeErrorHandling() {
+    this.app.use(errorHandler);
+  }
 
-  private initializeControllers(controllers: Controller[]) {
-    controllers.forEach((controller) => {
-      this.app.use('/', controller.router);
-    });
+  private initializeRoutes() {
+    Routes.init(this);
   }
 
   private static connectToTheDatabase() {
