@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export interface ILocationInterface {
+export interface ILocation {
   locationName: String;
   capacity: Number;
   creationDate: Date;
@@ -15,6 +15,7 @@ const locationSchema: mongoose.Schema = new mongoose.Schema({
   creationDate: { type: Date, default: Date.now }
 });
 
-export const locationModel = mongoose.model<
-  ILocationInterface & mongoose.Document
->('Location', locationSchema);
+export const locationModel = mongoose.model<ILocation & mongoose.Document>(
+  'Location',
+  locationSchema
+);

@@ -9,7 +9,7 @@ export enum Role {
   InfectionReportManager = 'InfectionReportManager'
 }
 
-export interface IModeratorInterface {
+export interface IModerator {
   email: String;
   password: String;
   salt: String;
@@ -40,6 +40,7 @@ const moderatorSchema: mongoose.Schema = new mongoose.Schema({
   registrationDate: Date
 });
 
-export const moderatorModel = mongoose.model<
-  IModeratorInterface & mongoose.Document
->('Moderator', moderatorSchema);
+export const moderatorModel = mongoose.model<IModerator & mongoose.Document>(
+  'Moderator',
+  moderatorSchema
+);

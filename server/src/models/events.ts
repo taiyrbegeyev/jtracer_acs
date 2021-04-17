@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export interface IEventInterface {
+export interface IEvent {
   eventName: String;
   locationId: String;
   organizers: Array<String>;
@@ -24,13 +24,10 @@ const eventSchema: mongoose.Schema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  creationDate: {
-    type: Date,
-    default: Date.now
-  }
+  creationDate: { type: Date, default: Date.now }
 });
 
-export const eventModel = mongoose.model<IEventInterface & mongoose.Document>(
+export const eventModel = mongoose.model<IEvent & mongoose.Document>(
   'Event',
   eventSchema
 );
