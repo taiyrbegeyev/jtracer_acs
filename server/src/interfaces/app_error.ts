@@ -1,5 +1,5 @@
 export enum AppErrorType {
-  APP_NAME = 'APP_NAME',
+  JTracer = 'JTracer',
   INTERNAL = 'INTERNAL',
   NETWORK = 'NETWORK',
   UNKNOWN = 'UNKNOWN'

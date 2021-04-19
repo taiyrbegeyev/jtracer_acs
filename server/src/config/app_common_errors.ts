@@ -3,7 +3,7 @@ import { AppErrorType } from 'interfaces/app_error';
 const CommonError = {
   // Application custom errors
   UNKNOWN_ERROR: {
-    type: AppErrorType.APP_NAME,
+    type: AppErrorType.JTracer,
     code: 'UNKNOWN_ERROR',
     message: 'Unknown error',
     statusCode: 500

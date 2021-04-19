@@ -8,7 +8,7 @@ function mapJoiValidationError(error: {
   value: any;
 }) {
   return {
-    type: AppErrorType.APP_NAME,
+    type: AppErrorType.JTracer,
     code: 'VALIDATION_ERROR',
     message: error.message,
     errors: error.inner,

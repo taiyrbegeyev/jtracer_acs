@@ -1,4 +1,5 @@
 import express from 'express';
+import { log } from 'utils/logger';
 import { CommonError } from '../config/app_common_errors';
 import { AppError } from '../services/error_hanlding/app_error';
 import { createError } from '../services/error_hanlding/app_error_factory';
@@ -16,6 +17,8 @@ export function errorHandler(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: express.NextFunction
 ) {
+  log.error(err);
+
   if (err instanceof AppError) {
     const code = err.statusCode || 500;
     return res.status(code).json(formatError(err));

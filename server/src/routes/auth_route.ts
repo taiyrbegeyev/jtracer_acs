@@ -12,6 +12,7 @@ export default class AuthRouter {
   }
 
   public routes(): void {
+    this.router.post('/login', AuthController.login);
     this.router.post('/createModerator', AuthController.createModerator);
     // this.router.post('/signup', AuthController.signUp);
     // this.router.post('/verify/email/:token', AuthController.verifyEmail);
