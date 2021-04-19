@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { moderatorModel } from 'models/moderators';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
@@ -7,34 +8,78 @@ import { Errors } from './error';
 
 class AuthController {
   /**
-   * Signup user takes name, email and password
+   * Log in
    *
    * @param {express.Request} req
    * @param  {express.Response} res
    * @param  {express.NextFunction} next
    */
-
-  static async createModerator(
+  // eslint-disable-next-line class-methods-use-this
+  public async login(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const validate = AuthValidator.createModeratorSchema.validate(req.body);
+      const validate = AuthValidator.loginSchema.validate(req.body, {
+        abortEarly: false
+      });
       if (validate.error) {
-        throw new AppError(Errors.EMAIL_ALREADY_TAKEN);
-        // return res.status(422).json({
-        //   error: validate.error.details[0].message + ''
-        // });
+        throw validate.error;
       }
-      // let value = validate.value;
-      // let isUserExists = await UserModel.findOne({
-      //   email: value.email,
-      //   isVerified: true
-      // });
-      // if (isUserExists) {
-      //   return res.status(422).send({ message: Messages.ERROR_422 });
-      // }
+
+      const { email, password } = validate.value;
+      const user = await moderatorModel.findOne({
+        email,
+        isRegistered: true
+      });
+
+      if (!user) {
+        throw new AppError(Errors.WRONG_CREDENTIALS);
+      }
+
+      let isPasswordMatching;
+      return user.comparePassword(password, (err: Error, match: boolean) => {
+        isPasswordMatching = match;
+
+        if (!isPasswordMatching) {
+          return next(createError(new AppError(Errors.WRONG_CREDENTIALS)));
+        }
+
+        return sendResponse(res, { message: 'Login is successful' });
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
+   * Create a moderator.
+   *
+   * @param {express.Request} req
+   * @param  {express.Response} res
+   * @param  {express.NextFunction} next
+   */
+  // eslint-disable-next-line class-methods-use-this
+  public async createModerator(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = AuthValidator.createModeratorSchema.validate(req.body, {
+        abortEarly: false
+      });
+      const { email } = validate.value;
+
+      const isUserExists = await moderatorModel.findOne({
+        email,
+        isRegistered: true
+      });
+
+      if (isUserExists) {
+        throw new AppError(Errors.EMAIL_ALREADY_TAKEN);
+      }
 
       // value.password = passwordHash.generate(value.password);
       // let user: any = await UserModel.create(value);
