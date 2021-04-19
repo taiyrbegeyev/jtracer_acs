@@ -44,7 +44,7 @@ class App {
     Routes.init(this);
   }
 
-  private static connectToTheDatabase() {
+  public static connectToTheDatabase() {
     const {
       APP_USER,
       APP_PWD,
