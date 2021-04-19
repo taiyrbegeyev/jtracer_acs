@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -40,7 +41,7 @@ class App {
         origin: true
       })
     );
-    // this.app.use(cookieParser());
+    this.app.use(cookieParser());
   }
 
   private initializeErrorHandling() {
