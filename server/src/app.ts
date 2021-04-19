@@ -1,3 +1,4 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
@@ -33,6 +34,12 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(express.json());
+    this.app.use(
+      cors({
+        credentials: true,
+        origin: true
+      })
+    );
     // this.app.use(cookieParser());
   }
 
