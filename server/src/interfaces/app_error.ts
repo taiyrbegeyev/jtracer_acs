@@ -7,10 +7,10 @@ export enum AppErrorType {
 
 export interface IAppError {
   name?: string;
-  type?: AppErrorType;
-  code?: string;
-  message?: any;
-  statusCode?: number;
+  type: AppErrorType;
+  code: string;
+  message: any;
+  statusCode: number;
   errors?: any;
   meta?: {
     context: any;

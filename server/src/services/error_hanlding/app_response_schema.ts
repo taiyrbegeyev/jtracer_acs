@@ -35,7 +35,7 @@ export function formatResponse(result: IAppError, override = {}) {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function sendResponse(
   res: express.Response,
-  payload: IAppError,
+  payload: any,
   statusCode = 200
 ) {
   return res.status(statusCode).json(formatResponse(payload));

@@ -56,6 +56,7 @@ class App {
     const MONGO_URI = `mongodb://${APP_USER}:${APP_PWD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${DB_NAME}?authSource=admin`;
     try {
       mongoose.connect(MONGO_URI, {
+        useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true
       });

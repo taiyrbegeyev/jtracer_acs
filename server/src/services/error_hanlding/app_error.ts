@@ -18,7 +18,7 @@ export class AppError extends Error {
   constructor(options: IAppError) {
     super();
     Object.setPrototypeOf(this, AppError.prototype);
-    if (!Object.keys(AppErrorType).includes(options.type)) {
+    if (!Object.keys(AppErrorType).includes(options.type?.toString())) {
       throw new Error(`ApplicationError: ${options.type} is not a valid type.`);
     }
 
