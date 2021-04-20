@@ -1,8 +1,10 @@
+import config from 'config';
 import * as express from 'express';
 import { moderatorModel } from 'models/moderators';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
+import AuthServices from 'services/auth_service';
 import AuthValidator from 'validators/authValidator';
 import { Errors } from './error';
 
@@ -14,7 +16,6 @@ class AuthController {
    * @param  {express.Response} res
    * @param  {express.NextFunction} next
    */
-  // eslint-disable-next-line class-methods-use-this
   public async login(
     req: express.Request,
     res: express.Response,
@@ -29,25 +30,56 @@ class AuthController {
       }
 
       const { email, password } = validate.value;
-      const user = await moderatorModel.findOne({
+      const moderator = await moderatorModel.findOne({
         email,
         isRegistered: true
       });
 
-      if (!user) {
+      if (!moderator) {
         throw new AppError(Errors.WRONG_CREDENTIALS);
       }
 
       let isPasswordMatching;
-      return user.comparePassword(password, (err: Error, match: boolean) => {
-        isPasswordMatching = match;
+      return moderator.comparePassword(
+        password,
+        async (err: Error, match: boolean) => {
+          isPasswordMatching = match;
 
-        if (!isPasswordMatching) {
-          return next(createError(new AppError(Errors.WRONG_CREDENTIALS)));
+          if (!isPasswordMatching) {
+            return next(createError(new AppError(Errors.WRONG_CREDENTIALS)));
+          }
+
+          const accessToken = AuthServices.generateJWTtoken(
+            moderator,
+            config.api.access_token_secret,
+            config.api.access_token_life
+          );
+
+          const refreshToken = AuthServices.generateJWTtoken(
+            moderator,
+            config.api.refresh_token_secret,
+            config.api.refresh_token_life
+          );
+
+          res.cookie('accessToken', accessToken, {
+            maxAge: (config.api.access_token_life as number) * 1000, // convert from seconds to milliseconds
+            httpOnly: true,
+            secure: false
+          });
+
+          // store the refresh token in the moderators collection
+          moderator.refreshToken = refreshToken;
+          await moderator.save();
+
+          const response = {
+            message: 'Login is successful',
+            accessToken,
+            refreshToken
+          };
+
+          return sendResponse(res, response);
         }
-
-        return sendResponse(res, { message: 'Login is successful' });
-      });
+      );
     } catch (err) {
       return next(createError(err));
     }
@@ -60,7 +92,6 @@ class AuthController {
    * @param  {express.Response} res
    * @param  {express.NextFunction} next
    */
-  // eslint-disable-next-line class-methods-use-this
   public async createModerator(
     req: express.Request,
     res: express.Response,

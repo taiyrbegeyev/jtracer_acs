@@ -11,8 +11,10 @@ export enum Role {
 }
 
 export interface IModerator extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
   email: string;
   hash: string;
+  refreshToken: string;
   firstName: string;
   lastName: string;
   roles: Array<Role>;
@@ -24,10 +26,8 @@ export interface IModerator extends mongoose.Document {
 
 const moderatorSchema = new mongoose.Schema<IModerator>({
   email: String,
-  hash: {
-    type: String
-    // select: false // Omit the hash when returning a moderator
-  },
+  hash: String,
+  refreshToken: String,
   firstName: String,
   lastName: String,
   roles: {
