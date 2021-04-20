@@ -1,4 +1,4 @@
-import { cleanEnv, makeValidator, port, host, email } from 'envalid';
+import { cleanEnv, makeValidator, port, host, email, num } from 'envalid';
 
 const nonEmptryStr = makeValidator((x) => {
   if (x.length > 0) {
@@ -19,7 +19,11 @@ const validateEnv = (): void => {
     JTRACER_ROOT_PWD: nonEmptryStr(),
     MONGO_HOSTNAME: host(),
     MONGO_PORT: port(),
-    CONTAINER_NAME: nonEmptryStr()
+    CONTAINER_NAME: nonEmptryStr(),
+    ACCESS_TOKEN_SECRET: nonEmptryStr(),
+    ACCESS_TOKEN_LIFE: num(),
+    REFRESH_TOKEN_SECRET: nonEmptryStr(),
+    REFRESH_TOKEN_LIFE: num()
   });
 };
 
