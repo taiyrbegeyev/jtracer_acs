@@ -34,7 +34,6 @@ class AuthController {
         email,
         isRegistered: true
       });
-
       if (!moderator) {
         throw new AppError(Errors.WRONG_CREDENTIALS);
       }
@@ -49,20 +48,24 @@ class AuthController {
             return next(createError(new AppError(Errors.WRONG_CREDENTIALS)));
           }
 
+          const payload = {
+            id: moderator._id,
+            email: moderator.email,
+            roles: moderator.roles
+          };
           const accessToken = AuthServices.generateJWTtoken(
-            moderator,
-            config.api.access_token_secret,
-            config.api.access_token_life
+            config.auth.access_token_secret,
+            config.auth.access_token_life,
+            payload
           );
-
           const refreshToken = AuthServices.generateJWTtoken(
-            moderator,
-            config.api.refresh_token_secret,
-            config.api.refresh_token_life
+            config.auth.refresh_token_secret,
+            config.auth.refresh_token_life,
+            payload
           );
 
           res.cookie('accessToken', accessToken, {
-            maxAge: (config.api.access_token_life as number) * 1000, // convert from seconds to milliseconds
+            maxAge: (config.auth.access_token_life as number) * 1000, // convert from seconds to milliseconds
             httpOnly: true,
             secure: false
           });
@@ -86,6 +89,61 @@ class AuthController {
   }
 
   /**
+   * Register
+   *
+   * @param {express.Request} req
+   * @param  {express.Response} res
+   * @param  {express.NextFunction} next
+   */
+  public async register(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = AuthValidator.registerSchema.validate(req.body, {
+        abortEarly: false
+      });
+      const { emailToken, password } = validate.value;
+
+      const { id } = AuthServices.decodeJWTtoken(
+        emailToken,
+        config.auth.email_token_secret
+      ) as any;
+      const isModeratorExists = await moderatorModel.findOne({ _id: id });
+      if (!isModeratorExists) {
+        throw new AppError(Errors.MODERATOR_DOES_NOT_EXIST);
+      }
+
+      const isModeratorRegistered = await moderatorModel.findOne({
+        _id: id,
+        isRegistered: true
+      });
+      if (isModeratorRegistered) {
+        throw new AppError(Errors.MODERATOR_ALREADY_REGISTERED);
+      }
+
+      const hash = AuthServices.hashPassword(password);
+      await moderatorModel.updateOne(
+        { _id: id },
+        {
+          $set: {
+            isRegistered: true,
+            registrationDate: new Date(Date.now()),
+            hash
+          }
+        }
+      );
+
+      return sendResponse(res, {
+        message: 'Registration is successful'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
    * Create a moderator.
    *
    * @param {express.Request} req
@@ -101,27 +159,25 @@ class AuthController {
       const validate = AuthValidator.createModeratorSchema.validate(req.body, {
         abortEarly: false
       });
-      const { email } = validate.value;
+      const { email, firstName, lastName, roles, inviteeId } = validate.value;
 
-      const isUserExists = await moderatorModel.findOne({
-        email,
-        isRegistered: true
-      });
-
-      if (isUserExists) {
+      const isModeratorExists = await moderatorModel.findOne({ email });
+      if (isModeratorExists) {
         throw new AppError(Errors.EMAIL_ALREADY_TAKEN);
       }
 
-      // value.password = passwordHash.generate(value.password);
-      // let user: any = await UserModel.create(value);
+      const moderator = await moderatorModel.create({
+        email,
+        firstName,
+        lastName,
+        roles,
+        inviteeId
+      });
+      await AuthServices.sendInvitationEmail(moderator);
 
-      // let emailToken = AuthService.emailToken(user._id);
-
-      // Mailer.sendMail(value.email, 'EMAIL VERIFICATION', {
-      //   name: user.name,
-      //   url: config.envConfig.EMAIL_VERIFICATION_URL + '/' + emailToken
-      // });
-      return sendResponse(res, { message: 'Registration is successful' });
+      return sendResponse(res, {
+        message: 'Moderation creation is successful'
+      });
     } catch (err) {
       return next(createError(err));
     }

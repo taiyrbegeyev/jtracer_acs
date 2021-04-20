@@ -19,6 +19,7 @@ export interface IModerator extends mongoose.Document {
   lastName: string;
   roles: Array<Role>;
   isRegistered: Boolean;
+  inviteeId: string;
   invitationDate: Date;
   registrationDate: Date;
   comparePassword: (password: string, callback: Function) => void;
@@ -35,36 +36,14 @@ const moderatorSchema = new mongoose.Schema<IModerator>({
     enum: Object.keys(Role),
     default: ['Viewer']
   },
+  inviteeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Moderator'
+  },
   isRegistered: { type: Boolean, default: false },
   invitationDate: { type: Date, default: Date.now },
   registrationDate: Date
 });
-
-/**
- * Password hash middleware.
- */
-// coderrocketfuel.com/article/store-passwords-in-mongodb-with-node-js-mongoose-and-bcrypt
-// github.com/microsoft/TypeScript-Node-Starter/blob/master/src/models/User.ts
-// moderatorSchema.pre<IModerator>('save', function save(next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   if (this.isModified('hash') || this.isNew) {
-//     return bcrypt.genSalt(10, (saltError, salt) => {
-//       if (saltError) {
-//         return next(saltError);
-//       }
-//       return bcrypt.hash(user.hash, salt, (hashError, hash) => {
-//         if (hashError) {
-//           return next(hashError);
-//         }
-
-//         user.hash = hash;
-//         return next();
-//       });
-//     });
-//   }
-//   return next();
-// });
 
 moderatorSchema.methods.comparePassword = function (
   password: string,
