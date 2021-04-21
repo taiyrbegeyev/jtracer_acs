@@ -65,7 +65,7 @@ class AuthController {
           );
 
           res.cookie('accessToken', accessToken, {
-            maxAge: (config.auth.access_token_life as number) * 1000, // convert from seconds to milliseconds
+            maxAge: config.auth.access_token_life * 1000, // convert from seconds to milliseconds
             httpOnly: true,
             secure: false
           });
