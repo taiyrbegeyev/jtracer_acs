@@ -1,6 +1,6 @@
 /* eslint-disable */
 import config from 'config';
-import { Errors } from 'controllers/authController/auth_errors';
+import { Errors } from 'controllers/auth_controller/auth_errors';
 import express from 'express';
 import AuthServices from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';

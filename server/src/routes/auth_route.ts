@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import AuthController from 'controllers/authController/auth_controller';
+import AuthController from 'controllers/auth_controller/auth_controller';
 import { authHandler } from 'middlewares/auth_handler';
 import { moderatorManager } from 'middlewares/authorization_handler';
 /**

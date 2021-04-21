@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Errors } from 'controllers/authController/auth_errors';
+import { Errors } from 'controllers/auth_controller/auth_errors';
 import express from 'express';
 import { Role } from 'models/moderators';
 import { createError } from 'services/error_hanlding/app_error_factory';
