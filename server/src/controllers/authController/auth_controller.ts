@@ -25,11 +25,8 @@ class AuthController {
       const validate = AuthValidator.loginSchema.validate(req.body, {
         abortEarly: false
       });
-      if (validate.error) {
-        throw validate.error;
-      }
-
       const { email, password } = validate.value;
+
       const moderator = await moderatorModel.findOne({
         email,
         isRegistered: true
@@ -138,6 +135,79 @@ class AuthController {
     } catch (err) {
       return next(createError(err));
     }
+  }
+
+  /**
+   * Create a refresh token.
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async refreshToken(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    let accessToken;
+    try {
+      accessToken = req.cookies.accessToken;
+      if (!accessToken) {
+        throw new AppError(Errors.NO_ACCESS_TOKEN_PROVIDED);
+      }
+    } catch (err) {
+      return next(createError(err));
+    }
+
+    let decoded;
+    try {
+      decoded = AuthServices.decodeJWTtoken(
+        accessToken,
+        config.auth.access_token_secret
+      ) as any;
+    } catch (err) {
+      return next(createError(Errors.INVALID_ACCESS_TOKEN_PROVIDED));
+    }
+
+    // look up the moderator's refresh token
+    let moderator;
+    try {
+      const { id } = decoded;
+      moderator = await moderatorModel.findOne({ _id: id });
+      if (!moderator) {
+        throw new AppError(Errors.MODERATOR_DOES_NOT_EXIST);
+      }
+    } catch (err) {
+      return next(createError(err));
+    }
+
+    // verify the refresh token
+    try {
+      AuthServices.decodeJWTtoken(
+        moderator.refreshToken,
+        config.auth.refresh_token_secret
+      ) as any;
+    } catch (err) {
+      return next(createError(Errors.INVALID_ACCESS_TOKEN_PROVIDED));
+    }
+
+    // generate a new access token
+    const newAccessToken = AuthServices.generateJWTtoken(
+      config.auth.access_token_secret,
+      config.auth.access_token_life,
+      decoded
+    );
+
+    res.cookie('accessToken', newAccessToken, {
+      maxAge: config.auth.access_token_life * 1000, // convert from seconds to milliseconds
+      httpOnly: true,
+      secure: false
+    });
+    const response = {
+      message: 'Refresh token is successful'
+    };
+
+    return sendResponse(res, response);
   }
 
   /**
