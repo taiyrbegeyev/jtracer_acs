@@ -52,6 +52,7 @@ class App {
     Routes.init(this);
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static connectToTheDatabase() {
     const {
       APP_USER,

@@ -5,7 +5,7 @@ import AuthRouter from './auth_route';
 
 export default class Routes {
   /**
-   * @param  {IApp} app
+   * @param app - IApp
    * @returns void
    */
   static init(server: IApp): void {

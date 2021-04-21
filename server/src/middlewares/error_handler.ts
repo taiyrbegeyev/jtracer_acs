@@ -1,3 +1,4 @@
+/* eslint-disable */
 import express from 'express';
 import { log } from 'utils/logger';
 import { CommonError } from '../config/app_common_errors';
@@ -8,13 +9,10 @@ import {
   sendResponse
 } from '../services/error_hanlding/app_response_schema';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function errorHandler(
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   err: any,
   req: express.Request,
   res: express.Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: express.NextFunction
 ) {
   log.error(err);

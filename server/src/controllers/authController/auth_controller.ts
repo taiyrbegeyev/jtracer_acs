@@ -6,15 +6,15 @@ import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthServices from 'services/auth_service';
 import AuthValidator from 'validators/authValidator';
-import { Errors } from './error';
+import { Errors } from './auth_errors';
 
 class AuthController {
   /**
    * Log in
    *
-   * @param {express.Request} req
-   * @param  {express.Response} res
-   * @param  {express.NextFunction} next
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
    */
   public async login(
     req: express.Request,
@@ -64,20 +64,17 @@ class AuthController {
             payload
           );
 
+          // store the refresh token in the moderators collection
+          moderator.refreshToken = refreshToken;
+          await moderator.save();
+
           res.cookie('accessToken', accessToken, {
             maxAge: config.auth.access_token_life * 1000, // convert from seconds to milliseconds
             httpOnly: true,
             secure: false
           });
-
-          // store the refresh token in the moderators collection
-          moderator.refreshToken = refreshToken;
-          await moderator.save();
-
           const response = {
-            message: 'Login is successful',
-            accessToken,
-            refreshToken
+            message: 'Login is successful'
           };
 
           return sendResponse(res, response);
@@ -91,9 +88,9 @@ class AuthController {
   /**
    * Register
    *
-   * @param {express.Request} req
-   * @param  {express.Response} res
-   * @param  {express.NextFunction} next
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
    */
   public async register(
     req: express.Request,
@@ -146,9 +143,9 @@ class AuthController {
   /**
    * Create a moderator.
    *
-   * @param {express.Request} req
-   * @param  {express.Response} res
-   * @param  {express.NextFunction} next
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
    */
   public async createModerator(
     req: express.Request,

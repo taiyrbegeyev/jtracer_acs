@@ -1,5 +1,4 @@
 import express from 'express';
-import { IAppError } from 'interfaces/app_error';
 import { AppError } from './app_error';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -24,7 +23,7 @@ export function formatError(error: AppError, overrides = {}) {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function formatResponse(result: IAppError, override = {}) {
+export function formatResponse(result: object, override = {}) {
   return {
     data: result,
     success: true,
@@ -35,7 +34,7 @@ export function formatResponse(result: IAppError, override = {}) {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function sendResponse(
   res: express.Response,
-  payload: any,
+  payload: object,
   statusCode = 200
 ) {
   return res.status(statusCode).json(formatResponse(payload));
