@@ -83,6 +83,27 @@ class AuthController {
   }
 
   /**
+   * Log out
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async logout(
+    req: express.Request,
+    res: express.Response
+  ): Promise<any> {
+    res.cookie('accessToken', '', {
+      httpOnly: true,
+      expires: new Date(0)
+    });
+
+    return sendResponse(res, {
+      message: 'Logout is successful'
+    });
+  }
+
+  /**
    * Register
    *
    * @param req - express.Request
