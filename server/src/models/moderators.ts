@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import * as mongoose from 'mongoose';
 
 export enum Role {
@@ -9,25 +10,25 @@ export enum Role {
   InfectionReportManager = 'InfectionReportManager'
 }
 
-export interface IModerator {
-  email: String;
-  password: String;
-  salt: String;
-  firstName: String;
-  lastName: String;
+export interface IModerator extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
+  email: string;
+  hash: string;
+  refreshToken: string;
+  firstName: string;
+  lastName: string;
   roles: Array<Role>;
   isRegistered: Boolean;
+  inviteeId: string;
   invitationDate: Date;
   registrationDate: Date;
+  comparePassword: (password: string, callback: Function) => void;
 }
 
-const moderatorSchema: mongoose.Schema = new mongoose.Schema({
-  email: {
-    type: String,
-    unique: true
-  },
-  password: String,
-  salt: String,
+const moderatorSchema = new mongoose.Schema<IModerator>({
+  email: String,
+  hash: String,
+  refreshToken: String,
   firstName: String,
   lastName: String,
   roles: {
@@ -35,10 +36,21 @@ const moderatorSchema: mongoose.Schema = new mongoose.Schema({
     enum: Object.keys(Role),
     default: ['Viewer']
   },
+  inviteeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Moderator'
+  },
   isRegistered: { type: Boolean, default: false },
   invitationDate: { type: Date, default: Date.now },
   registrationDate: Date
 });
+
+moderatorSchema.methods.comparePassword = function (
+  password: string,
+  callback: Function
+): void {
+  bcrypt.compare(password, this.hash, (err, isMatch) => callback(err, isMatch));
+};
 
 export const moderatorModel = mongoose.model<IModerator & mongoose.Document>(
   'Moderator',

@@ -20,8 +20,13 @@
   },
   "rules": {
     "tsdoc/syntax": "warn",
+    "radix": "off",
     "prettier/prettier": 2,
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "func-names": "off",
     "import/prefer-default-export": "off",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

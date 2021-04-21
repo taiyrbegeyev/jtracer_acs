@@ -23,7 +23,7 @@ services:
   #     - mongo
   mongo:
     image: mongo
-    container_name: jtracer_mongodb
+    container_name: $CONTAINER_NAME
     restart: unless-stopped
     env_file: .env
     environment:
