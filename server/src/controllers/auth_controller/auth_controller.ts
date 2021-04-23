@@ -6,7 +6,7 @@ import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthServices from 'services/auth_service';
 import AuthValidator from 'validators/authValidator';
-import { Errors } from './auth_errors';
+import { AuthErrors } from './auth_errors';
 
 class AuthController {
   /**
@@ -32,7 +32,7 @@ class AuthController {
         isRegistered: true
       });
       if (!moderator) {
-        throw new AppError(Errors.WRONG_CREDENTIALS);
+        throw new AppError(AuthErrors.WRONG_CREDENTIALS);
       }
 
       let isPasswordMatching;
@@ -42,7 +42,9 @@ class AuthController {
           isPasswordMatching = match;
 
           if (!isPasswordMatching) {
-            return next(createError(new AppError(Errors.WRONG_CREDENTIALS)));
+            return next(
+              createError(new AppError(AuthErrors.WRONG_CREDENTIALS))
+            );
           }
 
           const payload = {
@@ -127,7 +129,7 @@ class AuthController {
       ) as any;
       const isModeratorExists = await moderatorModel.findOne({ _id: id });
       if (!isModeratorExists) {
-        throw new AppError(Errors.MODERATOR_DOES_NOT_EXIST);
+        throw new AppError(AuthErrors.MODERATOR_DOES_NOT_EXIST);
       }
 
       const isModeratorRegistered = await moderatorModel.findOne({
@@ -135,7 +137,7 @@ class AuthController {
         isRegistered: true
       });
       if (isModeratorRegistered) {
-        throw new AppError(Errors.MODERATOR_ALREADY_REGISTERED);
+        throw new AppError(AuthErrors.MODERATOR_ALREADY_REGISTERED);
       }
 
       const hash = AuthServices.hashPassword(password);
@@ -174,7 +176,7 @@ class AuthController {
     try {
       accessToken = req.cookies.accessToken;
       if (!accessToken) {
-        throw new AppError(Errors.NO_ACCESS_TOKEN_PROVIDED);
+        throw new AppError(AuthErrors.NO_ACCESS_TOKEN_PROVIDED);
       }
     } catch (err) {
       return next(createError(err));
@@ -187,7 +189,7 @@ class AuthController {
         config.auth.access_token_secret
       ) as any;
     } catch (err) {
-      return next(createError(Errors.INVALID_ACCESS_TOKEN_PROVIDED));
+      return next(createError(AuthErrors.INVALID_ACCESS_TOKEN_PROVIDED));
     }
 
     // look up the moderator's refresh token
@@ -196,7 +198,7 @@ class AuthController {
       const { id } = decoded;
       moderator = await moderatorModel.findOne({ _id: id });
       if (!moderator) {
-        throw new AppError(Errors.MODERATOR_DOES_NOT_EXIST);
+        throw new AppError(AuthErrors.MODERATOR_DOES_NOT_EXIST);
       }
     } catch (err) {
       return next(createError(err));
@@ -209,7 +211,7 @@ class AuthController {
         config.auth.refresh_token_secret
       ) as any;
     } catch (err) {
-      return next(createError(Errors.INVALID_ACCESS_TOKEN_PROVIDED));
+      return next(createError(AuthErrors.INVALID_ACCESS_TOKEN_PROVIDED));
     }
 
     // generate a new access token
@@ -251,7 +253,7 @@ class AuthController {
 
       const isModeratorExists = await moderatorModel.findOne({ email });
       if (isModeratorExists) {
-        throw new AppError(Errors.EMAIL_ALREADY_TAKEN);
+        throw new AppError(AuthErrors.EMAIL_ALREADY_TAKEN);
       }
 
       const moderator = await moderatorModel.create({

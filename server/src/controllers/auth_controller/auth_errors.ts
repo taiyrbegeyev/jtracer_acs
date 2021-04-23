@@ -1,7 +1,7 @@
 import { CommonError } from 'config/app_common_errors';
 import { AppErrorType } from 'interfaces/app_error';
 
-export const Errors = {
+export const AuthErrors = {
   NO_ACCESS_TOKEN_PROVIDED: {
     ...CommonError.UNAUTHORIZED,
     code: 'NO_ACCESS_TOKEN_PROVIDED',
