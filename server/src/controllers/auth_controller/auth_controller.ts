@@ -4,7 +4,7 @@ import { moderatorModel } from 'models/moderators';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
-import AuthServices from 'services/auth_service';
+import AuthService from 'services/auth_service';
 import AuthValidator from 'validators/auth_validator';
 import { AuthErrors } from './auth_errors';
 
@@ -52,12 +52,12 @@ class AuthController {
             email: moderator.email,
             roles: moderator.roles
           };
-          const accessToken = AuthServices.generateJWTtoken(
+          const accessToken = AuthService.generateJWTtoken(
             config.auth.access_token_secret,
             config.auth.access_token_life,
             payload
           );
-          const refreshToken = AuthServices.generateJWTtoken(
+          const refreshToken = AuthService.generateJWTtoken(
             config.auth.refresh_token_secret,
             config.auth.refresh_token_life,
             payload
@@ -123,7 +123,7 @@ class AuthController {
       });
       const { emailToken, password } = validate.value;
 
-      const { id } = AuthServices.decodeJWTtoken(
+      const { id } = AuthService.decodeJWTtoken(
         emailToken,
         config.auth.email_token_secret
       ) as any;
@@ -140,7 +140,7 @@ class AuthController {
         throw new AppError(AuthErrors.MODERATOR_ALREADY_REGISTERED);
       }
 
-      const hash = AuthServices.hashPassword(password);
+      const hash = AuthService.hashPassword(password);
       await moderatorModel.updateOne(
         { _id: id },
         {
@@ -184,7 +184,7 @@ class AuthController {
 
     let decoded;
     try {
-      decoded = AuthServices.decodeJWTtoken(
+      decoded = AuthService.decodeJWTtoken(
         accessToken,
         config.auth.access_token_secret
       ) as any;
@@ -206,7 +206,7 @@ class AuthController {
 
     // verify the refresh token
     try {
-      AuthServices.decodeJWTtoken(
+      AuthService.decodeJWTtoken(
         moderator.refreshToken,
         config.auth.refresh_token_secret
       ) as any;
@@ -215,7 +215,7 @@ class AuthController {
     }
 
     // generate a new access token
-    const newAccessToken = AuthServices.generateJWTtoken(
+    const newAccessToken = AuthService.generateJWTtoken(
       config.auth.access_token_secret,
       config.auth.access_token_life,
       decoded
@@ -263,7 +263,7 @@ class AuthController {
         roles,
         inviteeId
       });
-      await AuthServices.sendInvitationEmail(moderator);
+      await AuthService.sendInvitationEmail(moderator);
 
       return sendResponse(res, {
         message: 'Moderation creation is successful'

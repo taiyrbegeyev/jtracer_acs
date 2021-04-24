@@ -2,7 +2,7 @@
 import config from 'config';
 import { AuthErrors } from 'controllers/auth_controller/auth_errors';
 import express from 'express';
-import AuthServices from 'services/auth_service';
+import AuthService from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 
@@ -23,7 +23,7 @@ export function authHandler(
   }
 
   try {
-    const decoded = AuthServices.decodeJWTtoken(
+    const decoded = AuthService.decodeJWTtoken(
       accessToken,
       config.auth.access_token_secret
     ) as any;
