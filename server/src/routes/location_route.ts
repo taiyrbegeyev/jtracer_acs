@@ -25,13 +25,13 @@ export default class LocationRouter {
     );
 
     this.router.patch(
-      '/locations/:id',
+      '/locations/:locationId',
       // [authHandler, locationManager],
       LocationController.editLocation
     );
 
     this.router.delete(
-      '/locations/:id',
+      '/locations/:locationId',
       // [authHandler, locationManager],
       LocationController.deleteLocation
     );

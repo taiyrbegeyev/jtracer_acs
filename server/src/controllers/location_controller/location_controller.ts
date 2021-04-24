@@ -88,10 +88,10 @@ class LocationController {
         throw validate.error;
       }
 
-      const { id } = req.params;
+      const { locationId } = req.params;
       const { locationName, capacity } = validate.value;
       const location = await locationModel.findByIdAndUpdate(
-        mongoose.Types.ObjectId(id),
+        mongoose.Types.ObjectId(locationId),
         {
           locationName,
           capacity
@@ -122,8 +122,8 @@ class LocationController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const { id } = req.params;
-      const location = await locationModel.findByIdAndDelete(id);
+      const { locationId } = req.params;
+      const location = await locationModel.findByIdAndDelete(locationId);
       if (!location) {
         throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
       }
