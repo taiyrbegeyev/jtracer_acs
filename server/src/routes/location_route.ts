@@ -1,7 +1,5 @@
 import { Router } from 'express';
 import LocationController from 'controllers/location_controller/location_controller';
-import { authHandler } from 'middlewares/auth_handler';
-import { locationManager } from 'middlewares/authorization_handler';
 /**
  * LocationRouter
  */
@@ -16,31 +14,25 @@ export default class LocationRouter {
   public routes(): void {
     this.router.get(
       '/locations',
-      [authHandler, locationManager],
+      // [authHandler, locationManager],
       LocationController.getLocations
-    );
-
-    this.router.get(
-      '/locations/:id',
-      [authHandler, locationManager],
-      LocationController.getLocation
     );
 
     this.router.post(
       '/locations',
-      [authHandler, locationManager],
+      // [authHandler, locationManager],
       LocationController.postLocation
     );
 
     this.router.patch(
       '/locations/:id',
-      [authHandler, locationManager],
+      // [authHandler, locationManager],
       LocationController.editLocation
     );
 
     this.router.delete(
       '/locations/:id',
-      [authHandler, locationManager],
+      // [authHandler, locationManager],
       LocationController.deleteLocation
     );
   }

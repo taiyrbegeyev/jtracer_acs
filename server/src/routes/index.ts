@@ -18,19 +18,12 @@ export default class Routes {
     server.app.use(`/api/${version}/auth`, new AuthRouter().router);
     server.app.use(`/api/${version}/`, new LocationRouter().router);
 
-    server.app.all(
-      '*',
-      (
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction
-      ) => {
-        return sendResponse(
-          res,
-          { message: `Can't find ${req.originalUrl} on this server!` },
-          404
-        );
-      }
+    server.app.all('*', (req: express.Request, res: express.Response) =>
+      sendResponse(
+        res,
+        { message: `Can't find ${req.originalUrl} on this server!` },
+        404
+      )
     );
   }
 }
