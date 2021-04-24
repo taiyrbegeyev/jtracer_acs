@@ -5,6 +5,7 @@ import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthRouter from './auth_route';
 import EventRouter from './event_route';
 import LocationRouter from './location_route';
+import ModeratorRouter from './moderator_route';
 
 export default class Routes {
   /**
@@ -22,6 +23,7 @@ export default class Routes {
       `/api/${version}/locations/:locationId`,
       new EventRouter().router
     );
+    server.app.use(`/api/${version}/`, new ModeratorRouter().router);
 
     server.app.all('*', (req: express.Request, res: express.Response) =>
       sendResponse(
