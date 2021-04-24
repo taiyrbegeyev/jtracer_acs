@@ -1,6 +1,6 @@
-/* eslint-disable */
 import * as express from 'express';
 import { moderatorModel } from 'models/moderators';
+import mongoose from 'mongoose';
 import AuthService from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -20,7 +20,14 @@ class ModeratorController {
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ): Promise<any> {}
+  ): Promise<any> {
+    try {
+      const moderators = await moderatorModel.find();
+      return sendResponse(res, moderators, 200);
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
 
   /**
    * Create a moderator.
@@ -38,8 +45,11 @@ class ModeratorController {
       const validate = ModeratorValidator.moderatorSchema.validate(req.body, {
         abortEarly: false
       });
-      const { email, firstName, lastName, roles, inviteeId } = validate.value;
+      if (validate.error) {
+        throw validate.error;
+      }
 
+      const { email, firstName, lastName, roles, inviteeId } = validate.value;
       const isModeratorExists = await moderatorModel.findOne({ email });
       if (isModeratorExists) {
         throw new AppError(ModeratorErrors.MODERATOR_EXISTS);
@@ -73,7 +83,38 @@ class ModeratorController {
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ): Promise<any> {}
+  ): Promise<any> {
+    try {
+      const validate = ModeratorValidator.moderatorSchema.validate(req.body, {
+        abortEarly: false
+      });
+      if (validate.error) {
+        throw validate.error;
+      }
+
+      const { moderatorId } = req.params;
+      const { email, firstName, lastName, roles, inviteeId } = validate.value;
+      const moderator = await moderatorModel.findByIdAndUpdate(
+        mongoose.Types.ObjectId(moderatorId),
+        {
+          email,
+          firstName,
+          lastName,
+          roles,
+          inviteeId
+        }
+      );
+      if (!moderator) {
+        throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
+      }
+
+      return sendResponse(res, {
+        message: 'Moderator modification is successful.'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
 
   /**
    * Delete a moderator
@@ -86,7 +127,21 @@ class ModeratorController {
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ): Promise<any> {}
+  ): Promise<any> {
+    try {
+      const { moderatorId } = req.params;
+      const moderator = await moderatorModel.findByIdAndDelete(moderatorId);
+      if (!moderator) {
+        throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
+      }
+
+      return sendResponse(res, {
+        message: 'Moderator deletion is successful.'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
 }
 
 export default new ModeratorController();
