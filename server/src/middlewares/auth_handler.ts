@@ -1,6 +1,6 @@
 /* eslint-disable */
 import config from 'config';
-import { Errors } from 'controllers/auth_controller/auth_errors';
+import { AuthErrors } from 'controllers/auth_controller/auth_errors';
 import express from 'express';
 import AuthServices from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';
@@ -16,7 +16,7 @@ export function authHandler(
   try {
     accessToken = req.cookies.accessToken;
     if (!accessToken) {
-      throw new AppError(Errors.NO_ACCESS_TOKEN_PROVIDED);
+      throw new AppError(AuthErrors.NO_ACCESS_TOKEN_PROVIDED);
     }
   } catch (err) {
     return next(createError(err));
@@ -32,6 +32,6 @@ export function authHandler(
     res.locals.roles = decoded.roles;
     next();
   } catch (e) {
-    return next(createError(Errors.INVALID_ACCESS_TOKEN_PROVIDED));
+    return next(createError(AuthErrors.INVALID_ACCESS_TOKEN_PROVIDED));
   }
 }

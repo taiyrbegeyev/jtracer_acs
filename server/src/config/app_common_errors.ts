@@ -32,10 +32,7 @@ const CommonError = {
     type: AppErrorType.NETWORK,
     code: 'RESOURCE_NOT_FOUND',
     message: 'Resource not found',
-    statusCode: 404,
-    meta: {
-      translationKey: 'app.common.error.RESOURCE_NOT_FOUND'
-    }
+    statusCode: 404
   },
 
   // Predefined 5xx http errors

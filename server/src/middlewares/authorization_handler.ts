@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Errors } from 'controllers/auth_controller/auth_errors';
+import { AuthErrors } from 'controllers/auth_controller/auth_errors';
 import express from 'express';
 import { Role } from 'models/moderators';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -11,7 +11,7 @@ export function viewer(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.Viewer))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
@@ -23,7 +23,7 @@ export function locationManager(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.LocationManager))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
@@ -35,7 +35,7 @@ export function eventManager(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.EventManager))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
@@ -47,7 +47,7 @@ export function moderatorManager(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.ModeratorManager))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
@@ -59,7 +59,7 @@ export function logManager(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.LogManager))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
@@ -71,7 +71,7 @@ export function infectionReportManager(
   next: express.NextFunction
 ) {
   if (!res.locals.role.includes(Role.InfectionReportManager))
-    return next(createError(Errors.MODERATOR_ACCESS_DENIED));
+    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
 }
