@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as express from 'express';
 import { locationModel } from 'models/locations';
 import mongoose from 'mongoose';
@@ -22,7 +21,7 @@ class LocationController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      let locations = await locationModel.find();
+      const locations = await locationModel.find();
       return sendResponse(res, locations, 200);
     } catch (err) {
       return next(createError(err));

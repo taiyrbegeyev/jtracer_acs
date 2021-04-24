@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { LocationErrors } from 'controllers/location_controller/location_errors';
 import * as express from 'express';
 import { eventModel } from 'models/events';
@@ -31,7 +30,7 @@ class EventController {
         throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
       }
 
-      let events = await eventModel.find({ locationId: locationId });
+      const events = await eventModel.find({ locationId });
       return sendResponse(res, events, 200);
     } catch (err) {
       return next(createError(err));

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { CommonError } from 'config/app_common_errors';
 
 export const EventErrors = {
