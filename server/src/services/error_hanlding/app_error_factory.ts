@@ -29,10 +29,10 @@ export function createError(error: any): AppError {
 
   if (!Object.prototype.hasOwnProperty.call(error, 'type')) {
     const payload = {
-      type: AppErrorType.JTracer,
+      type: AppErrorType.INTERNAL,
       code: error.name,
       message: error.message,
-      statusCode: 400
+      statusCode: 500
     };
     return new AppError(payload);
   }
