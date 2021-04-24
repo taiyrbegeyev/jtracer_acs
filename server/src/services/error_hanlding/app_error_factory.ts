@@ -26,5 +26,16 @@ export function createError(error: any): AppError {
     const joiError = mapJoiValidationError(error);
     return new AppError(joiError);
   }
+
+  if (!Object.prototype.hasOwnProperty.call(error, 'type')) {
+    const payload = {
+      type: AppErrorType.JTracer,
+      code: error.name,
+      message: error.message,
+      statusCode: 400
+    };
+    return new AppError(payload);
+  }
+
   return new AppError(error);
 }

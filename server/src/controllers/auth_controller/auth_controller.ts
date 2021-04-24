@@ -5,7 +5,7 @@ import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthServices from 'services/auth_service';
-import AuthValidator from 'validators/authValidator';
+import AuthValidator from 'validators/auth_validator';
 import { AuthErrors } from './auth_errors';
 
 class AuthController {

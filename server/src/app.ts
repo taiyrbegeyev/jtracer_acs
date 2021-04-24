@@ -46,6 +46,11 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorHandler);
+    process.on('unhandledRejection', (err: Error) => {
+      log.error(err.name, err.message);
+      log.error('UNHANDLED REJECTION! 💥 Shutting down...');
+      process.exit();
+    });
   }
 
   private initializeRoutes() {
