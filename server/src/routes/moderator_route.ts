@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import LocationController from 'controllers/location_controller/location_controller';
+import ModeratorController from 'controllers/moderator_controller/moderator_controller';
 /**
- * LocationRouter
+ * ModeratorRouter
  */
-export default class LocationRouter {
+export default class ModeratorRouter {
   public router: Router;
 
   constructor() {
@@ -13,27 +13,27 @@ export default class LocationRouter {
 
   public routes(): void {
     this.router.get(
-      '/locations',
+      '/moderators',
       // [authHandler, locationManager],
-      LocationController.getLocations
+      ModeratorController.getModerators
     );
 
     this.router.post(
-      '/locations',
+      '/moderators',
       // [authHandler, locationManager],
-      LocationController.postLocation
+      ModeratorController.postModerator
     );
 
     this.router.patch(
-      '/locations/:locationId',
+      '/moderators/:moderatorId',
       // [authHandler, locationManager],
-      LocationController.editLocation
+      ModeratorController.editModerator
     );
 
     this.router.delete(
-      '/locations/:locationId',
+      '/moderators/:moderatorId',
       // [authHandler, locationManager],
-      LocationController.deleteLocation
+      ModeratorController.deleteModerator
     );
   }
 }

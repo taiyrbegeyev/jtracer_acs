@@ -26,9 +26,18 @@ export interface IModerator extends mongoose.Document {
 }
 
 const moderatorSchema = new mongoose.Schema<IModerator>({
-  email: String,
-  hash: String,
-  refreshToken: String,
+  email: {
+    type: String,
+    unique: true
+  },
+  hash: {
+    type: String,
+    select: false
+  },
+  refreshToken: {
+    type: String,
+    select: false
+  },
   firstName: String,
   lastName: String,
   roles: {

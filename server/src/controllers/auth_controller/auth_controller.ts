@@ -1,4 +1,5 @@
 import config from 'config';
+import { ModeratorErrors } from 'controllers/moderator_controller/moderator_errors';
 import * as express from 'express';
 import { moderatorModel } from 'models/moderators';
 import { AppError } from 'services/error_hanlding/app_error';
@@ -129,7 +130,7 @@ class AuthController {
       ) as any;
       const isModeratorExists = await moderatorModel.findOne({ _id: id });
       if (!isModeratorExists) {
-        throw new AppError(AuthErrors.MODERATOR_DOES_NOT_EXIST);
+        throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
       }
 
       const isModeratorRegistered = await moderatorModel.findOne({
@@ -137,7 +138,7 @@ class AuthController {
         isRegistered: true
       });
       if (isModeratorRegistered) {
-        throw new AppError(AuthErrors.MODERATOR_ALREADY_REGISTERED);
+        throw new AppError(ModeratorErrors.MODERATOR_EXISTS);
       }
 
       const hash = AuthService.hashPassword(password);
@@ -198,7 +199,7 @@ class AuthController {
       const { id } = decoded;
       moderator = await moderatorModel.findOne({ _id: id });
       if (!moderator) {
-        throw new AppError(AuthErrors.MODERATOR_DOES_NOT_EXIST);
+        throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
       }
     } catch (err) {
       return next(createError(err));
@@ -231,46 +232,6 @@ class AuthController {
     };
 
     return sendResponse(res, response);
-  }
-
-  /**
-   * Create a moderator.
-   *
-   * @param req - express.Request
-   * @param res - express.Response
-   * @param next - express.NextFunction
-   */
-  public async createModerator(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): Promise<any> {
-    try {
-      const validate = AuthValidator.createModeratorSchema.validate(req.body, {
-        abortEarly: false
-      });
-      const { email, firstName, lastName, roles, inviteeId } = validate.value;
-
-      const isModeratorExists = await moderatorModel.findOne({ email });
-      if (isModeratorExists) {
-        throw new AppError(AuthErrors.EMAIL_ALREADY_TAKEN);
-      }
-
-      const moderator = await moderatorModel.create({
-        email,
-        firstName,
-        lastName,
-        roles,
-        inviteeId
-      });
-      await AuthService.sendInvitationEmail(moderator);
-
-      return sendResponse(res, {
-        message: 'Moderation creation is successful'
-      });
-    } catch (err) {
-      return next(createError(err));
-    }
   }
 }
 

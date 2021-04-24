@@ -22,24 +22,6 @@ export const AuthErrors = {
     code: 'MODERATOR_ACCESS_DENIED',
     message: 'Access denied.'
   },
-  MODERATOR_DOES_NOT_EXIST: {
-    type: AppErrorType.JTracer,
-    code: 'MODERATOR_DOES_NOT_EXIST',
-    message: 'The moderator does not exist.',
-    statusCode: 404
-  },
-  MODERATOR_ALREADY_REGISTERED: {
-    type: AppErrorType.JTracer,
-    code: 'MODERATOR_ALREADY_REGISTERED',
-    message: 'The moderator is already registered.',
-    statusCode: 409
-  },
-  EMAIL_ALREADY_TAKEN: {
-    type: AppErrorType.JTracer,
-    code: 'EMAIL_ALREADY_TAKEN',
-    message: 'The given email address is already taken.',
-    statusCode: 400
-  },
   AUTH_WEAK_PASSWORD: {
     type: AppErrorType.JTracer,
     code: 'AUTH_WEAK_PASSWORD',
