@@ -117,7 +117,7 @@ class EventController {
         { eventName, organizers }
       );
       if (!event) {
-        throw new AppError(EventErrors.EVENT_NAME_NOT_EXISTS);
+        throw new AppError(EventErrors.EVENT_NOT_EXISTS);
       }
 
       return sendResponse(res, {
@@ -149,7 +149,7 @@ class EventController {
 
       const event = await eventModel.findByIdAndDelete(eventId);
       if (!event) {
-        throw new AppError(EventErrors.EVENT_NAME_NOT_EXISTS);
+        throw new AppError(EventErrors.EVENT_NOT_EXISTS);
       }
 
       return sendResponse(res, {
