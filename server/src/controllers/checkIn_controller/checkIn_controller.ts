@@ -18,7 +18,7 @@ class CheckInController {
    * @param res - express.Response
    * @param next - express.NextFunction
    */
-  public async getCheckIns(
+  public async getCurrentCheckIns(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction

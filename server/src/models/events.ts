@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export interface IEvent {
   eventName: String;
   locationId: String;
-  organizers: Array<String>;
+  organizers: Array<mongoose.Types.ObjectId>;
   qrCode: String;
   creationDate: Date;
 }
