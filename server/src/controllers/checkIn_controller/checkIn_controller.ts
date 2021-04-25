@@ -73,7 +73,7 @@ class CheckInController {
       }
       const {
         eventId,
-        eventDuration,
+        endTime,
         email,
         isGuest,
         phoneNumber,
@@ -86,9 +86,7 @@ class CheckInController {
       }
 
       const checkInTime = new Date(Date.now());
-      const checkOutTime = new Date(
-        checkInTime.getTime() + eventDuration * 60 * 1000 // convert to milliseconds
-      );
+      const checkOutTime = new Date(endTime);
       const checkInDay = new Date(checkInTime)
         .toLocaleString('de-DE')
         .split(',')[0];
@@ -112,7 +110,7 @@ class CheckInController {
       );
 
       return sendResponse(res, {
-        message: 'Check-In is successful.'
+        message: 'Check-in is successful.'
       });
     } catch (err) {
       return next(createError(err));

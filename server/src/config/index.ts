@@ -19,8 +19,5 @@ export default {
   email: {
     mailgun_api_key: `${process.env.MAILGUN_API_KEY}`,
     domain_name: `${process.env.DOMAIN_NAME}`
-  },
-  event: {
-    maxDuration: 720 // in minutes
   }
 };

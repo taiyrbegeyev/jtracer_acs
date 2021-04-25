@@ -1,14 +1,9 @@
-import config from 'config';
 import Joi, { optional, required } from 'joi';
 
 class CheckInValidator {
   checkInSchema = Joi.object({
     eventId: Joi.string().required(),
-    eventDuration: Joi.number()
-      .integer()
-      .positive()
-      .max(config.event.maxDuration)
-      .required(),
+    endTime: Joi.date().iso().required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .trim()
