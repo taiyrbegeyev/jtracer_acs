@@ -20,6 +20,15 @@ class CheckInValidator {
       otherwise: optional()
     })
   });
+
+  contactTracingSchema = Joi.object({
+    attendeeEmail: Joi.string()
+      .email({ tlds: { allow: false } })
+      .trim()
+      .required(),
+    startDate: Joi.date().iso().required(),
+    endDate: Joi.date().iso().required()
+  });
 }
 
 export default new CheckInValidator();

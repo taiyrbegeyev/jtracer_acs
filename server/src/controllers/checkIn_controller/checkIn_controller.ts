@@ -116,6 +116,46 @@ class CheckInController {
       return next(createError(err));
     }
   }
+
+  /**
+   * Get all check-ins for a given email or phone number.
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async getCheckIns(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = CheckInValidator.contactTracingSchema.validate(
+        req.body,
+        { abortEarly: false }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+      const { attendeeEmail } = validate.value;
+      const startDate = new Date(validate.value.startDate);
+      const endDate = new Date(validate.value.endDate);
+
+      const checkIns = await checkInModel.find({
+        'checkInsData.email': {
+          $eq: attendeeEmail
+        },
+        'checkInsData.checkOutTime': {
+          $gte: startDate,
+          $lte: endDate
+        }
+      });
+
+      return sendResponse(res, checkIns, 200);
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
 }
 
 export default new CheckInController();

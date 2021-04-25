@@ -23,5 +23,11 @@ export default class CheckInRouter {
       // [authHandler, locationManager],
       CheckInController.postCheckIn
     );
+
+    this.router.get(
+      '/checkins',
+      // [authHandler, infectionReportManager],
+      CheckInController.getCheckIns
+    );
   }
 }
