@@ -11,7 +11,6 @@ export enum Role {
 }
 
 export interface IModerator extends mongoose.Document {
-  _id: mongoose.Types.ObjectId;
   email: string;
   hash: string;
   refreshToken: string;
