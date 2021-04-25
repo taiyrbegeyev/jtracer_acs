@@ -15,7 +15,7 @@ export default class CheckInRouter {
     this.router.get(
       '/locations/:locationId/events/:eventId/checkIns',
       // [authHandler, locationManager],
-      CheckInController.getCheckIns
+      CheckInController.getCurrentCheckIns
     );
 
     this.router.post(

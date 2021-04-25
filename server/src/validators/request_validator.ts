@@ -12,7 +12,9 @@ class RequestValidator {
           .trim(),
         Joi.string()
       )
-      .required()
+      .required(),
+    startDate: Joi.date().iso().required(),
+    endDate: Joi.date().iso().required()
   });
 
   approveDeclineRequestSchema = Joi.object({

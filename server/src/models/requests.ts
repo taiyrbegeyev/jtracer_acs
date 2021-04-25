@@ -9,11 +9,12 @@ export enum Status {
 export interface IRequest {
   moderatorId: String;
   attendeeInfo: String;
+  startDate: Date;
+  endDate: Date;
   status: Status;
   approvedBy: Array<mongoose.Types.ObjectId>;
   declinedBy: Array<mongoose.Types.ObjectId>;
   requestDate: Date;
-  approvedDeclinedDate: Date;
 }
 
 const requestSchema: mongoose.Schema = new mongoose.Schema({
@@ -22,6 +23,8 @@ const requestSchema: mongoose.Schema = new mongoose.Schema({
     ref: 'Moderator'
   },
   attendeeInfo: String,
+  startDate: Date,
+  endDate: Date,
   status: {
     type: String,
     enum: Object.keys(Status),
@@ -39,8 +42,7 @@ const requestSchema: mongoose.Schema = new mongoose.Schema({
       ref: 'Moderator'
     }
   ],
-  requestDate: { type: Date, default: Date.now },
-  approvedDeclinedDate: Date
+  requestDate: { type: Date, default: Date.now }
 });
 
 export const requestModel = mongoose.model<IRequest & mongoose.Document>(
