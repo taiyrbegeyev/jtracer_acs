@@ -15,25 +15,22 @@ interface ICheckInData {
   checkOutTime: Date;
 }
 
-const checkInDataSchema: mongoose.Schema = new mongoose.Schema({
-  eventId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event'
-  },
-  email: String,
-  isGuest: Boolean,
-  phoneNumber: String,
-  zipCode: String,
-  checkInTime: { type: Date, default: Date.now },
-  checkOutTime: Date
-});
-
 const checkInSchema: mongoose.Schema = new mongoose.Schema({
-  checkInDay: {
-    type: String,
-    unique: true
-  },
-  checkInsData: [checkInDataSchema]
+  checkInDay: String,
+  checkInsData: [
+    {
+      eventId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event'
+      },
+      email: String,
+      isGuest: Boolean,
+      phoneNumber: String,
+      zipCode: String,
+      checkInTime: { type: Date, default: Date.now },
+      checkOutTime: Date
+    }
+  ]
 });
 
 checkInSchema.pre<ICheckIn>('save', function save(next) {

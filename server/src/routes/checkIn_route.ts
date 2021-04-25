@@ -12,6 +12,12 @@ export default class CheckInRouter {
   }
 
   public routes(): void {
+    this.router.get(
+      '/locations/:locationId/events/:eventId/checkIns',
+      // [authHandler, locationManager],
+      CheckInController.getCheckIns
+    );
+
     this.router.post(
       '/checkIns',
       // [authHandler, locationManager],

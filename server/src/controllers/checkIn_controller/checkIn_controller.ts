@@ -1,7 +1,9 @@
 import { EventErrors } from 'controllers/event_controller/event_errors';
+import { LocationErrors } from 'controllers/location_controller/location_errors';
 import express from 'express';
 import { checkInModel } from 'models/checkIns';
 import { eventModel } from 'models/events';
+import { locationModel } from 'models/locations';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -9,6 +11,47 @@ import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import CheckInValidator from 'validators/checkIn_validator';
 
 class CheckInController {
+  /**
+   * Get current check-ins for a given event
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async getCheckIns(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const { locationId, eventId } = req.params;
+
+      const location = await locationModel.findById(locationId);
+      if (!location) {
+        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
+      }
+
+      const event = await eventModel.findById(eventId);
+      if (!event) {
+        throw new AppError(EventErrors.EVENT_NOT_EXISTS);
+      }
+
+      const currentDate = new Date(Date.now());
+      const checkInDay = currentDate.toLocaleString('de-DE').split(',')[0];
+
+      const checkIns = await checkInModel.find({
+        checkInDay,
+        'checkInsData.checkOutTime': {
+          $gte: currentDate
+        }
+      });
+
+      return sendResponse(res, checkIns, 200);
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
   /**
    * Create an check in for a given event
    *
@@ -49,11 +92,7 @@ class CheckInController {
       const checkInDay = new Date(checkInTime)
         .toLocaleString('de-DE')
         .split(',')[0];
-      // check if the a document for the current day is created
-      // let date = await checkInModel.find({ checkInDay });
-      // if (!date) {
-      //   date = await checkInModel.create({ checkInDay, checkInsData: [] });
-      // }
+
       await checkInModel.findOneAndUpdate(
         { checkInDay },
         {
