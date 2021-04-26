@@ -26,7 +26,6 @@ class CheckInController {
   ): Promise<any> {
     try {
       const { locationId, eventId } = req.params;
-
       const location = await locationModel.findById(locationId);
       if (!location) {
         throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);

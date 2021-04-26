@@ -26,6 +26,9 @@ class AuthController {
       const validate = AuthValidator.loginSchema.validate(req.body, {
         abortEarly: false
       });
+      if (validate.error) {
+        throw validate.error;
+      }
       const { email, password } = validate.value;
 
       const moderator = await moderatorModel.findOne({
@@ -122,6 +125,9 @@ class AuthController {
       const validate = AuthValidator.registerSchema.validate(req.body, {
         abortEarly: false
       });
+      if (validate.error) {
+        throw validate.error;
+      }
       const { emailToken, password } = validate.value;
 
       const { id } = AuthService.decodeJWTtoken(

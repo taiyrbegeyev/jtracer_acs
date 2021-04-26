@@ -14,25 +14,25 @@ export default class EventRouter {
   public routes(): void {
     this.router.get(
       '/events',
-      // [authHandler, locationManager],
+      // [authHandler, eventManager],
       EventController.getEvents
     );
 
     this.router.post(
       '/events',
-      // [authHandler, locationManager],
+      // [authHandler, eventManager],
       EventController.postEvent
     );
 
     this.router.patch(
       '/events/:eventId',
-      // [authHandler, locationManager],
+      // [authHandler, eventManager],
       EventController.editEvent
     );
 
     this.router.delete(
       '/events/:eventId',
-      // [authHandler, locationManager],
+      // [authHandler, eventManager],
       EventController.deleteEvent
     );
   }

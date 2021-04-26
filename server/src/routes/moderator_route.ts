@@ -14,25 +14,25 @@ export default class ModeratorRouter {
   public routes(): void {
     this.router.get(
       '/moderators',
-      // [authHandler, locationManager],
+      // [authHandler, moderatorManager],
       ModeratorController.getModerators
     );
 
     this.router.post(
       '/moderators',
-      // [authHandler, locationManager],
+      // [authHandler, moderatorManager],
       ModeratorController.postModerator
     );
 
     this.router.patch(
       '/moderators/:moderatorId',
-      // [authHandler, locationManager],
+      // [authHandler, moderatorManager],
       ModeratorController.editModerator
     );
 
     this.router.delete(
       '/moderators/:moderatorId',
-      // [authHandler, locationManager],
+      // [authHandler, moderatorManager],
       ModeratorController.deleteModerator
     );
   }
