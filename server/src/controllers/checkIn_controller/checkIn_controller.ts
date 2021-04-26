@@ -46,9 +46,14 @@ class CheckInController {
           $gte: currentDate
         }
       });
-      const normalizedCheckIns: ICheckInData[] = [];
+      let normalizedCheckIns: ICheckInData[] = [];
       checkIns.forEach((elem: ICheckIn) =>
         normalizedCheckIns.push(...elem.checkInsData)
+      );
+      normalizedCheckIns = normalizedCheckIns.filter(
+        (elem: ICheckInData) =>
+          // eslint-disable-next-line eqeqeq
+          elem.eventId == eventId && elem.checkOutTime >= currentDate
       );
 
       return sendResponse(res, normalizedCheckIns, 200);
@@ -150,28 +155,39 @@ class CheckInController {
       const endDate = new Date(validate.value.endDate);
 
       const checkIns = await checkInModel.find({
-        'checkInsData.email': {
-          $eq: attendeeEmail
-        },
+        'checkInsData.email': attendeeEmail,
         'checkInsData.checkOutTime': {
           $gte: startDate,
           $lte: endDate
         }
       });
-      // restructure checkIns into one array of objects
-      const normalizedCheckIns: ICheckInData[] = [];
+
+      // even though we run a query on the collection, the returned data
+      // (the checkInsData to be more specific) will still include
+      // unwanted checkins, because the query is run on the documents, not
+      // on the array of objects. So, we will have to filter the list ourselves.
+      let normalizedCheckIns: ICheckInData[] = [];
       checkIns.forEach((elem: ICheckIn) =>
         normalizedCheckIns.push(...elem.checkInsData)
       );
+      normalizedCheckIns = normalizedCheckIns.filter(
+        (elem: ICheckInData) =>
+          // eslint-disable-next-line eqeqeq
+          elem.email == attendeeEmail &&
+          startDate <= elem.checkOutTime &&
+          elem.checkOutTime <= endDate
+      );
 
       // iterate through the List of the potential infected person's checkins
-      const contactsCheckIns: ICheckInData[] = [];
-      normalizedCheckIns.forEach(async (elem: ICheckInData) => {
-        await checkInModel.find({
-          'checkInsData.eventId': {
-            $eq: elem.eventId
-          },
-          $and: [
+      const contactCheckIns: ICheckIn[] = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const elem of normalizedCheckIns) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await checkInModel
+          .find({
+            'checkInsData.eventId': elem.eventId
+          })
+          .and([
             {
               $or: [
                 {
@@ -192,11 +208,22 @@ class CheckInController {
                 }
               ]
             }
-          ]
-        });
-      });
+          ]);
+        contactCheckIns.push(...result);
+      }
 
-      return sendResponse(res, contactsCheckIns, 200);
+      // restructure contactCheckIns into one array of objects
+      const normalizedContactsCheckIns: ICheckInData[] = [];
+      contactCheckIns.forEach((elem: ICheckIn) =>
+        normalizedContactsCheckIns.push(...elem.checkInsData)
+      );
+      // normalizedContactsCheckIns = normalizedContactsCheckIns.filter(
+      //   (elem: ICheckInData) =>
+      //     startDate <= elem.checkOutTime &&
+      //     elem.checkOutTime <= endDate
+      // );
+
+      return sendResponse(res, contactCheckIns, 200);
     } catch (err) {
       return next(createError(err));
     }
