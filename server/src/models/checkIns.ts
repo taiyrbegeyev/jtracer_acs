@@ -5,7 +5,7 @@ export interface ICheckIn extends mongoose.Document {
   checkInsData: Array<ICheckInData>;
 }
 
-interface ICheckInData {
+export interface ICheckInData {
   eventId: String;
   email: String;
   isGuest: Boolean;
