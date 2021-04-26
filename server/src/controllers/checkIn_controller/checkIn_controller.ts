@@ -1,13 +1,14 @@
 import { EventErrors } from 'controllers/event_controller/event_errors';
 import { LocationErrors } from 'controllers/location_controller/location_errors';
 import express from 'express';
-import { checkInModel } from 'models/checkIns';
+import { checkInModel, ICheckIn, ICheckInData } from 'models/checkIns';
 import { eventModel } from 'models/events';
 import { locationModel } from 'models/locations';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
+import { log } from 'utils/logger';
 import CheckInValidator from 'validators/checkIn_validator';
 
 class CheckInController {
@@ -45,8 +46,12 @@ class CheckInController {
           $gte: currentDate
         }
       });
+      const normalizedCheckIns: ICheckInData[] = [];
+      checkIns.forEach((elem: ICheckIn) =>
+        normalizedCheckIns.push(...elem.checkInsData)
+      );
 
-      return sendResponse(res, checkIns, 200);
+      return sendResponse(res, normalizedCheckIns, 200);
     } catch (err) {
       return next(createError(err));
     }
@@ -86,10 +91,13 @@ class CheckInController {
       }
 
       const checkInTime = new Date(Date.now());
+      log.debug(`checkInTime: ${checkInTime}`);
       const checkOutTime = new Date(endTime);
+      log.debug(`checkOutTime: ${checkOutTime}`);
       const checkInDay = new Date(checkInTime)
         .toLocaleString('de-DE')
         .split(',')[0];
+      log.debug(`checkInDay: ${checkInDay}`);
 
       await checkInModel.findOneAndUpdate(
         { checkInDay },
@@ -150,8 +158,12 @@ class CheckInController {
           $lte: endDate
         }
       });
+      const normalizedCheckIns: ICheckInData[] = [];
+      checkIns.forEach((checkInDay: ICheckIn) =>
+        normalizedCheckIns.push(...checkInDay.checkInsData)
+      );
 
-      return sendResponse(res, checkIns, 200);
+      return sendResponse(res, normalizedCheckIns, 200);
     } catch (err) {
       return next(createError(err));
     }
