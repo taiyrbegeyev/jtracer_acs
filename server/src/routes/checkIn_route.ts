@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import CheckInController from 'controllers/checkIn_controller/checkIn_controller';
-import ContactTracingController from 'controllers/contact_tracing_controller/contact_tracing_controller';
 /**
  * CheckInRouter
  */
@@ -29,12 +28,6 @@ export default class CheckInRouter {
       '/checkins',
       // [authHandler, infectionReportManager],
       CheckInController.getCheckIns
-    );
-
-    this.router.get(
-      '/checkins/trace',
-      // [authHandler, infectionReportManager],
-      ContactTracingController.contactTracing
     );
   }
 }
