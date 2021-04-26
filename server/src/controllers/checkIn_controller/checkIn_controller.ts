@@ -126,7 +126,7 @@ class CheckInController {
   }
 
   /**
-   * Get all check-ins for a given email or phone number.
+   * Trace all contacts of a given email based on start and end dates.
    *
    * @param req - express.Request
    * @param res - express.Response
@@ -158,12 +158,45 @@ class CheckInController {
           $lte: endDate
         }
       });
+      // restructure checkIns into one array of objects
       const normalizedCheckIns: ICheckInData[] = [];
-      checkIns.forEach((checkInDay: ICheckIn) =>
-        normalizedCheckIns.push(...checkInDay.checkInsData)
+      checkIns.forEach((elem: ICheckIn) =>
+        normalizedCheckIns.push(...elem.checkInsData)
       );
 
-      return sendResponse(res, normalizedCheckIns, 200);
+      // iterate through the List of the potential infected person's checkins
+      const contactsCheckIns: ICheckInData[] = [];
+      normalizedCheckIns.forEach(async (elem: ICheckInData) => {
+        await checkInModel.find({
+          'checkInsData.eventId': {
+            $eq: elem.eventId
+          },
+          $and: [
+            {
+              $or: [
+                {
+                  'checkInsData.checkInTime': {
+                    $gte: elem.checkInTime,
+                    $lte: elem.checkOutTime
+                  }
+                }
+              ]
+            },
+            {
+              $or: [
+                {
+                  'checkInsData.checkOutTime': {
+                    $gte: elem.checkInTime,
+                    $lte: elem.checkOutTime
+                  }
+                }
+              ]
+            }
+          ]
+        });
+      });
+
+      return sendResponse(res, contactsCheckIns, 200);
     } catch (err) {
       return next(createError(err));
     }
