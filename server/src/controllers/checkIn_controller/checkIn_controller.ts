@@ -213,17 +213,24 @@ class CheckInController {
       }
 
       // restructure contactCheckIns into one array of objects
-      const normalizedContactsCheckIns: ICheckInData[] = [];
+      let normalizedContactsCheckIns: ICheckInData[] = [];
       contactCheckIns.forEach((elem: ICheckIn) =>
         normalizedContactsCheckIns.push(...elem.checkInsData)
       );
-      // normalizedContactsCheckIns = normalizedContactsCheckIns.filter(
-      //   (elem: ICheckInData) =>
-      //     startDate <= elem.checkOutTime &&
-      //     elem.checkOutTime <= endDate
-      // );
+      normalizedContactsCheckIns = normalizedContactsCheckIns.filter(
+        (elem: ICheckInData) =>
+          startDate <= elem.checkOutTime &&
+          elem.checkOutTime <= endDate &&
+          // eslint-disable-next-line eqeqeq
+          elem.email != attendeeEmail
+      );
+      const uniqueNormalizedContactsCheckIns = [
+        ...new Map(
+          normalizedContactsCheckIns.map((item) => [JSON.stringify(item), item])
+        ).values()
+      ];
 
-      return sendResponse(res, contactCheckIns, 200);
+      return sendResponse(res, uniqueNormalizedContactsCheckIns, 200);
     } catch (err) {
       return next(createError(err));
     }

@@ -25,7 +25,7 @@ export default class CheckInRouter {
     );
 
     this.router.get(
-      '/checkins',
+      '/checkins/trace',
       // [authHandler, infectionReportManager],
       CheckInController.getCheckIns
     );
