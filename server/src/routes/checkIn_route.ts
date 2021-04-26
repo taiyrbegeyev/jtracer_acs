@@ -14,15 +14,11 @@ export default class CheckInRouter {
   public routes(): void {
     this.router.get(
       '/locations/:locationId/events/:eventId/checkIns',
-      // [authHandler, locationManager],
+      // [authHandler, viewer],
       CheckInController.getCurrentCheckIns
     );
 
-    this.router.post(
-      '/checkIns',
-      // [authHandler, locationManager],
-      CheckInController.postCheckIn
-    );
+    this.router.post('/checkIns', CheckInController.postCheckIn);
 
     this.router.get(
       '/checkins/trace',
