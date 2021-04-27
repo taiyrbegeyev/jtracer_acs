@@ -1,27 +1,24 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Typography } from '@material-ui/core';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import PropTypes from 'prop-types';
+import PageNotFound from 'containers/PageNotFound/PageNotFound';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 
-App.propTypes = {
-  t: PropTypes.func.isRequired
-};
-
-const App = ({ t }) => {
+const App = () => {
   let theme = createMuiTheme();
   theme = responsiveFontSizes(theme);
 
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <CssBaseline />
-        <Typography variant="h3">{t('Welcome to React')}</Typography>
-      </div>
+      <CssBaseline />
+      <PageNotFound />
     </ThemeProvider>
   );
 };
+
+// App.propTypes = {
+//   t: PropTypes.func.isRequired
+// };
 
 export default withNamespaces()(App);
