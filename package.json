@@ -7,6 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "client:format-and-lint": "cd client && npm run format && npm run lint",
     "server:format-and-lint": "cd server && npm run format && npm run lint",
     "prepare": "husky install"
   },
