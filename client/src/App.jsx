@@ -1,11 +1,17 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 
-function App() {
+App.propTypes = {
+  t: PropTypes.func.isRequired
+};
+
+function App({ t }) {
   return (
     <div>
-      <p>Hello World</p>
+      <p>{t('Welcome to React')}</p>
     </div>
   );
 }
 
-export default App;
+export default withNamespaces()(App);
