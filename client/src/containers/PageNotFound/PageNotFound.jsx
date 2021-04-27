@@ -1,10 +1,11 @@
 import { Box, Grid, Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import notFoundIllustration from 'assets/illustrations/undraw_page_not_found.svg';
 import { NotFoundIllustration } from './styles';
 
-const PageNotFound = () => {
+const PageNotFound = ({ t }) => {
   return (
     <Grid
       container
@@ -17,13 +18,12 @@ const PageNotFound = () => {
       <Grid item xs={4}>
         <Box mb={1}>
           <Typography variant="h4" align="center">
-            Oops! Page not found
+            {t('not_found_page_title')}
           </Typography>
         </Box>
         <Box mb={1}>
           <Typography variant="subtitle1" align="center">
-            Sorry, but the page you are looking for is not found. Please, make
-            sure that you have typed the current URL
+            {t('not_found_page_sub_title')}
           </Typography>
         </Box>
         <Box>
@@ -37,6 +37,10 @@ const PageNotFound = () => {
       </Grid>
     </Grid>
   );
+};
+
+PageNotFound.propTypes = {
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(PageNotFound);

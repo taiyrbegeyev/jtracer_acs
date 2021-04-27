@@ -17,8 +17,4 @@ const App = () => {
   );
 };
 
-// App.propTypes = {
-//   t: PropTypes.func.isRequired
-// };
-
 export default withNamespaces()(App);
