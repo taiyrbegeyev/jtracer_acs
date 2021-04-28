@@ -8,6 +8,7 @@ import { NotFoundIllustration } from './styles';
 const PageNotFound = ({ t }) => {
   return (
     <Grid
+      component="main"
       container
       spacing={4}
       alignItems="center"
