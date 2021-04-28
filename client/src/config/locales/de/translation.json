@@ -1,3 +1,11 @@
 {
-  "Welcome to React": "Willkommen bei react und react-i18next"
+  "not_found_page_title": "Oops! Page not found",
+  "not_found_page_sub_title": "Sorry, but the page you are looking for is not found. Please, make sure that you have typed the current URL",
+  "sign_in_page_sign_in": "Sign in",
+  "sign_in_page_forgot_password": "Forgot password?",
+  "sign_in_page_contact_admin": "Don't have an account? Contact the admin",
+  "drawer_locations": "Locations 🇩🇪",
+  "drawer_report_infection": "Report Infection 🇩🇪",
+  "drawer_moderator_management": "Moderator Management 🇩🇪",
+  "drawer_settings": "Settings 🇩🇪"
 }

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Switch from '@material-ui/core/Switch';
+import {
+  Button,
+  Drawer,
+  List,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Switch
+} from '@material-ui/core';
 import PeopleIcon from '@material-ui/icons/People';
 import ReportIcon from '@material-ui/icons/Report';
 import RoomIcon from '@material-ui/icons/Room';
@@ -38,15 +42,21 @@ const renderIcons = (index) => {
   }
 };
 
-const JTracerDrawer = () => {
+const JTracerDrawer = ({ t, i18n }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    checked: true
+    checked: false
   });
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  useEffect(() => {
+    const { checked } = state;
+    if (checked) i18n.changeLanguage('de-DE');
+    else i18n.changeLanguage('en-US');
+  }, [state.checked]);
 
   return (
     <Drawer
@@ -61,18 +71,20 @@ const JTracerDrawer = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Locations', 'Report Infection', 'Moderator Management'].map(
-          (text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{renderIcons(index)}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          )
-        )}
+        {[
+          t('drawer_locations'),
+          t('drawer_report_infection'),
+          t('drawer_moderator_management')
+        ].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>{renderIcons(index)}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
       </List>
       <Divider />
       <List>
-        {['Settings'].map((text) => (
+        {[t('drawer_settings')].map((text) => (
           <ListItem button key={text}>
             <ListItemIcon>
               <SettingsIcon />
@@ -83,15 +95,15 @@ const JTracerDrawer = () => {
       </List>
       <List style={{ marginTop: '48vh' }}>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
-          <label>Deutsch</label>
+          <label>English</label>
           <Switch
             checked={state.checked}
             onChange={handleChange}
-            color="primary"
+            color="default"
             name="checked"
             inputProps={{ 'aria-label': 'primary checkbox' }}
           />
-          <label>English</label>
+          <label>Deutsch</label>
         </ListItem>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
           <Button color="primary">Log out</Button>
@@ -101,4 +113,9 @@ const JTracerDrawer = () => {
   );
 };
 
-export default JTracerDrawer;
+JTracerDrawer.propTypes = {
+  t: PropTypes.func.isRequired,
+  i18n: PropTypes.object.isRequired
+};
+
+export default withNamespaces()(JTracerDrawer);
