@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,6 +17,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import ReportIcon from '@material-ui/icons/Report';
 import RoomIcon from '@material-ui/icons/Room';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { handleSelectedIndex } from 'reducers/drawerSlice';
 
 const drawerWidth = 300;
 
@@ -47,6 +49,8 @@ const JTracerDrawer = ({ t, i18n }) => {
   const [state, setState] = React.useState({
     checked: false
   });
+  const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -76,7 +80,12 @@ const JTracerDrawer = ({ t, i18n }) => {
           t('drawer_report_infection'),
           t('drawer_moderator_management')
         ].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem
+            button
+            key={text}
+            onClick={() => dispatch(handleSelectedIndex(index))}
+            selected={selectedIndex == index}
+          >
             <ListItemIcon>{renderIcons(index)}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
@@ -85,7 +94,12 @@ const JTracerDrawer = ({ t, i18n }) => {
       <Divider />
       <List>
         {[t('drawer_settings')].map((text) => (
-          <ListItem button key={text}>
+          <ListItem
+            button
+            key={text}
+            onClick={() => dispatch(handleSelectedIndex(3))}
+            selected={selectedIndex == 3}
+          >
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
