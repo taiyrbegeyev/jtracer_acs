@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SignIn = ({ t }) => {
+const SignInPage = ({ t }) => {
   const classes = useStyles();
 
   return (
@@ -103,8 +103,8 @@ const SignIn = ({ t }) => {
   );
 };
 
-SignIn.propTypes = {
+SignInPage.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(SignIn);
+export default withNamespaces()(SignInPage);
