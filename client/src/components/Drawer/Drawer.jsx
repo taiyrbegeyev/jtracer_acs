@@ -17,7 +17,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import ReportIcon from '@material-ui/icons/Report';
 import RoomIcon from '@material-ui/icons/Room';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { handleSelectedIndex } from 'reducers/drawerSlice';
+import { handleSelectedIndex } from 'reducers/drawer_slice';
 
 const drawerWidth = 300;
 
