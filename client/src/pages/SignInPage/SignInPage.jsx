@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { signInPending, signInSuccess, signInFail } from 'reducers/auth_slice';
+import { signIn } from 'services/auth_service';
 import {
   Avatar,
   Button,
@@ -7,8 +11,11 @@ import {
   Link,
   Grid,
   Typography,
-  Container
+  Container,
+  CircularProgress,
+  Snackbar
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -33,8 +40,64 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const SignInPage = ({ t }) => {
   const classes = useStyles();
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const error = useSelector((state) => state.auth.error);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [isSnackBarOpen, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'email':
+        setEmail(value);
+        break;
+      case 'password':
+        setPassword(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      return alert('Fill up all the form!');
+    }
+    dispatch(signInPending());
+    try {
+      await signIn({ email, password });
+      dispatch(signInSuccess());
+      // dispatch(getUserProfile());
+      history.push('/');
+    } catch (error) {
+      console.log(error);
+      if (error.response)
+        dispatch(signInFail(error.response.data.error.message));
+      handleClick();
+    }
+  };
 
   return (
     <Box
@@ -52,7 +115,14 @@ const SignInPage = ({ t }) => {
           <Typography component="h1" variant="h5">
             {t('sign_in_page_sign_in')}
           </Typography>
-          <form className={classes.form} noValidate>
+          <Snackbar
+            open={isSnackBarOpen}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert severity="error">{error}</Alert>
+          </Snackbar>
+          <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -63,6 +133,7 @@ const SignInPage = ({ t }) => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleOnChange}
             />
             <TextField
               variant="outlined"
@@ -74,6 +145,7 @@ const SignInPage = ({ t }) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handleOnChange}
             />
             <Button
               type="submit"
@@ -97,6 +169,11 @@ const SignInPage = ({ t }) => {
               </Grid>
             </Grid>
           </form>
+          {isLoading && (
+            <Box mt={4}>
+              <CircularProgress />
+            </Box>
+          )}
         </div>
       </Container>
     </Box>

@@ -1,4 +1,5 @@
 import HomePage from 'pages/HomePage/HomePage';
+import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import SignInPage from 'pages/SignInPage/SignInPage';
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -18,6 +19,7 @@ const Routes = () => {
           component={HomePage}
           exact
         />
+        <Route path="*" component={PageNotFound} />
       </Switch>
     </BrowserRouter>
   );
