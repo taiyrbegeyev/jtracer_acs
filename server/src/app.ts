@@ -58,14 +58,10 @@ class App {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public static connectToTheDatabase() {
-    const {
-      APP_USER,
-      APP_PWD,
-      DB_NAME,
-      MONGO_HOSTNAME,
-      MONGO_PORT
-    } = process.env;
+  public static connectToTheDatabase(
+    MONGO_HOSTNAME = process.env.MONGO_HOSTNAME
+  ) {
+    const { APP_USER, APP_PWD, DB_NAME, MONGO_PORT } = process.env;
 
     const MONGO_URI = `mongodb://${APP_USER}:${APP_PWD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${DB_NAME}?authSource=admin`;
     try {
@@ -75,6 +71,7 @@ class App {
         useUnifiedTopology: true,
         useFindAndModify: false
       });
+      mongoose.set('debug', true);
     } catch (err) {
       log.error(err);
     }

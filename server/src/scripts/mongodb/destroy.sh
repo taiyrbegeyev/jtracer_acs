@@ -7,7 +7,11 @@ fi
 
 export $(cat .env | xargs)
 
-docker container stop $CONTAINER_NAME
-docker rm $CONTAINER_NAME
+docker container stop $API_CONTAINER_NAME
+docker container stop $DB_CONTAINER_NAME
+docker rm $API_CONTAINER_NAME
+docker rm $DB_CONTAINER_NAME
+docker image rm server_$API_CONTAINER_NAME
+docker image rm mongo
 docker system prune
 rm -rf ~/data/db
