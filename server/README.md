@@ -7,14 +7,30 @@ Docker is one of the prerequisites to make the application up and running. Make 
 Create a file `.env` with the following variables:
 
 ```
-PORT=
+API_PORT=
+
 MONGO_INITDB_ROOT_USERNAME=
 MONGO_INITDB_ROOT_PASSWORD=
 APP_USER=
 APP_PWD=
 DB_NAME=
+JTRACER_ROOT_EMAIL=
+JTRACER_ROOT_PWD=
+JTRACER_ROOT_FIRST_NAME=
+JTRACER_ROOT_LAST_NAME=
 MONGO_HOSTNAME=
 MONGO_PORT=
+CONTAINER_NAME=
+
+ACCESS_TOKEN_SECRET=
+ACCESS_TOKEN_LIFE=
+REFRESH_TOKEN_SECRET=
+REFRESH_TOKEN_LIFE=
+EMAIL_TOKEN_SECRET=
+EMAIL_TOKEN_LIFE=
+
+MAILGUN_API_KEY=
+DOMAIN_NAME=
 ```
 
 In order to run all components of the system run:

@@ -22,9 +22,9 @@ class App {
   }
 
   public listen(): void {
-    this.app.listen(process.env.PORT, () => {
+    this.app.listen(process.env.API_PORT, () => {
       log.info(
-        `⚡️[server]: Server is running at https://localhost:${process.env.PORT}`
+        `⚡️[server]: Server is running at https://localhost:${process.env.API_PORT}`
       );
     });
   }
