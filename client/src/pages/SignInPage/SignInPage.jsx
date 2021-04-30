@@ -89,7 +89,7 @@ const SignInPage = ({ t }) => {
     try {
       await signIn({ email, password });
       dispatch(signInSuccess());
-      dispatch(getModeratorProfile(email));
+      dispatch(getModeratorProfile());
       history.push('/');
     } catch (error) {
       console.log(error);

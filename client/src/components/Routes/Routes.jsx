@@ -13,9 +13,6 @@ const Routes = () => {
         <ProtectedRoute
           path="/"
           redirectRoute="/signin"
-          guardFunction={() => {
-            return true;
-          }}
           component={HomePage}
           exact
         />
