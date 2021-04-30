@@ -1,13 +1,6 @@
 import Joi from 'joi';
 
 class ModeratorValidator {
-  getOneModeratorSchema = Joi.object({
-    email: Joi.string()
-      .email({ tlds: { allow: false } })
-      .trim()
-      .required()
-  });
-
   moderatorSchema = Joi.object({
     email: Joi.string()
       .email({ tlds: { allow: false } })

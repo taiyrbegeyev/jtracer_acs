@@ -5,7 +5,6 @@ import { Role } from 'models/moderators';
 import { createError } from 'services/error_hanlding/app_error_factory';
 
 export function viewer(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -17,7 +16,6 @@ export function viewer(
 }
 
 export function locationManager(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -29,7 +27,6 @@ export function locationManager(
 }
 
 export function eventManager(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -41,7 +38,6 @@ export function eventManager(
 }
 
 export function moderatorManager(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -53,7 +49,6 @@ export function moderatorManager(
 }
 
 export function logManager(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -65,7 +60,6 @@ export function logManager(
 }
 
 export function infectionReportManager(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction

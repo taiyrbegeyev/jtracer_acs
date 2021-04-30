@@ -22,21 +22,13 @@ class ModeratorController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const validate = ModeratorValidator.getOneModeratorSchema.validate(
-        req.query,
-        {
-          abortEarly: false
-        }
-      );
-      if (validate.error) {
-        throw validate.error;
-      }
-      const email = req.query.email as string;
+      const { email } = res.locals;
       // exclude hash from the response object
       const moderators = await moderatorModel
         .findOne({ email })
-        .select('-hash');
-      return sendResponse(res, [moderators], 200);
+        .select('-hash')
+        .select('-refreshToken');
+      return sendResponse(res, moderators, 200);
     } catch (err) {
       return next(createError(err));
     }
@@ -56,7 +48,10 @@ class ModeratorController {
   ): Promise<any> {
     try {
       // exclude hash from the response object
-      const moderators = await moderatorModel.find().select('-hash');
+      const moderators = await moderatorModel
+        .find()
+        .select('-hash')
+        .select('-refreshToken');
       return sendResponse(res, moderators, 200);
     } catch (err) {
       return next(createError(err));

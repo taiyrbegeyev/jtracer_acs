@@ -33,8 +33,7 @@ const moderatorSchema = new mongoose.Schema<IModerator>({
     type: String
   },
   refreshToken: {
-    type: String,
-    select: false
+    type: String
   },
   firstName: String,
   lastName: String,
