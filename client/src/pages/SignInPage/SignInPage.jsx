@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { signInPending, signInSuccess, signInFail } from 'reducers/auth_slice';
-import { signIn } from 'services/auth_service';
+import { getModeratorProfile, signIn } from 'services/auth_service';
 import {
   Avatar,
   Button,
@@ -89,7 +89,7 @@ const SignInPage = ({ t }) => {
     try {
       await signIn({ email, password });
       dispatch(signInSuccess());
-      // dispatch(getUserProfile());
+      dispatch(getModeratorProfile(email));
       history.push('/');
     } catch (error) {
       console.log(error);
