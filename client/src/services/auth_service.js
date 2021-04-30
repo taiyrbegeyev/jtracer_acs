@@ -7,25 +7,30 @@ import {
 
 const rootUrl = 'api/v1/';
 const signInUrl = rootUrl + 'auth/login';
-const moderatorUrl = rootUrl + 'moderators';
+const signOutUrl = rootUrl + 'auth/logout';
+const refreshAccessTokenUrl = rootUrl + 'auth/refreshToken';
+const moderatorUrl = rootUrl + 'moderator';
 
 export const signIn = async (data) => {
-  return await axios.post(signInUrl, data);
+  const res = await axios.post(signInUrl, data);
+  const accessTokenMaxAge = res.data.data;
+  const accessTokenExpiry = new Date(new Date().getTime() + accessTokenMaxAge);
+  localStorage.setItem('accessTokenExpiry', accessTokenExpiry);
 };
 
-export const fetchModerator = async (email) => {
-  return await axios.get(moderatorUrl, {
-    params: { email },
-    // include the access token from a http-only cookie
-    withCredentials: true
-  });
+export const signOut = async () => {
+  localStorage.removeItem('accessTokenExpiry');
+  return await axios.post(signOutUrl);
 };
 
-export const getModeratorProfile = (email) => async (dispatch) => {
+export const getModeratorProfile = () => async (dispatch) => {
   try {
     dispatch(getModeratorPending());
-    const result = await fetchModerator(email);
-    const moderator = result.data.data[0];
+    const res = await axios.get(moderatorUrl, {
+      // include the access token from a http-only cookie
+      withCredentials: true
+    });
+    const moderator = res.data.data;
 
     console.log(moderator);
     if (moderator && moderator._id) {
@@ -35,4 +40,26 @@ export const getModeratorProfile = (email) => async (dispatch) => {
   } catch (err) {
     dispatch(getModeratorFail(err));
   }
+};
+
+export const refreshAcessToken = async () => {
+  try {
+    const res = await axios.post(refreshAccessTokenUrl, {
+      withCredentials: true
+    });
+    const accessTokenMaxAge = res.data.data;
+    const accessTokenExpiry = new Date(
+      new Date().getTime() + accessTokenMaxAge
+    );
+    localStorage.setItem('accessTokenExpiry', accessTokenExpiry);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const isAccessTokenExpired = () => {
+  const accessTokenExpiry = localStorage.getItem('accessTokenExpiry');
+  return accessTokenExpiry < new Date(Date.now()).toISOString();
 };
