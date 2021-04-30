@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ModeratorController from 'controllers/moderator_controller/moderator_controller';
+import { authHandler } from 'middlewares/auth_handler';
 /**
  * ModeratorRouter
  */
@@ -12,6 +13,12 @@ export default class ModeratorRouter {
   }
 
   public routes(): void {
+    this.router.get(
+      '/moderator',
+      [authHandler],
+      ModeratorController.getModerator
+    );
+
     this.router.get(
       '/moderators',
       // [authHandler, moderatorManager],

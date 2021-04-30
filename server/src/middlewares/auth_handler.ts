@@ -5,9 +5,9 @@ import express from 'express';
 import AuthService from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
+import { log } from 'utils/logger';
 
 export function authHandler(
-  err: any,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -15,6 +15,7 @@ export function authHandler(
   let accessToken;
   try {
     accessToken = req.cookies.accessToken;
+    log.debug(accessToken);
     if (!accessToken) {
       throw new AppError(AuthErrors.NO_ACCESS_TOKEN_PROVIDED);
     }

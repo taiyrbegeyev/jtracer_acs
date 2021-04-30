@@ -10,6 +10,39 @@ import { ModeratorErrors } from './moderator_errors';
 
 class ModeratorController {
   /**
+   * Get a moderator
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async getModerator(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = ModeratorValidator.getOneModeratorSchema.validate(
+        req.query,
+        {
+          abortEarly: false
+        }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+      const email = req.query.email as string;
+      // exclude hash from the response object
+      const moderators = await moderatorModel
+        .findOne({ email })
+        .select('-hash');
+      return sendResponse(res, [moderators], 200);
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
    * Get all moderators
    *
    * @param req - express.Request
@@ -22,7 +55,8 @@ class ModeratorController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const moderators = await moderatorModel.find();
+      // exclude hash from the response object
+      const moderators = await moderatorModel.find().select('-hash');
       return sendResponse(res, moderators, 200);
     } catch (err) {
       return next(createError(err));
