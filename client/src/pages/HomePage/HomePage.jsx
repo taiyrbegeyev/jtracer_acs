@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import JTracerDrawer from 'components/Drawer/Drawer';
+import LocationsPage from 'pages/LocationsPage/LocationsPage';
 
 const drawerWidth = 300;
 
@@ -27,35 +28,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const getCurrentAppBarText = (selectedInxex) => {
-  switch (selectedInxex) {
-    case 0:
-      return 'drawer_locations';
-    case 1:
-      return 'drawer_report_infection';
-    case 2:
-      return 'drawer_moderator_management';
-    case 3:
-      return 'drawer_settings';
-  }
-};
-
-const getCurrentScreen = (selectedInxex) => {
-  switch (selectedInxex) {
-    case 0:
-      return <p>Locations</p>;
-    case 1:
-      return <p>Report Infection</p>;
-    case 2:
-      return <p>Moderator Management</p>;
-    case 3:
-      return <p>Settings</p>;
-  }
-};
-
 const HomePage = ({ t }) => {
   const classes = useStyles();
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+
+  const getCurrentAppBarText = (selectedInxex) => {
+    switch (selectedInxex) {
+      case 0:
+        return 'drawer_locations';
+      case 1:
+        return 'drawer_report_infection';
+      case 2:
+        return 'drawer_moderator_management';
+      case 3:
+        return 'drawer_settings';
+    }
+  };
+
+  const getCurrentScreen = (selectedInxex) => {
+    switch (selectedInxex) {
+      case 0:
+        return <LocationsPage />;
+      case 1:
+        return <p>Report Infection</p>;
+      case 2:
+        return <p>Moderator Management</p>;
+      case 3:
+        return <p>Settings</p>;
+    }
+  };
 
   return (
     <div className={classes.root}>
