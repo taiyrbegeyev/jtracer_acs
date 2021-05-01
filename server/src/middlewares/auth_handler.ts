@@ -15,7 +15,6 @@ export function authHandler(
   let accessToken;
   try {
     accessToken = req.cookies.accessToken;
-    log.debug(accessToken);
     if (!accessToken) {
       throw new AppError(AuthErrors.NO_ACCESS_TOKEN_PROVIDED);
     }
