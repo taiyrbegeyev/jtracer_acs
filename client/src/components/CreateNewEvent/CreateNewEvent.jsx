@@ -11,13 +11,13 @@ import {
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { withNamespaces } from 'react-i18next';
-import { createLocation } from 'services/location_service';
+import { createEvent } from 'services/event_service';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const CreateNewLocation = ({
+const CreateNewEvent = ({
   t,
   dialogOpen,
   snackBarOpen,
@@ -25,20 +25,19 @@ const CreateNewLocation = ({
   handleSnackBarOpen,
   handleSnackBarClose
 }) => {
-  const [locationName, setlocationName] = useState();
-  const [capacity, setlocationCapacity] = useState();
-  const [locationCreationSuccessful, setlocationCreationSuccessful] = useState(
-    true
-  );
+  const [eventName, setEventName] = useState();
+  const [eventCapacity, setEventCapacity] = useState();
+  // const [organizers, setOrganizers] = useState([]);
+  const [eventCreationSuccessful, setEventCreationSuccessful] = useState(true);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'locationName':
-        setlocationName(value);
+      case 'eventName':
+        setEventName(value);
         break;
-      case 'capacity':
-        setlocationCapacity(value);
+      case 'eventCapacity':
+        setEventCapacity(value);
         break;
       default:
         break;
@@ -47,17 +46,17 @@ const CreateNewLocation = ({
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if (!locationName || !capacity) {
+    if (!eventName || !eventCapacity) {
       return alert('Fill up all the form!');
     }
     try {
-      await createLocation({ locationName, capacity });
+      await createEvent({ eventName, eventCapacity });
       handleClose();
-      setlocationCreationSuccessful(true);
+      setEventCreationSuccessful(true);
       handleSnackBarOpen();
     } catch (error) {
       console.log(error);
-      setlocationCreationSuccessful(false);
+      setEventCreationSuccessful(false);
       handleSnackBarOpen();
     }
   };
@@ -69,10 +68,10 @@ const CreateNewLocation = ({
         autoHideDuration={2000}
         onClose={handleSnackBarClose}
       >
-        {locationCreationSuccessful ? (
-          <Alert severity="success">Location creation is successful</Alert>
+        {eventCreationSuccessful ? (
+          <Alert severity="success">Event creation is successful</Alert>
         ) : (
-          <Alert severity="error">Location creation has failed</Alert>
+          <Alert severity="error">Event creation has failed</Alert>
         )}
       </Snackbar>
       <Dialog
@@ -81,15 +80,15 @@ const CreateNewLocation = ({
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          {t('locations_page_create_new_location')}
+          {t('events_page_create_new_event')}
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            name="locationName"
-            id="locationName"
-            label="Location Name"
+            name="eventName"
+            id="eventName"
+            label="Event Name"
             type="text"
             fullWidth
             required
@@ -97,8 +96,8 @@ const CreateNewLocation = ({
           />
           <TextField
             margin="dense"
-            name="capacity"
-            id="capacity"
+            name="eventCapacity"
+            id="eventCapacity"
             label="Capacity"
             type="number"
             fullWidth
@@ -119,7 +118,7 @@ const CreateNewLocation = ({
   );
 };
 
-CreateNewLocation.propTypes = {
+CreateNewEvent.propTypes = {
   t: PropTypes.func.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
   snackBarOpen: PropTypes.bool.isRequired,
@@ -128,4 +127,4 @@ CreateNewLocation.propTypes = {
   handleSnackBarClose: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(CreateNewLocation);
+export default withNamespaces()(CreateNewEvent);

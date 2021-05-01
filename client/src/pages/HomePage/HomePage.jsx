@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import JTracerDrawer from 'components/Drawer/Drawer';
-import LocationsPage from 'pages/LocationsPage/LocationsPage';
+import EventsPage from 'pages/EventsPage/EventsPage';
 
 const drawerWidth = 300;
 
@@ -35,7 +35,7 @@ const HomePage = ({ t }) => {
   const getCurrentAppBarText = (selectedInxex) => {
     switch (selectedInxex) {
       case 0:
-        return 'drawer_locations';
+        return 'drawer_events';
       case 1:
         return 'drawer_report_infection';
       case 2:
@@ -48,7 +48,7 @@ const HomePage = ({ t }) => {
   const getCurrentScreen = (selectedInxex) => {
     switch (selectedInxex) {
       case 0:
-        return <LocationsPage />;
+        return <EventsPage />;
       case 1:
         return <p>Report Infection</p>;
       case 2:

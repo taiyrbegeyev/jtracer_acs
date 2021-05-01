@@ -4,11 +4,11 @@
   "sign_in_page_sign_in": "Sign in",
   "sign_in_page_forgot_password": "Forgot password?",
   "sign_in_page_contact_admin": "Don't have an account? Contact the admin",
-  "drawer_locations": "Locations 🇩🇪",
+  "drawer_events": "Events 🇩🇪",
   "drawer_report_infection": "Report Infection 🇩🇪",
   "drawer_moderator_management": "Moderator Management 🇩🇪",
   "drawer_settings": "Settings 🇩🇪",
-  "locations_page_create_new_location": "Create New Location 🇩🇪",
-  "locations_page_print_all_qr_codes": "Print All QR Codes 🇩🇪",
-  "locations_page_no_locations_found": "No Locations Found 🇩🇪"
+  "events_page_create_new_event": "Create New Event 🇩🇪",
+  "events_page_print_all_qr_codes": "Print All QR Codes 🇩🇪",
+  "events_page_no_events_found": "No Events Found 🇩🇪"
 }

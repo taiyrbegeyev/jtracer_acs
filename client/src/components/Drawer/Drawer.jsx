@@ -61,12 +61,8 @@ const JTracerDrawer = ({ t, i18n }) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const handleLocations = () => {
-    return (
-      roles.includes(Role.Viewer) ||
-      roles.includes(Role.LocationManager) ||
-      roles.includes(Role.EventManager)
-    );
+  const handleEvents = () => {
+    return roles.includes(Role.Viewer) || roles.includes(Role.EventManager);
   };
 
   const handleReportInfection = () => {
@@ -105,15 +101,15 @@ const JTracerDrawer = ({ t, i18n }) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {handleLocations() && (
+        {handleEvents() && (
           <ListItem
             button
-            key={t('drawer_locations')}
+            key={t('drawer_events')}
             onClick={() => dispatch(handleSelectedIndex(0))}
             selected={selectedIndex == 0}
           >
             <ListItemIcon>{renderIcons(0)}</ListItemIcon>
-            <ListItemText primary={t('drawer_locations')} />
+            <ListItemText primary={t('drawer_events')} />
           </ListItem>
         )}
         {handleReportInfection() && (

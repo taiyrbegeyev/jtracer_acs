@@ -9,19 +9,19 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { getAllLocations } from 'services/location_service';
-import CreateNewLocation from 'components/CreateNewLocation/CreateNewLocation';
+import { getAllEvents } from 'services/event_service';
+import CreateNewEvent from 'components/CreateNewEvent/CreateNewEvent';
 
-const LocationsPage = ({ t }) => {
+const EventsPage = ({ t }) => {
   const [dialogOpen, setdialogOpen] = useState(false);
   const [snackBarOpen, setsnackBarOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.location.isLoading);
-  const locations = useSelector((state) => state.location.locations);
+  const isLoading = useSelector((state) => state.event.isLoading);
+  const events = useSelector((state) => state.event.events);
 
   useEffect(() => {
-    dispatch(getAllLocations());
+    dispatch(getAllEvents());
   }, [snackBarOpen]);
 
   const handleClickOpen = () => {
@@ -45,7 +45,7 @@ const LocationsPage = ({ t }) => {
 
   return (
     <div>
-      <CreateNewLocation
+      <CreateNewEvent
         dialogOpen={dialogOpen}
         snackBarOpen={snackBarOpen}
         handleClose={handleClose}
@@ -58,17 +58,17 @@ const LocationsPage = ({ t }) => {
         aria-label="contained primary button group"
       >
         <Button onClick={handleClickOpen}>
-          {t('locations_page_create_new_location')}
+          {t('events_page_create_new_event')}
         </Button>
-        <Button>{t('locations_page_print_all_qr_codes')}</Button>
+        <Button>{t('events_page_print_all_qr_codes')}</Button>
       </ButtonGroup>
       <Box mt={4}>
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </div>
-        ) : locations.length === 0 ? (
-          <Typography>{t('locations_page_no_locations_found')}</Typography>
+        ) : events.length === 0 ? (
+          <Typography>{t('events_page_no_events_found')}</Typography>
         ) : (
           <p>good</p>
         )}
@@ -77,8 +77,8 @@ const LocationsPage = ({ t }) => {
   );
 };
 
-LocationsPage.propTypes = {
+EventsPage.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(LocationsPage);
+export default withNamespaces()(EventsPage);

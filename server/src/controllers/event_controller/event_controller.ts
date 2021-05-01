@@ -10,7 +10,7 @@ import { EventErrors } from './event_errors';
 
 class EventController {
   /**
-   * Get all events for a given location
+   * Get all events
    *
    * @param req - express.Request
    * @param res - express.Response
@@ -30,7 +30,7 @@ class EventController {
   }
 
   /**
-   * Create an event for a given location
+   * Create an event
    *
    * @param req - express.Request
    * @param res - express.Response
@@ -77,7 +77,7 @@ class EventController {
   }
 
   /**
-   * Edit an event for a given location
+   * Edit an event
    *
    * @param req - express.Request
    * @param res - express.Response
@@ -115,7 +115,7 @@ class EventController {
   }
 
   /**
-   * Delete an event for a given location
+   * Delete an event
    *
    * @param req - express.Request
    * @param res - express.Response
