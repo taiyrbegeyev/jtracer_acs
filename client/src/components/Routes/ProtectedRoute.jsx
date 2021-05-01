@@ -1,22 +1,56 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {
+  getModeratorProfile,
+  isAccessTokenExpired,
+  refreshAcessToken
+} from 'services/auth_service';
+import { signInSuccess } from 'reducers/auth_slice';
 
-const ProtectedRoute = ({
-  component: Component,
-  redirectRoute,
-  guardFunction,
-  guardFunctionArgs,
-  ...rest
-}) => {
+const ProtectedRoute = ({ component: Component, redirectRoute, ...rest }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const { isAuth } = useSelector((state) => state.auth);
+  const { moderator } = useSelector((state) => state.moderator);
+
+  useEffect(() => {
+    const updateAccessToken = async () => {
+      const result = await refreshAcessToken();
+      result &&
+        dispatch(signInSuccess()) &&
+        console.log('Updating Access Token');
+      setLoading(false);
+    };
+
+    if (isAuth) {
+      setLoading(false);
+    } else {
+      if (
+        localStorage.getItem('accessTokenExpiry') &&
+        !isAccessTokenExpired()
+      ) {
+        dispatch(getModeratorProfile());
+        updateAccessToken();
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [dispatch, isAuth, moderator._id]);
+
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (guardFunction && guardFunction(guardFunctionArgs)) {
-          return <Component {...props} />;
+        if (loading) {
+          return <p>Loading ...</p>;
         } else {
-          return <Redirect to={redirectRoute} />;
+          return isAuth ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to={redirectRoute} />
+          );
         }
       }}
     />
@@ -26,7 +60,7 @@ const ProtectedRoute = ({
 ProtectedRoute.propTypes = {
   component: PropTypes.func.isRequired,
   redirectRoute: PropTypes.string.isRequired,
-  guardFunction: PropTypes.func.isRequired,
+  guardFunction: PropTypes.func,
   guardFunctionArgs: PropTypes.object
 };
 

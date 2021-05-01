@@ -1,4 +1,4 @@
-import { cleanEnv, makeValidator, port, host, email, num } from 'envalid';
+import { cleanEnv, makeValidator, port, email, num } from 'envalid';
 
 const nonEmptryStr = makeValidator((x) => {
   if (x.length > 0) {
@@ -9,7 +9,7 @@ const nonEmptryStr = makeValidator((x) => {
 
 const validateEnv = (): void => {
   cleanEnv(process.env, {
-    PORT: port(),
+    API_PORT: port(),
     MONGO_INITDB_ROOT_USERNAME: nonEmptryStr(),
     MONGO_INITDB_ROOT_PASSWORD: nonEmptryStr(),
     APP_USER: nonEmptryStr(),
@@ -17,9 +17,10 @@ const validateEnv = (): void => {
     DB_NAME: nonEmptryStr(),
     JTRACER_ROOT_EMAIL: email(),
     JTRACER_ROOT_PWD: nonEmptryStr(),
-    MONGO_HOSTNAME: host(),
+    MONGO_HOSTNAME: nonEmptryStr(),
     MONGO_PORT: port(),
-    CONTAINER_NAME: nonEmptryStr(),
+    API_CONTAINER_NAME: nonEmptryStr(),
+    DB_CONTAINER_NAME: nonEmptryStr(),
     ACCESS_TOKEN_SECRET: nonEmptryStr(),
     ACCESS_TOKEN_LIFE: num(),
     REFRESH_TOKEN_SECRET: nonEmptryStr(),

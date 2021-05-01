@@ -71,16 +71,13 @@ class AuthController {
           moderator.refreshToken = refreshToken;
           await moderator.save();
 
+          const accessTokenMaxAge = config.auth.access_token_life * 1000;
           res.cookie('accessToken', accessToken, {
-            maxAge: config.auth.access_token_life * 1000, // convert from seconds to milliseconds
+            maxAge: accessTokenMaxAge, // convert from seconds to milliseconds
             httpOnly: true,
             secure: false
           });
-          const response = {
-            message: 'Login is successful'
-          };
-
-          return sendResponse(res, response);
+          return sendResponse(res, accessTokenMaxAge);
         }
       );
     } catch (err) {
@@ -179,30 +176,10 @@ class AuthController {
     res: express.Response,
     next: express.NextFunction
   ): Promise<any> {
-    let accessToken;
-    try {
-      accessToken = req.cookies.accessToken;
-      if (!accessToken) {
-        throw new AppError(AuthErrors.NO_ACCESS_TOKEN_PROVIDED);
-      }
-    } catch (err) {
-      return next(createError(err));
-    }
-
-    let decoded;
-    try {
-      decoded = AuthService.decodeJWTtoken(
-        accessToken,
-        config.auth.access_token_secret
-      ) as any;
-    } catch (err) {
-      return next(createError(AuthErrors.INVALID_ACCESS_TOKEN_PROVIDED));
-    }
-
     // look up the moderator's refresh token
     let moderator;
     try {
-      const { id } = decoded;
+      const { id } = res.locals;
       moderator = await moderatorModel.findOne({ _id: id });
       if (!moderator) {
         throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
@@ -222,22 +199,24 @@ class AuthController {
     }
 
     // generate a new access token
+    const payload = {
+      id: moderator._id,
+      email: moderator.email,
+      roles: moderator.roles
+    };
     const newAccessToken = AuthService.generateJWTtoken(
       config.auth.access_token_secret,
       config.auth.access_token_life,
-      decoded
+      payload
     );
 
+    const accessTokenMaxAge = config.auth.access_token_life * 1000;
     res.cookie('accessToken', newAccessToken, {
-      maxAge: config.auth.access_token_life * 1000, // convert from seconds to milliseconds
+      maxAge: accessTokenMaxAge, // convert from seconds to milliseconds
       httpOnly: true,
       secure: false
     });
-    const response = {
-      message: 'Refresh token is successful'
-    };
-
-    return sendResponse(res, response);
+    return sendResponse(res, accessTokenMaxAge);
   }
 }
 

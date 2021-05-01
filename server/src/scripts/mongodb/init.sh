@@ -7,7 +7,7 @@ fi
 
 export $(cat .env | xargs)
 
-docker exec -i $CONTAINER_NAME mongo -u $MONGO_INITDB_ROOT_USERNAME --authenticationDatabase admin -p $MONGO_INITDB_ROOT_PASSWORD <<EOF
+docker exec -i $DB_CONTAINER_NAME mongo -u $MONGO_INITDB_ROOT_USERNAME --authenticationDatabase admin -p $MONGO_INITDB_ROOT_PASSWORD <<EOF
 
 use admin;
 

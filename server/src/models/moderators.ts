@@ -30,12 +30,10 @@ const moderatorSchema = new mongoose.Schema<IModerator>({
     unique: true
   },
   hash: {
-    type: String,
-    select: false
+    type: String
   },
   refreshToken: {
-    type: String,
-    select: false
+    type: String
   },
   firstName: String,
   lastName: String,

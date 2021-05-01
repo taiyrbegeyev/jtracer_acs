@@ -1,29 +1,22 @@
 version: '3.8'
 
 services:
-  # nodejs:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   image: nodejs
-  #   container_name: nodejs
-  #   restart: unless-stopped
-  #   env_file: .env
-  #   environment:
-  #     - MONGO_USERNAME=$DATABASE_USERNAME
-  #     - MONGO_PASSWORD=$DATABASE_PASSWORD
-  #     - MONGO_HOST=db
-  #     - MONGO_PORT=$DATABASE_PORT
-  #     - MONGO_DB=$DATABASE
-  #   ports:
-  #     - '3000:3000'
-  #   networks:
-  #     - jtracer-network
-  #   links:
-  #     - mongo
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: $API_CONTAINER_NAME
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - '$API_PORT:$API_PORT'
+    networks:
+      - jtracer-network
+    links:
+      - mongo
   mongo:
     image: mongo
-    container_name: $CONTAINER_NAME
+    container_name: $DB_CONTAINER_NAME
     restart: unless-stopped
     env_file: .env
     environment:

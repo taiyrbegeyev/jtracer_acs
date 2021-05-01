@@ -11,7 +11,7 @@ const firstName = process.env.JTRACER_ROOT_FIRST_NAME;
 const lastName = process.env.JTRACER_ROOT_LAST_NAME;
 const saltRounds = 10;
 
-App.connectToTheDatabase();
+App.connectToTheDatabase('127.0.0.1');
 
 bcrypt.genSalt(saltRounds, async (saltError, salt) => {
   if (saltError) {
