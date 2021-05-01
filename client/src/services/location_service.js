@@ -6,12 +6,12 @@ import {
 } from 'reducers/location_slice';
 
 const rootUrl = 'api/v1/';
-const getAllLocationsUrl = rootUrl + 'locations';
+const locationsUrl = rootUrl + 'locations';
 
 export const getAllLocations = () => async (dispatch) => {
   try {
     dispatch(getLocationsPending());
-    const res = await axios.get(getAllLocationsUrl, {
+    const res = await axios.get(locationsUrl, {
       // include the access token from a http-only cookie
       withCredentials: true
     });
@@ -20,4 +20,11 @@ export const getAllLocations = () => async (dispatch) => {
   } catch (err) {
     dispatch(getLocationsFail(err));
   }
+};
+
+export const createLocation = async (data) => {
+  return await axios.post(locationsUrl, data, {
+    // include the access token from a http-only cookie
+    withCredentials: true
+  });
 };
