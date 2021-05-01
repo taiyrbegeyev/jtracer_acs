@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +19,7 @@ import ReportIcon from '@material-ui/icons/Report';
 import RoomIcon from '@material-ui/icons/Room';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { handleSelectedIndex } from 'reducers/drawer_slice';
+import { signOut } from 'services/auth_service';
 
 const drawerWidth = 300;
 
@@ -46,14 +48,24 @@ const renderIcons = (index) => {
 
 const JTracerDrawer = ({ t, i18n }) => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checked: false
   });
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
+  const handleLogOut = async () => {
+    try {
+      await signOut();
+      history.push('/signin');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -120,7 +132,9 @@ const JTracerDrawer = ({ t, i18n }) => {
           <label>Deutsch</label>
         </ListItem>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button color="primary">Log out</Button>
+          <Button color="primary" onClick={handleLogOut}>
+            Log out
+          </Button>
         </ListItem>
       </List>
     </Drawer>
