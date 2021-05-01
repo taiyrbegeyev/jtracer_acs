@@ -7,5 +7,8 @@
   "drawer_locations": "Locations 🇩🇪",
   "drawer_report_infection": "Report Infection 🇩🇪",
   "drawer_moderator_management": "Moderator Management 🇩🇪",
-  "drawer_settings": "Settings 🇩🇪"
+  "drawer_settings": "Settings 🇩🇪",
+  "locations_page_create_new_location": "Create New Location 🇩🇪",
+  "locations_page_print_all_qr_codes": "Print All QR Codes 🇩🇪",
+  "locations_page_no_locations_found": "No Locations Found 🇩🇪"
 }
