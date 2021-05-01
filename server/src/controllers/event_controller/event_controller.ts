@@ -1,7 +1,5 @@
-import { LocationErrors } from 'controllers/location_controller/location_errors';
 import * as express from 'express';
 import { eventModel } from 'models/events';
-import { locationModel } from 'models/locations';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -24,13 +22,7 @@ class EventController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const { locationId } = req.params;
-      const location = await locationModel.findById(locationId);
-      if (!location) {
-        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
-      }
-
-      const events = await eventModel.find({ locationId });
+      const events = await eventModel.find();
       return sendResponse(res, events, 200);
     } catch (err) {
       return next(createError(err));
@@ -57,13 +49,12 @@ class EventController {
         throw validate.error;
       }
 
-      const { locationId } = req.params;
-      const location = await locationModel.findById(locationId);
-      if (!location) {
-        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
+      const { eventName, eventCapacity, organizers } = validate.value;
+      const event = await eventModel.findOne({ eventName });
+      if (event) {
+        throw new AppError(EventErrors.EVENT_NAME_EXISTS);
       }
 
-      const { eventName, organizers } = validate.value;
       // generate _id manually, since it will be embedded into an QR code
       const id = mongoose.Types.ObjectId();
       // create a QR code
@@ -72,7 +63,7 @@ class EventController {
       await eventModel.create({
         _id: id,
         eventName,
-        locationId,
+        eventCapacity,
         organizers,
         qrCode
       });
@@ -105,16 +96,11 @@ class EventController {
         throw validate.error;
       }
 
-      const { locationId, eventId } = req.params;
-      const location = await locationModel.findById(locationId);
-      if (!location) {
-        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
-      }
-
-      const { eventName, organizers } = validate.value;
+      const { eventId } = req.params;
+      const { eventName, eventCapacity, organizers } = validate.value;
       const event = await eventModel.findByIdAndUpdate(
         mongoose.Types.ObjectId(eventId),
-        { eventName, organizers }
+        { eventName, eventCapacity, organizers }
       );
       if (!event) {
         throw new AppError(EventErrors.EVENT_NOT_EXISTS);
@@ -141,12 +127,7 @@ class EventController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const { locationId, eventId } = req.params;
-      const location = await locationModel.findById(locationId);
-      if (!location) {
-        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
-      }
-
+      const { eventId } = req.params;
       const event = await eventModel.findByIdAndDelete(eventId);
       if (!event) {
         throw new AppError(EventErrors.EVENT_NOT_EXISTS);

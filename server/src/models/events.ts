@@ -2,18 +2,18 @@ import * as mongoose from 'mongoose';
 
 export interface IEvent {
   eventName: String;
-  locationId: String;
+  eventCapacity: Number;
   organizers: Array<mongoose.Types.ObjectId>;
   qrCode: String;
   creationDate: Date;
 }
 
 const eventSchema: mongoose.Schema = new mongoose.Schema({
-  eventName: String,
-  locationId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Location'
+  eventName: {
+    type: String,
+    unique: true
   },
+  eventCapacity: Number,
   organizers: [
     {
       type: mongoose.Schema.Types.ObjectId,
