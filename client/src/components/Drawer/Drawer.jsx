@@ -20,6 +20,7 @@ import RoomIcon from '@material-ui/icons/Room';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { handleSelectedIndex } from 'reducers/drawer_slice';
 import { signOut } from 'services/auth_service';
+import { Role } from 'constants/index';
 
 const drawerWidth = 300;
 
@@ -52,11 +53,28 @@ const JTracerDrawer = ({ t, i18n }) => {
     checked: false
   });
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+  const roles = useSelector((state) => state.moderator.moderator.roles);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
+  const handleLocations = () => {
+    return (
+      roles.includes(Role.Viewer) ||
+      roles.includes(Role.LocationManager) ||
+      roles.includes(Role.EventManager)
+    );
+  };
+
+  const handleReportInfection = () => {
+    return roles.includes(Role.InfectionReportManager);
+  };
+
+  const handleModeratorManagement = () => {
+    return roles.includes(Role.ModeratorManager);
   };
 
   const handleLogOut = async () => {
@@ -87,21 +105,39 @@ const JTracerDrawer = ({ t, i18n }) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {[
-          t('drawer_locations'),
-          t('drawer_report_infection'),
-          t('drawer_moderator_management')
-        ].map((text, index) => (
+        {handleLocations() && (
           <ListItem
             button
-            key={text}
-            onClick={() => dispatch(handleSelectedIndex(index))}
-            selected={selectedIndex == index}
+            key={t('drawer_locations')}
+            onClick={() => dispatch(handleSelectedIndex(0))}
+            selected={selectedIndex == 0}
           >
-            <ListItemIcon>{renderIcons(index)}</ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemIcon>{renderIcons(0)}</ListItemIcon>
+            <ListItemText primary={t('drawer_locations')} />
           </ListItem>
-        ))}
+        )}
+        {handleReportInfection() && (
+          <ListItem
+            button
+            key={t('drawer_report_infection')}
+            onClick={() => dispatch(handleSelectedIndex(1))}
+            selected={selectedIndex == 1}
+          >
+            <ListItemIcon>{renderIcons(1)}</ListItemIcon>
+            <ListItemText primary={t('drawer_report_infection')} />
+          </ListItem>
+        )}
+        {handleModeratorManagement() && (
+          <ListItem
+            button
+            key={t('drawer_moderator_management')}
+            onClick={() => dispatch(handleSelectedIndex(2))}
+            selected={selectedIndex == 2}
+          >
+            <ListItemIcon>{renderIcons(2)}</ListItemIcon>
+            <ListItemText primary={t('drawer_moderator_management')} />
+          </ListItem>
+        )}
       </List>
       <Divider />
       <List>
@@ -119,7 +155,7 @@ const JTracerDrawer = ({ t, i18n }) => {
           </ListItem>
         ))}
       </List>
-      <List style={{ marginTop: '48vh' }}>
+      <List style={{ position: 'absolute', bottom: '0', width: '100%' }}>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
           <label>English</label>
           <Switch

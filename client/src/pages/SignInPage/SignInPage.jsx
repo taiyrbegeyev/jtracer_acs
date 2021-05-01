@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { signInPending, signInSuccess, signInFail } from 'reducers/auth_slice';
-import { getModeratorProfile, signIn } from 'services/auth_service';
+import { signIn } from 'services/auth_service';
 import {
   Avatar,
   Button,
@@ -20,6 +20,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import { getModeratorProfile } from 'services/moderator_service';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
