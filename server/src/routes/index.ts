@@ -1,6 +1,8 @@
 import config from 'config';
 import * as express from 'express';
 import { IApp } from 'interfaces/app';
+import { AppErrorType } from 'interfaces/app_error';
+import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthRouter from './auth_route';
 import CheckInRouter from './checkIn_route';
@@ -27,12 +29,21 @@ export default class Routes {
     server.app.use(`/api/${version}/`, new ModeratorRouter().router);
     server.app.use(`/api/${version}/`, new CheckInRouter().router);
 
-    server.app.all('*', (req: express.Request, res: express.Response) =>
-      sendResponse(
-        res,
-        { message: `Can't find ${req.originalUrl} on this server!` },
-        404
-      )
+    server.app.all(
+      '*',
+      (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) =>
+        next(
+          createError({
+            type: AppErrorType.NETWORK,
+            code: 'RESOURCE_NOT_FOUND',
+            message: `Can't find ${req.originalUrl} on this server!`,
+            statusCode: 404
+          })
+        )
     );
   }
 }
