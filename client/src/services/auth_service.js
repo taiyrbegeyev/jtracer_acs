@@ -32,7 +32,6 @@ export const getModeratorProfile = () => async (dispatch) => {
     });
     const moderator = res.data.data;
 
-    console.log(moderator);
     if (moderator && moderator._id) {
       return dispatch(getModeratorSuccess(moderator));
     }
@@ -61,5 +60,8 @@ export const refreshAcessToken = async () => {
 
 export const isAccessTokenExpired = () => {
   const accessTokenExpiry = localStorage.getItem('accessTokenExpiry');
-  return accessTokenExpiry < new Date(Date.now()).toISOString();
+  return (
+    new Date(accessTokenExpiry).toISOString() <
+    new Date(Date.now()).toISOString()
+  );
 };

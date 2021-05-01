@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AuthController from 'controllers/auth_controller/auth_controller';
+import { authHandler } from 'middlewares/auth_handler';
 /**
  * AuthRouter
  */
@@ -15,7 +16,11 @@ export default class AuthRouter {
     this.router.post('/login', AuthController.login);
     this.router.post('/logout', AuthController.logout);
     this.router.post('/register', AuthController.register);
-    this.router.post('/refreshToken', AuthController.refreshToken);
+    this.router.post(
+      '/refreshToken',
+      [authHandler],
+      AuthController.refreshToken
+    );
 
     // this.router.post('/verify/email/:token', AuthController.verifyEmail);
     // this.router.post('/forgotPassword', AuthController.forgotPassword);

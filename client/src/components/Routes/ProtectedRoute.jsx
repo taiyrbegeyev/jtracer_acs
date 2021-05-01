@@ -18,36 +18,39 @@ const ProtectedRoute = ({ component: Component, redirectRoute, ...rest }) => {
   useEffect(() => {
     const updateAccessToken = async () => {
       const result = await refreshAcessToken();
-      console.log('Updating Access Token');
-      console.log(result);
-      result && dispatch(signInSuccess());
+      result &&
+        dispatch(signInSuccess()) &&
+        console.log('Updating Access Token');
       setLoading(false);
     };
 
-    !isAuth &&
-      !moderator._id &&
-      localStorage.getItem('accessTokenExpiry') &&
-      !isAccessTokenExpired() &&
-      dispatch(getModeratorProfile()) &&
-      console.log('1');
-
-    !isAuth &&
-      localStorage.getItem('accessTokenExpiry') &&
-      !isAccessTokenExpired() &&
-      updateAccessToken() &&
-      console.log('2');
+    if (isAuth) {
+      setLoading(false);
+    } else {
+      if (
+        localStorage.getItem('accessTokenExpiry') &&
+        !isAccessTokenExpired()
+      ) {
+        dispatch(getModeratorProfile());
+        updateAccessToken();
+      } else {
+        setLoading(false);
+      }
+    }
   }, [dispatch, isAuth, moderator._id]);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        console.log(`isAuth: ${isAuth}`);
-        console.log(`loading: ${loading}`);
-        if (!loading && !isAuth) {
-          return <Redirect to={redirectRoute} />;
+        if (loading) {
+          return <p>Loading ...</p>;
         } else {
-          return <Component {...props} />;
+          return isAuth ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to={redirectRoute} />
+          );
         }
       }}
     />
