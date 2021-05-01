@@ -3,7 +3,6 @@ import * as express from 'express';
 import { IApp } from 'interfaces/app';
 import { AppErrorType } from 'interfaces/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
-import { sendResponse } from 'services/error_hanlding/app_response_schema';
 import AuthRouter from './auth_route';
 import CheckInRouter from './checkIn_route';
 import EventRouter from './event_route';

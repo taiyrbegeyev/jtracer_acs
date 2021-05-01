@@ -53,7 +53,7 @@ const JTracerDrawer = ({ t, i18n }) => {
     checked: false
   });
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
-  const roles = useSelector((state) => state.moderator.moderator.roles);
+  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
   const dispatch = useDispatch();
   const history = useHistory();
 

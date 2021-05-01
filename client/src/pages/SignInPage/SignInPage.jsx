@@ -95,7 +95,7 @@ const SignInPage = ({ t }) => {
     } catch (error) {
       console.log(error);
       if (error.response)
-        dispatch(signInFail(error.response.data.error.message));
+        dispatch(signInFail(error.response.data?.error?.message));
       handleClick();
     }
   };
