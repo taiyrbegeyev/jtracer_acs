@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import JTracerDrawer from 'components/Drawer/Drawer';
 import EventsPage from 'pages/EventsPage/EventsPage';
+import ModeratorManagementPage from 'pages/ModeratorManagementPage/ModeratorManagementPage';
 
 const drawerWidth = 300;
 
@@ -52,7 +53,7 @@ const HomePage = ({ t }) => {
       case 1:
         return <p>Report Infection</p>;
       case 2:
-        return <p>Moderator Management</p>;
+        return <ModeratorManagementPage />;
       case 3:
         return <p>Settings</p>;
     }

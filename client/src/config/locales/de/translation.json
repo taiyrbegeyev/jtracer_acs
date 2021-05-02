@@ -10,5 +10,16 @@
   "drawer_settings": "Settings 🇩🇪",
   "events_page_create_new_event": "Create New Event 🇩🇪",
   "events_page_print_all_qr_codes": "Print All QR Codes 🇩🇪",
-  "events_page_no_events_found": "No Events Found 🇩🇪"
+  "events_page_no_events_found": "No Events Found 🇩🇪",
+  "moderators_management_page_create_new_moderator": "Create New Moderator 🇩🇪",
+  "moderators_management_page_no_events_found": "No Moderators Found 🇩🇪",
+  "moderators_management_page_email": "Email 🇩🇪",
+  "moderators_management_page_first_name": "First Name 🇩🇪",
+  "moderators_management_page_last_name": "Last Name 🇩🇪",
+  "moderators_management_page_roles": "Roles 🇩🇪",
+  "moderators_management_page_pick_at_least_one": "Pick at least one 🇩🇪",
+  "moderators_management_page_cancel": "Cancel 🇩🇪",
+  "moderators_management_page_create": "Create 🇩🇪",
+  "moderators_management_page_successful_creation": "Moderator creation is successful 🇩🇪",
+  "moderators_management_page_failed_creation": "Moderator creation has failed 🇩🇪"
 }
