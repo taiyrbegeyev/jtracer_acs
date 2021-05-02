@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Chip, IconButton } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  IconButton,
+  CircularProgress,
+  Typography
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DataGrid } from '@material-ui/data-grid';
 import { withNamespaces } from 'react-i18next';
-import { removeModerator } from 'services/moderator_management_service';
+import {
+  formatModerator,
+  getModerators,
+  removeModerator
+} from 'services/moderator_management_service';
 
-const DisplayModerators = ({
-  t,
-  rows,
-  handleModeratorDeletionSnackBarOpen
-}) => {
+const DisplayModerators = ({ t }) => {
   const columns = [
     {
       field: 'email',
@@ -64,30 +71,51 @@ const DisplayModerators = ({
     }
   ];
 
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.moderatorManagement.isLoading);
+  const moderators = useSelector(
+    (state) => state.moderatorManagement.moderators
+  );
+
+  useEffect(() => {
+    dispatch(getModerators());
+  }, []);
+
   const handleOnRemoval = async (moderatorId) => {
-    console.log(moderatorId);
     try {
       await removeModerator(moderatorId);
-      handleModeratorDeletionSnackBarOpen();
+      dispatch(getModerators());
     } catch (err) {
       console.log(err);
-      handleModeratorDeletionSnackBarOpen();
     }
   };
 
   return (
     <div style={{ height: 400 }}>
-      <DataGrid rows={rows} columns={columns} pageSize={10} autoHeight />
+      <Box mt={4}>
+        {isLoading ? (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </div>
+        ) : moderators.length === 0 ? (
+          <Typography>
+            {t('moderators_management_page_no_events_found')}
+          </Typography>
+        ) : (
+          <DataGrid
+            rows={formatModerator(moderators)}
+            columns={columns}
+            pageSize={10}
+            autoHeight
+          />
+        )}
+      </Box>
     </div>
   );
 };
 
 DisplayModerators.propTypes = {
-  t: PropTypes.func.isRequired,
-  rows: PropTypes.array.isRequired,
-  moderatorDeletionSnackBarOpen: PropTypes.bool.isRequired,
-  handleModeratorDeletionSnackBarOpen: PropTypes.func.isRequired,
-  handleModeratorDeletionSnackBarClose: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(DisplayModerators);

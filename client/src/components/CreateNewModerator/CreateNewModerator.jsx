@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -19,7 +19,10 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import { withNamespaces } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
-import { createModerator } from 'services/moderator_management_service';
+import {
+  createModerator,
+  getModerators
+} from 'services/moderator_management_service';
 import { Role } from 'constants/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,14 +38,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const CreateNewModerator = ({
-  t,
-  dialogOpen,
-  moderatorCreationSnackBarOpen,
-  handleClose,
-  handleModeratorCreationSnackBarOpen,
-  handleModeratorCreationSnackBarClose
-}) => {
+const CreateNewModerator = ({ t, dialogOpen, handleClose }) => {
   const classes = useStyles();
   const [email, setEmail] = useState();
   const [firstName, setFirstName] = useState();
@@ -54,13 +50,29 @@ const CreateNewModerator = ({
     }, {})
   );
   const [
+    moderatorCreationSnackBarOpen,
+    setModeratorCreationSnackBarOpen
+  ] = useState(false);
+  const [
     moderatorCreationSuccessful,
     setModeratorCreationSuccessful
   ] = useState(true);
+  const dispatch = useDispatch();
   const { moderator } = useSelector((state) => state.moderator);
 
   const handleRoles = (event) => {
     setRoles({ ...roles, [event.target.name]: event.target.checked });
+  };
+
+  const handleModeratorCreationSnackBarOpen = () => {
+    setModeratorCreationSnackBarOpen(true);
+  };
+
+  const handleModeratorCreationSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setModeratorCreationSnackBarOpen(false);
   };
 
   const {
@@ -110,6 +122,7 @@ const CreateNewModerator = ({
         roles: selectedRoles,
         inviteeId: moderator._id
       });
+      dispatch(getModerators());
       handleClose();
       setModeratorCreationSuccessful(true);
       handleModeratorCreationSnackBarOpen();
@@ -250,10 +263,7 @@ const CreateNewModerator = ({
 CreateNewModerator.propTypes = {
   t: PropTypes.func.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
-  moderatorCreationSnackBarOpen: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  handleModeratorCreationSnackBarOpen: PropTypes.func.isRequired,
-  handleModeratorCreationSnackBarClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(CreateNewModerator);
