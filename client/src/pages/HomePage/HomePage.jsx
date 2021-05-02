@@ -10,6 +10,7 @@ import JTracerDrawer from 'components/Drawer/Drawer';
 import EventsPage from 'pages/EventsPage/EventsPage';
 import ModeratorManagementPage from 'pages/ModeratorManagementPage/ModeratorManagementPage';
 import { getModerators } from 'services/moderator_management_service';
+import { getAllEvents } from 'services/event_service';
 
 const drawerWidth = 300;
 
@@ -37,6 +38,7 @@ const HomePage = ({ t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getModerators());
+    dispatch(getAllEvents());
   }, []);
 
   const getCurrentAppBarText = (selectedInxex) => {

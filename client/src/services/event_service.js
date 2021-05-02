@@ -16,7 +16,13 @@ export const getAllEvents = () => async (dispatch) => {
       withCredentials: true
     });
     const { data } = res.data;
-    dispatch(getEventsSuccess(data));
+    const newData = await Promise.all(
+      data.map(async (event) => {
+        event['currentCheckIns'] = await getCurrentCheckIns(event._id);
+        return event;
+      })
+    );
+    dispatch(getEventsSuccess(newData));
   } catch (err) {
     dispatch(getEventsFail(err));
   }
@@ -27,4 +33,13 @@ export const createEvent = async (data) => {
     // include the access token from a http-only cookie
     withCredentials: true
   });
+};
+
+export const getCurrentCheckIns = async (eventId) => {
+  const res = await axios.get(eventsUrl + `/${eventId}/checkIns`, {
+    // include the access token from a http-only cookie
+    withCredentials: true
+  });
+  const { data } = res.data;
+  return data;
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { withNamespaces } from 'react-i18next';
-import { createEvent } from 'services/event_service';
+import { createEvent, getAllEvents } from 'services/event_service';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -72,6 +72,7 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
   const [eventCreationSuccessful, setEventCreationSuccessful] = useState(true);
   const [snackBarOpen, setsnackBarOpen] = useState(false);
 
+  const dispatch = useDispatch();
   const moderators = useSelector(
     (state) => state.moderatorManagement.moderators
   );
@@ -108,6 +109,7 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
     }
     try {
       await createEvent({ eventName, eventCapacity, organizers });
+      dispatch(getAllEvents());
       handleClose();
       setEventCreationSuccessful(true);
       handleSnackBarOpen();

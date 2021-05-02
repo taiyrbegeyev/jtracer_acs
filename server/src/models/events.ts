@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export interface IEvent {
   eventName: String;
   eventCapacity: Number;
-  organizers: Array<mongoose.Types.ObjectId>;
+  organizers: Array<String>;
   qrCode: String;
   creationDate: Date;
 }
@@ -16,7 +16,7 @@ const eventSchema: mongoose.Schema = new mongoose.Schema({
   eventCapacity: Number,
   organizers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'Moderator'
     }
   ],
