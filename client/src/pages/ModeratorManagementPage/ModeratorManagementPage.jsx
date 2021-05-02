@@ -3,8 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { getModerators } from 'services/moderator_management_service';
+import {
+  formatModerator,
+  getModerators
+} from 'services/moderator_management_service';
 import CreateNewModerator from 'components/CreateNewModerator/CreateNewModerator';
+import DisplayModerators from 'components/DisplayModerators/DisplayModerators';
 
 const ModeratorManagementPage = ({ t }) => {
   const [dialogOpen, setdialogOpen] = useState(false);
@@ -61,7 +65,7 @@ const ModeratorManagementPage = ({ t }) => {
             {t('moderators_management_page_no_events_found')}
           </Typography>
         ) : (
-          <p>good</p>
+          <DisplayModerators rows={formatModerator(moderators)} />
         )}
       </Box>
     </div>
