@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import JTracerDrawer from 'components/Drawer/Drawer';
 import EventsPage from 'pages/EventsPage/EventsPage';
 import ModeratorManagementPage from 'pages/ModeratorManagementPage/ModeratorManagementPage';
+import { getModerators } from 'services/moderator_management_service';
 
 const drawerWidth = 300;
 
@@ -32,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
 const HomePage = ({ t }) => {
   const classes = useStyles();
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getModerators());
+  }, []);
 
   const getCurrentAppBarText = (selectedInxex) => {
     switch (selectedInxex) {

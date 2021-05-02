@@ -84,7 +84,7 @@ const SignInPage = ({ t }) => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      return alert('Fill up all the form!');
+      return alert(t('fill_all_the_form'));
     }
     dispatch(signInPending());
     try {

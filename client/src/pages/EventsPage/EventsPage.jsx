@@ -14,7 +14,6 @@ import CreateNewEvent from 'components/CreateNewEvent/CreateNewEvent';
 
 const EventsPage = ({ t }) => {
   const [dialogOpen, setdialogOpen] = useState(false);
-  const [snackBarOpen, setsnackBarOpen] = useState(false);
 
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.event.isLoading);
@@ -22,7 +21,7 @@ const EventsPage = ({ t }) => {
 
   useEffect(() => {
     dispatch(getAllEvents());
-  }, [snackBarOpen]);
+  }, []);
 
   const handleClickOpen = () => {
     setdialogOpen(true);
@@ -32,26 +31,9 @@ const EventsPage = ({ t }) => {
     setdialogOpen(false);
   };
 
-  const handleSnackBarOpen = () => {
-    setsnackBarOpen(true);
-  };
-
-  const handleSnackBarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setsnackBarOpen(false);
-  };
-
   return (
     <div>
-      <CreateNewEvent
-        dialogOpen={dialogOpen}
-        snackBarOpen={snackBarOpen}
-        handleClose={handleClose}
-        handleSnackBarOpen={handleSnackBarOpen}
-        handleSnackBarClose={handleSnackBarClose}
-      />
+      <CreateNewEvent dialogOpen={dialogOpen} handleClose={handleClose} />
       <ButtonGroup
         variant="contained"
         color="primary"

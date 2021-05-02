@@ -106,7 +106,7 @@ const CreateNewModerator = ({ t, dialogOpen, handleClose }) => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!email || !firstName || !lastName || error) {
-      return alert('Fill up all the form!');
+      return alert(t('fill_all_the_form'));
     }
 
     const selectedRoles = [];

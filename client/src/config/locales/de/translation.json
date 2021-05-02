@@ -1,4 +1,5 @@
 {
+  "fill_all_the_form": "Fill up all the form! 🇩🇪",
   "not_found_page_title": "Oops! Page not found",
   "not_found_page_sub_title": "Sorry, but the page you are looking for is not found. Please, make sure that you have typed the current URL",
   "sign_in_page_sign_in": "Sign in",
@@ -11,6 +12,11 @@
   "events_page_create_new_event": "Create New Event 🇩🇪",
   "events_page_print_all_qr_codes": "Print All QR Codes 🇩🇪",
   "events_page_no_events_found": "No Events Found 🇩🇪",
+  "events_page_successful_creation": "Event creation is successful 🇩🇪",
+  "events_page_failed_creation": "Event creation has failed 🇩🇪",
+  "events_page_event_name": "Event Name 🇩🇪",
+  "events_page_capacity": "Capacity 🇩🇪",
+  "events_page_organizers": "Organizers 🇩🇪",
   "moderators_management_page_create_new_moderator": "Create New Moderator 🇩🇪",
   "moderators_management_page_no_events_found": "No Moderators Found 🇩🇪",
   "moderators_management_page_email": "Email 🇩🇪",

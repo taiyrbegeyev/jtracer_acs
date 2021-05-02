@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -76,10 +76,6 @@ const DisplayModerators = ({ t }) => {
   const moderators = useSelector(
     (state) => state.moderatorManagement.moderators
   );
-
-  useEffect(() => {
-    dispatch(getModerators());
-  }, []);
 
   const handleOnRemoval = async (moderatorId) => {
     try {
