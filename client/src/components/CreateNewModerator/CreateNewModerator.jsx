@@ -38,10 +38,10 @@ function Alert(props) {
 const CreateNewModerator = ({
   t,
   dialogOpen,
-  snackBarOpen,
+  moderatorCreationSnackBarOpen,
   handleClose,
-  handleSnackBarOpen,
-  handleSnackBarClose
+  handleModeratorCreationSnackBarOpen,
+  handleModeratorCreationSnackBarClose
 }) => {
   const classes = useStyles();
   const [email, setEmail] = useState();
@@ -112,20 +112,20 @@ const CreateNewModerator = ({
       });
       handleClose();
       setModeratorCreationSuccessful(true);
-      handleSnackBarOpen();
+      handleModeratorCreationSnackBarOpen();
     } catch (error) {
       console.log(error);
       setModeratorCreationSuccessful(false);
-      handleSnackBarOpen();
+      handleModeratorCreationSnackBarOpen();
     }
   };
 
   return (
     <div>
       <Snackbar
-        open={snackBarOpen}
+        open={moderatorCreationSnackBarOpen}
         autoHideDuration={2000}
-        onClose={handleSnackBarClose}
+        onClose={handleModeratorCreationSnackBarClose}
       >
         {moderatorCreationSuccessful ? (
           <Alert severity="success">
@@ -250,10 +250,10 @@ const CreateNewModerator = ({
 CreateNewModerator.propTypes = {
   t: PropTypes.func.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
-  snackBarOpen: PropTypes.bool.isRequired,
+  moderatorCreationSnackBarOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  handleSnackBarOpen: PropTypes.func.isRequired,
-  handleSnackBarClose: PropTypes.func.isRequired
+  handleModeratorCreationSnackBarOpen: PropTypes.func.isRequired,
+  handleModeratorCreationSnackBarClose: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(CreateNewModerator);

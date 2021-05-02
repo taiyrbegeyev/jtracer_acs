@@ -17,9 +17,14 @@
   "moderators_management_page_first_name": "First Name 🇩🇪",
   "moderators_management_page_last_name": "Last Name 🇩🇪",
   "moderators_management_page_roles": "Roles 🇩🇪",
+  "moderators_management_page_registered": "Registered 🇩🇪",
+  "moderators_management_page_registration_date": "Registration Date 🇩🇪",
+  "moderators_management_page_registration_actions": "Actions 🇩🇪",
   "moderators_management_page_pick_at_least_one": "Pick at least one 🇩🇪",
   "moderators_management_page_cancel": "Cancel 🇩🇪",
   "moderators_management_page_create": "Create 🇩🇪",
   "moderators_management_page_successful_creation": "Moderator creation is successful 🇩🇪",
-  "moderators_management_page_failed_creation": "Moderator creation has failed 🇩🇪"
+  "moderators_management_page_failed_creation": "Moderator creation has failed 🇩🇪",
+  "moderators_management_page_successful_deletion": "Moderator deletion is successful 🇩🇪",
+  "moderators_management_page_failed_deletion": "Moderator deletion has failed 🇩🇪"
 }

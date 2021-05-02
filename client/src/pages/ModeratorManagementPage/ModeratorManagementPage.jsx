@@ -11,8 +11,15 @@ import CreateNewModerator from 'components/CreateNewModerator/CreateNewModerator
 import DisplayModerators from 'components/DisplayModerators/DisplayModerators';
 
 const ModeratorManagementPage = ({ t }) => {
-  const [dialogOpen, setdialogOpen] = useState(false);
-  const [snackBarOpen, setsnackBarOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [
+    moderatorCreationSnackBarOpen,
+    setModeratorCreationSnackBarOpen
+  ] = useState(false);
+  const [
+    moderatorDeletionSnackBarOpen,
+    setModeratorDeletionSnackBarOpen
+  ] = useState(false);
 
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.moderatorManagement.isLoading);
@@ -22,35 +29,50 @@ const ModeratorManagementPage = ({ t }) => {
 
   useEffect(() => {
     dispatch(getModerators());
-  }, [snackBarOpen]);
+  }, [moderatorCreationSnackBarOpen, moderatorDeletionSnackBarOpen]);
 
   const handleClickOpen = () => {
-    setdialogOpen(true);
+    setDialogOpen(true);
   };
 
   const handleClose = () => {
-    setdialogOpen(false);
+    setDialogOpen(false);
   };
 
-  const handleSnackBarOpen = () => {
-    setsnackBarOpen(true);
+  const handleModeratorCreationSnackBarOpen = () => {
+    setModeratorCreationSnackBarOpen(true);
   };
 
-  const handleSnackBarClose = (event, reason) => {
+  const handleModeratorCreationSnackBarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setsnackBarOpen(false);
+    setModeratorCreationSnackBarOpen(false);
+  };
+
+  const handleModeratorDeletionSnackBarOpen = () => {
+    setModeratorDeletionSnackBarOpen(true);
+  };
+
+  const handleModeratorDeletionSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setModeratorDeletionSnackBarOpen(false);
   };
 
   return (
     <div>
       <CreateNewModerator
         dialogOpen={dialogOpen}
-        snackBarOpen={snackBarOpen}
+        moderatorCreationSnackBarOpen={moderatorCreationSnackBarOpen}
         handleClose={handleClose}
-        handleSnackBarOpen={handleSnackBarOpen}
-        handleSnackBarClose={handleSnackBarClose}
+        handleModeratorCreationSnackBarOpen={
+          handleModeratorCreationSnackBarOpen
+        }
+        handleModeratorCreationSnackBarClose={
+          handleModeratorCreationSnackBarClose
+        }
       />
       <Button variant="contained" color="primary" onClick={handleClickOpen}>
         {t('moderators_management_page_create_new_moderator')}
@@ -65,7 +87,16 @@ const ModeratorManagementPage = ({ t }) => {
             {t('moderators_management_page_no_events_found')}
           </Typography>
         ) : (
-          <DisplayModerators rows={formatModerator(moderators)} />
+          <DisplayModerators
+            rows={formatModerator(moderators)}
+            moderatorDeletionSnackBarOpen={moderatorDeletionSnackBarOpen}
+            handleModeratorDeletionSnackBarOpen={
+              handleModeratorDeletionSnackBarOpen
+            }
+            handleModeratorDeletionSnackBarClose={
+              handleModeratorDeletionSnackBarClose
+            }
+          />
         )}
       </Box>
     </div>

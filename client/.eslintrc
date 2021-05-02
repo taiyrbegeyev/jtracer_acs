@@ -22,5 +22,7 @@
     "browser": true,
     "es2021": true
   },
-  "rules": {}
+  "rules": {
+    "react/display-name": "off"
+  }
 }

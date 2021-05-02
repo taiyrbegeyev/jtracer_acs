@@ -30,6 +30,10 @@ export const createModerator = async (data) => {
   });
 };
 
+export const removeModerator = async (moderatorId) => {
+  return await axios.delete(moderatorsUrl + `/${moderatorId}`);
+};
+
 export const formatModerator = (moderators) => {
   // _id => id, and convert roles enums to strings
   return moderators.map(({ roles, _id: id, ...rest }) => ({
