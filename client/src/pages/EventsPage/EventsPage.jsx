@@ -27,7 +27,6 @@ const EventsPage = ({ t }) => {
         <Button onClick={handleClickOpen}>
           {t('events_page_create_new_event')}
         </Button>
-        <Button>{t('events_page_print_all_qr_codes')}</Button>
       </ButtonGroup>
       <DisplayEvents />
     </div>

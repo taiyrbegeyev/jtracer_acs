@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
-  // Collapse,
+  Collapse,
   IconButton,
   Table,
   TableBody,
@@ -14,7 +14,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  // Chip,
+  Paper,
+  Chip,
   CircularProgress
 } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
@@ -31,14 +32,29 @@ const useRowStyles = makeStyles({
   }
 });
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: theme.spacing(0.5),
+    margin: 0,
+    marginBottom: theme.spacing(2)
+  },
+  chip: {
+    margin: theme.spacing(0.5)
+  }
+}));
+
 function Row(props) {
   const { event } = props;
   const [open, setOpen] = useState(false);
-  const classes = useRowStyles();
+  const rowClasses = useRowStyles();
+  const classes = useStyles();
 
   return (
     <React.Fragment>
-      <TableRow className={classes.root}>
+      <TableRow className={rowClasses.root}>
         <TableCell size="small" padding="none">
           <IconButton
             aria-label="expand row"
@@ -73,33 +89,39 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
-      {/* <TableRow>
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                Organizers
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Paper component="ul" className={classes.paper}>
+                {event.organizers.map((organizer) => (
+                  <li key={organizer}>
+                    <Chip label={organizer} className={classes.chip} />
+                  </li>
+                ))}
+              </Paper>
+              <Typography variant="h6" gutterBottom component="div">
+                Check-ins
+              </Typography>
+              <Table size="small" aria-label="checkIns">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Check-in Time</TableCell>
+                    <TableCell>Check-out Time</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
+                  {event.currentCheckIns.map((checkIn) => (
+                    <TableRow key={checkIn.email}>
                       <TableCell component="th" scope="row">
-                        {historyRow.date}
+                        {checkIn.email}
                       </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
+                      <TableCell>{checkIn.checkInTime}</TableCell>
+                      <TableCell>{checkIn.checkOutTime}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -107,7 +129,7 @@ function Row(props) {
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow> */}
+      </TableRow>
     </React.Fragment>
   );
 }
