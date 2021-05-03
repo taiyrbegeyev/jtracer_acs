@@ -23,6 +23,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PrintIcon from '@material-ui/icons/Print';
+import RenderPDF from 'components/RenderPDF/RenderPDF';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const useRowStyles = makeStyles({
   root: {
@@ -70,12 +72,22 @@ function Row(props) {
         <TableCell align="right">{event.eventCapacity}</TableCell>
         <TableCell align="right">{event.currentCheckIns?.length}</TableCell>
         <TableCell align="center" size="small" padding="none">
-          <IconButton
-            size="small"
-            onClick={() => setOpen(!open)}
-            style={{ marginRight: '10px' }}
-          >
-            <PrintIcon />
+          <IconButton size="small" style={{ marginRight: '10px' }}>
+            <PDFDownloadLink
+              document={
+                <RenderPDF eventName={event.eventName} qrCode={event.qrCode} />
+              }
+              fileName={`${event.eventName} CheckIn QR.pdf`}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                padding: '0',
+                margin: '0',
+                display: 'inherit'
+              }}
+            >
+              <PrintIcon />
+            </PDFDownloadLink>
           </IconButton>
           <IconButton
             size="small"
@@ -181,7 +193,8 @@ Row.propTypes = {
     eventName: PropTypes.string.isRequired,
     eventCapacity: PropTypes.number.isRequired,
     organizers: PropTypes.array.isRequired,
-    currentCheckIns: PropTypes.array.isRequired
+    currentCheckIns: PropTypes.array.isRequired,
+    qrCode: PropTypes.string.isRequired
   }).isRequired
 };
 
