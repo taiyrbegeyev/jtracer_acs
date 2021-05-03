@@ -18,7 +18,11 @@ const EventsPage = ({ t }) => {
 
   return (
     <div>
-      <CreateNewEvent dialogOpen={dialogOpen} handleClose={handleClose} />
+      <CreateNewEvent
+        dialogOpen={dialogOpen}
+        handleClose={handleClose}
+        isEdit={false}
+      />
       <ButtonGroup
         variant="contained"
         color="primary"

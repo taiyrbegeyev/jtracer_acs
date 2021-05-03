@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { withNamespaces } from 'react-i18next';
-import { createEvent, getAllEvents } from 'services/event_service';
+import { createEvent, editEvent, getAllEvents } from 'services/event_service';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -62,13 +62,22 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
+const CreateNewEvent = ({
+  t,
+  dialogOpen,
+  handleClose,
+  isEdit = false,
+  eventId,
+  defaultEventName,
+  defaultEventCapacity,
+  defaultOrganizers
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const [eventName, setEventName] = useState();
   const [eventCapacity, setEventCapacity] = useState();
-  const [organizers, setOrganizers] = useState([]);
+  const [organizers, setOrganizers] = useState(isEdit ? defaultOrganizers : []);
   const [eventCreationSuccessful, setEventCreationSuccessful] = useState(true);
   const [snackBarOpen, setsnackBarOpen] = useState(false);
 
@@ -108,7 +117,11 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
       return alert(t('fill_all_the_form'));
     }
     try {
-      await createEvent({ eventName, eventCapacity, organizers });
+      if (isEdit) {
+        await editEvent({ eventId, eventName, eventCapacity, organizers });
+      } else {
+        await createEvent({ eventName, eventCapacity, organizers });
+      }
       dispatch(getAllEvents());
       handleClose();
       setEventCreationSuccessful(true);
@@ -124,6 +137,7 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
     setOrganizers(event.target.value);
   };
 
+  console.log(isEdit);
   return (
     <div>
       <Snackbar
@@ -133,10 +147,16 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
       >
         {eventCreationSuccessful ? (
           <Alert severity="success">
-            {t('events_page_successful_creation')}
+            {isEdit
+              ? t('events_page_successful_edit')
+              : t('events_page_successful_creation')}
           </Alert>
         ) : (
-          <Alert severity="error">{t('events_page_failed_creation')}</Alert>
+          <Alert severity="error">
+            {isEdit
+              ? t('events_page_failed_edit')
+              : t('events_page_failed_creation')}
+          </Alert>
         )}
       </Snackbar>
       <Dialog
@@ -145,7 +165,9 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          {t('events_page_create_new_event')}
+          {isEdit
+            ? t('events_page_edit_event')
+            : t('events_page_create_new_event')}
         </DialogTitle>
         <DialogContent
           style={{
@@ -163,6 +185,7 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
             fullWidth
             required
             onChange={handleOnChange}
+            defaultValue={defaultEventName}
           />
           <TextField
             margin="dense"
@@ -173,6 +196,7 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
             fullWidth
             required
             onChange={handleOnChange}
+            defaultValue={defaultEventCapacity}
           />
           <FormControl className={classes.formControl}>
             <InputLabel id="organizers-multiple-chip-label">
@@ -211,7 +235,9 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
             {t('moderators_management_page_cancel')}
           </Button>
           <Button onClick={handleOnSubmit} color="primary">
-            {t('moderators_management_page_create')}
+            {isEdit
+              ? t('events_page_edit')
+              : t('moderators_management_page_create')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -222,7 +248,12 @@ const CreateNewEvent = ({ t, dialogOpen, handleClose }) => {
 CreateNewEvent.propTypes = {
   t: PropTypes.func.isRequired,
   dialogOpen: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  isEdit: PropTypes.bool.isRequired,
+  eventId: PropTypes.string,
+  defaultEventName: PropTypes.string,
+  defaultEventCapacity: PropTypes.number,
+  defaultOrganizers: PropTypes.array
 };
 
 export default withNamespaces()(CreateNewEvent);

@@ -26,6 +26,7 @@ import PrintIcon from '@material-ui/icons/Print';
 import RenderPDF from 'components/RenderPDF/RenderPDF';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { getAllEvents, removeEvent } from 'services/event_service';
+import CreateNewEvent from 'components/CreateNewEvent/CreateNewEvent';
 
 const useRowStyles = makeStyles({
   root: {
@@ -51,10 +52,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Row(props) {
   const { event } = props;
+  const [dialogOpen, setdialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const rowClasses = useRowStyles();
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const handleClickOpen = () => {
+    setdialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setdialogOpen(false);
+  };
 
   const handleOnRemoval = async (eventId) => {
     try {
@@ -67,6 +77,15 @@ function Row(props) {
 
   return (
     <React.Fragment>
+      <CreateNewEvent
+        dialogOpen={dialogOpen}
+        handleClose={handleClose}
+        isEdit={true}
+        eventId={event._id}
+        defaultEventName={event.eventName}
+        defaultEventCapacity={event.eventCapacity}
+        defaultOrganizers={event.organizers}
+      />
       <TableRow className={rowClasses.root}>
         <TableCell size="small" padding="none">
           <IconButton
@@ -102,7 +121,7 @@ function Row(props) {
           </IconButton>
           <IconButton
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={handleClickOpen}
             style={{ marginRight: '10px' }}
           >
             <EditIcon />

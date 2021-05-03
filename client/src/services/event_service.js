@@ -35,6 +35,21 @@ export const createEvent = async (data) => {
   });
 };
 
+export const editEvent = async (data) => {
+  return await axios.patch(
+    eventsUrl + `/${data.eventId}`,
+    {
+      eventName: data.eventName,
+      eventCapacity: data.eventCapacity,
+      organizers: data.organizers
+    },
+    {
+      // include the access token from a http-only cookie
+      withCredentials: true
+    }
+  );
+};
+
 export const removeEvent = async (eventId) => {
   return await axios.delete(eventsUrl + `/${eventId}`);
 };
