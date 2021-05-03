@@ -5,8 +5,10 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.27",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
+    "@react-pdf/renderer": "^2.0.10",
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

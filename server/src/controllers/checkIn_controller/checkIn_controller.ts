@@ -1,9 +1,7 @@
 import { EventErrors } from 'controllers/event_controller/event_errors';
-import { LocationErrors } from 'controllers/location_controller/location_errors';
 import express from 'express';
 import { checkInModel, ICheckIn, ICheckInData } from 'models/checkIns';
 import { eventModel } from 'models/events';
-import { locationModel } from 'models/locations';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -25,12 +23,7 @@ class CheckInController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const { locationId, eventId } = req.params;
-      const location = await locationModel.findById(locationId);
-      if (!location) {
-        throw new AppError(LocationErrors.LOCATION_NOT_EXISTS);
-      }
-
+      const { eventId } = req.params;
       const event = await eventModel.findById(eventId);
       if (!event) {
         throw new AppError(EventErrors.EVENT_NOT_EXISTS);

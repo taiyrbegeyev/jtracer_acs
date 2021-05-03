@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  getModeratorProfile,
-  isAccessTokenExpired,
-  refreshAcessToken
-} from 'services/auth_service';
+import { isAccessTokenExpired, refreshAcessToken } from 'services/auth_service';
 import { signInSuccess } from 'reducers/auth_slice';
+import { getModeratorProfile } from 'services/moderator_service';
 
 const ProtectedRoute = ({ component: Component, redirectRoute, ...rest }) => {
   const dispatch = useDispatch();

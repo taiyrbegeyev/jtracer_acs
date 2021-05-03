@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { signInPending, signInSuccess, signInFail } from 'reducers/auth_slice';
-import { getModeratorProfile, signIn } from 'services/auth_service';
+import { signIn } from 'services/auth_service';
 import {
   Avatar,
   Button,
@@ -20,6 +20,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import { getModeratorProfile } from 'services/moderator_service';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,7 +84,7 @@ const SignInPage = ({ t }) => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      return alert('Fill up all the form!');
+      return alert(t('fill_all_the_form'));
     }
     dispatch(signInPending());
     try {
@@ -94,7 +95,7 @@ const SignInPage = ({ t }) => {
     } catch (error) {
       console.log(error);
       if (error.response)
-        dispatch(signInFail(error.response.data.error.message));
+        dispatch(signInFail(error.response.data?.error?.message));
       handleClick();
     }
   };

@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import EventController from 'controllers/event_controller/event_controller';
+import { eventManager } from 'middlewares/authorization_handler';
+import { authHandler } from 'middlewares/auth_handler';
 /**
  * EventRouter
  */
@@ -14,25 +16,25 @@ export default class EventRouter {
   public routes(): void {
     this.router.get(
       '/events',
-      // [authHandler, eventManager],
+      [authHandler, eventManager],
       EventController.getEvents
     );
 
     this.router.post(
       '/events',
-      // [authHandler, eventManager],
+      [authHandler, eventManager],
       EventController.postEvent
     );
 
     this.router.patch(
       '/events/:eventId',
-      // [authHandler, eventManager],
+      [authHandler, eventManager],
       EventController.editEvent
     );
 
     this.router.delete(
       '/events/:eventId',
-      // [authHandler, eventManager],
+      [authHandler, eventManager],
       EventController.deleteEvent
     );
   }

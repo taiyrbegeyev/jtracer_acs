@@ -3,10 +3,8 @@ import * as mongoose from 'mongoose';
 
 export enum Role {
   Viewer = 'Viewer',
-  LocationManager = 'LocationManager',
   EventManager = 'EventManager',
   ModeratorManager = 'ModeratorManager',
-  LogManager = 'LogManager',
   InfectionReportManager = 'InfectionReportManager'
 }
 

@@ -9,18 +9,7 @@ export function viewer(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (!res.locals.role.includes(Role.Viewer))
-    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
-
-  next();
-}
-
-export function locationManager(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  if (!res.locals.role.includes(Role.LocationManager))
+  if (!res.locals.roles.includes(Role.Viewer))
     return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
@@ -31,7 +20,7 @@ export function eventManager(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (!res.locals.role.includes(Role.EventManager))
+  if (!res.locals.roles.includes(Role.EventManager))
     return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
@@ -42,18 +31,7 @@ export function moderatorManager(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (!res.locals.role.includes(Role.ModeratorManager))
-    return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
-
-  next();
-}
-
-export function logManager(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  if (!res.locals.role.includes(Role.LogManager))
+  if (!res.locals.roles.includes(Role.ModeratorManager))
     return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();
@@ -64,7 +42,7 @@ export function infectionReportManager(
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (!res.locals.role.includes(Role.InfectionReportManager))
+  if (!res.locals.roles.includes(Role.InfectionReportManager))
     return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
 
   next();

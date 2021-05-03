@@ -1,5 +1,10 @@
 import { Router } from 'express';
 import CheckInController from 'controllers/checkIn_controller/checkIn_controller';
+import { authHandler } from 'middlewares/auth_handler';
+import {
+  infectionReportManager,
+  viewer
+} from 'middlewares/authorization_handler';
 /**
  * CheckInRouter
  */
@@ -13,8 +18,8 @@ export default class CheckInRouter {
 
   public routes(): void {
     this.router.get(
-      '/locations/:locationId/events/:eventId/checkIns',
-      // [authHandler, viewer],
+      '/events/:eventId/checkIns',
+      [authHandler, viewer],
       CheckInController.getCurrentCheckIns
     );
 
@@ -22,7 +27,7 @@ export default class CheckInRouter {
 
     this.router.get(
       '/checkins/trace',
-      // [authHandler, infectionReportManager],
+      [authHandler, infectionReportManager],
       CheckInController.getCheckIns
     );
   }
