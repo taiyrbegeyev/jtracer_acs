@@ -17,13 +17,13 @@ const ModeratorManagementPage = ({ t }) => {
   };
 
   return (
-    <div>
+    <React.Fragment>
       <CreateNewModerator dialogOpen={dialogOpen} handleClose={handleClose} />
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         {t('moderators_management_page_create_new_moderator')}
       </Button>
       <DisplayModerators />
-    </div>
+    </React.Fragment>
   );
 };
 

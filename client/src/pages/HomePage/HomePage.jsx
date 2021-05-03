@@ -11,6 +11,7 @@ import EventsPage from 'pages/EventsPage/EventsPage';
 import ModeratorManagementPage from 'pages/ModeratorManagementPage/ModeratorManagementPage';
 import { getModerators } from 'services/moderator_management_service';
 import { getAllEvents } from 'services/event_service';
+import ReportInfectionPage from 'pages/ReportInfectionPage/ReportInfectionPage';
 
 const drawerWidth = 300;
 
@@ -59,7 +60,7 @@ const HomePage = ({ t }) => {
       case 0:
         return <EventsPage />;
       case 1:
-        return <p>Report Infection</p>;
+        return <ReportInfectionPage />;
       case 2:
         return <ModeratorManagementPage />;
       case 3:

@@ -1,5 +1,5 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { blue } from '@material-ui/core/colors';
+import { blue, pink } from '@material-ui/core/colors';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import React from 'react';
@@ -10,7 +10,10 @@ const App = () => {
   let theme = createMuiTheme({
     palette: {
       primary: {
-        main: blue[500]
+        main: blue[400]
+      },
+      secondary: {
+        main: pink[400]
       }
     }
   });

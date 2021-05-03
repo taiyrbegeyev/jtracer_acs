@@ -25,7 +25,7 @@ const EventsPage = ({ t }) => {
       />
       <ButtonGroup
         variant="contained"
-        color="primary"
+        color="secondary"
         aria-label="contained primary button group"
       >
         <Button onClick={handleClickOpen}>
