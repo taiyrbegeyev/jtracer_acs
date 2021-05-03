@@ -35,6 +35,10 @@ export const createEvent = async (data) => {
   });
 };
 
+export const removeEvent = async (eventId) => {
+  return await axios.delete(eventsUrl + `/${eventId}`);
+};
+
 export const getCurrentCheckIns = async (eventId) => {
   const res = await axios.get(eventsUrl + `/${eventId}/checkIns`, {
     // include the access token from a http-only cookie

@@ -11,20 +11,20 @@ import {
 
 const styles = StyleSheet.create({
   page: {
+    paddingHorizontal: 20,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    textAlign: 'center'
   },
   eventName: {
-    fontSize: '60px'
+    fontSize: '48px'
   },
   checkIn: {
     fontSize: '36px'
   },
   qrCode: {
-    width: 400,
-    height: 400
+    alignSelf: 'center'
   },
   instructions: {
     fontSize: '18px',
@@ -44,13 +44,15 @@ const RenderPDF = ({ eventName, qrCode }) => {
           <Text style={styles.checkIn}>Check In</Text>
         </View>
         <View style={styles.qrCode}>
-          <Image src={qrCode} />
+          <Image src={qrCode} style={{ width: '400px' }} />
         </View>
-        <View style={{ ...styles.page, ...styles.instructions }}>
-          <Text style={styles.distance}>
+        <View>
+          <Text style={{ ...styles.distance, ...styles.instructions }}>
             Bitte scannen Sie diesen QR Code beim Betreten des Raumes.
           </Text>
-          <Text>Please scan this QR Code when entering the room.</Text>
+          <Text style={styles.instructions}>
+            Please scan this QR Code when entering the room.
+          </Text>
         </View>
       </Page>
     </Document>

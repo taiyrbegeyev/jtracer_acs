@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -25,6 +25,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PrintIcon from '@material-ui/icons/Print';
 import RenderPDF from 'components/RenderPDF/RenderPDF';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { getAllEvents, removeEvent } from 'services/event_service';
 
 const useRowStyles = makeStyles({
   root: {
@@ -53,6 +54,16 @@ function Row(props) {
   const [open, setOpen] = useState(false);
   const rowClasses = useRowStyles();
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleOnRemoval = async (eventId) => {
+    try {
+      await removeEvent(eventId);
+      dispatch(getAllEvents());
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -96,7 +107,7 @@ function Row(props) {
           >
             <EditIcon />
           </IconButton>
-          <IconButton size="small" onClick={() => setOpen(!open)}>
+          <IconButton size="small" onClick={() => handleOnRemoval(event._id)}>
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -147,11 +158,9 @@ function Row(props) {
 }
 
 const DisplayEvents = ({ t }) => {
-  // const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.moderatorManagement.isLoading);
   const { events } = useSelector((state) => state.event);
 
-  console.log(events);
   return (
     <Box mt={4}>
       {isLoading ? (
@@ -190,6 +199,7 @@ DisplayEvents.propTypes = {
 
 Row.propTypes = {
   event: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     eventName: PropTypes.string.isRequired,
     eventCapacity: PropTypes.number.isRequired,
     organizers: PropTypes.array.isRequired,
