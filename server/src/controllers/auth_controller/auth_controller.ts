@@ -160,6 +160,46 @@ class AuthController {
   }
 
   /**
+   * Verify if the email token is valid and associated with the moderator
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async verifyEmailToken(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = AuthValidator.verifyEmailTokenSchema.validate(
+        req.query,
+        {
+          abortEarly: false
+        }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+      const { emailToken, email } = validate.value;
+
+      const invitationToken = await invitationTokenModel.findOne({
+        email,
+        token: emailToken
+      });
+      if (!invitationToken) {
+        throw new AppError(AuthErrors.REGISTER_EMAIL_TOKEN_NOT_EXISTS);
+      }
+
+      return sendResponse(res, {
+        message: 'The email token is valid'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
    * Create a refresh token.
    *
    * @param req - express.Request

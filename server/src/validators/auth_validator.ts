@@ -10,18 +10,26 @@ class AuthValidator {
   });
 
   registerSchema = Joi.object({
-    emailToken: Joi.string().token().required(),
-    // https://stackoverflow.com/a/19605207/13278127
+    emailToken: Joi.string().required(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .trim()
       .required(),
     password: Joi.string()
+      // https://stackoverflow.com/a/19605207/13278127
       .pattern(
         new RegExp(
           '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
         )
       )
+      .required()
+  });
+
+  verifyEmailTokenSchema = Joi.object({
+    emailToken: Joi.string().required(),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .trim()
       .required()
   });
 }
