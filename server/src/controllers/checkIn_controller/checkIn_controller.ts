@@ -3,6 +3,7 @@ import { EventErrors } from 'controllers/event_controller/event_errors';
 import express from 'express';
 import { checkInModel, ICheckIn, ICheckInData } from 'models/checkIns';
 import { eventModel } from 'models/events';
+import { Role } from 'models/moderators';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -32,12 +33,14 @@ class CheckInController {
       }
 
       // check if the moderator has permissions to view this event
-      const isAllowed = await eventModel.findOne({
-        _id: eventId,
-        organizers: res.locals.email
-      });
-      if (!isAllowed) {
-        throw new AppError(AuthErrors.MODERATOR_ACCESS_DENIED);
+      if (!res.locals.roles.includes(Role.EventManager)) {
+        const isAllowed = await eventModel.findOne({
+          _id: eventId,
+          organizers: res.locals.email
+        });
+        if (!isAllowed) {
+          throw new AppError(AuthErrors.MODERATOR_ACCESS_DENIED);
+        }
       }
 
       const currentDate = new Date(Date.now());
@@ -96,13 +99,18 @@ class CheckInController {
         validate.value.endDate
       );
 
-      const checkIns = await checkInModel.find({
-        'checkInsData.email': attendeeEmail,
-        'checkInsData.checkOutTime': {
-          $gte: startDate,
-          $lte: endDate
-        }
-      });
+      const checkIns = await checkInModel
+        .find({
+          'checkInsData.email': attendeeEmail,
+          'checkInsData.checkOutTime': {
+            $gte: startDate,
+            $lte: endDate
+          }
+        })
+        .populate({
+          path: 'checkInsData.eventId',
+          select: 'eventName'
+        });
 
       // even though we run a query on the collection, the returned data
       // (the checkInsData to be more specific) will still include

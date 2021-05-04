@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { eventModel } from 'models/events';
+import { Role } from 'models/moderators';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -22,8 +23,13 @@ class EventController {
     next: express.NextFunction
   ): Promise<any> {
     try {
+      let events;
       // Only display the events that the moderator is able to act upon
-      const events = await eventModel.find({ organizers: res.locals.email });
+      if (res.locals.roles.includes(Role.EventManager)) {
+        events = await eventModel.find();
+      } else {
+        events = await eventModel.find({ organizers: res.locals.email });
+      }
       return sendResponse(res, events, 200);
     } catch (err) {
       return next(createError(err));
