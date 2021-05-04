@@ -5,7 +5,6 @@ import express from 'express';
 import AuthService from 'services/auth_service';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
-import { log } from 'utils/logger';
 
 export function authHandler(
   req: express.Request,

@@ -22,7 +22,8 @@ class EventController {
     next: express.NextFunction
   ): Promise<any> {
     try {
-      const events = await eventModel.find();
+      // Only display the events that the moderator is able to act upon
+      const events = await eventModel.find({ organizers: res.locals.email });
       return sendResponse(res, events, 200);
     } catch (err) {
       return next(createError(err));

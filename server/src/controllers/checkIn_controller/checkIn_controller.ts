@@ -1,3 +1,4 @@
+import { AuthErrors } from 'controllers/auth_controller/auth_errors';
 import { EventErrors } from 'controllers/event_controller/event_errors';
 import express from 'express';
 import { checkInModel, ICheckIn, ICheckInData } from 'models/checkIns';
@@ -6,6 +7,7 @@ import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
+import { convertUTCToLocalDateIgnoringTimezone } from 'utils/date';
 import { log } from 'utils/logger';
 import CheckInValidator from 'validators/checkIn_validator';
 
@@ -29,6 +31,15 @@ class CheckInController {
         throw new AppError(EventErrors.EVENT_NOT_EXISTS);
       }
 
+      // check if the moderator has permissions to view this event
+      const isAllowed = await eventModel.findOne({
+        _id: eventId,
+        organizers: res.locals.email
+      });
+      if (!isAllowed) {
+        throw new AppError(AuthErrors.MODERATOR_ACCESS_DENIED);
+      }
+
       const currentDate = new Date(Date.now());
       const checkInDay = currentDate.toLocaleString('de-DE').split(',')[0];
 
@@ -46,6 +57,67 @@ class CheckInController {
         (elem: ICheckInData) =>
           // eslint-disable-next-line eqeqeq
           elem.eventId == eventId && elem.checkOutTime >= currentDate
+      );
+
+      return sendResponse(res, normalizedCheckIns, 200);
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
+   * Get all check-ins for a given email
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async getCheckIns(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = CheckInValidator.contactTracingSchema.validate(
+        req.query,
+        {
+          abortEarly: false
+        }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+
+      const { attendeeEmail } = validate.value;
+      const startDate = convertUTCToLocalDateIgnoringTimezone(
+        validate.value.startDate
+      );
+      const endDate = convertUTCToLocalDateIgnoringTimezone(
+        validate.value.endDate
+      );
+
+      const checkIns = await checkInModel.find({
+        'checkInsData.email': attendeeEmail,
+        'checkInsData.checkOutTime': {
+          $gte: startDate,
+          $lte: endDate
+        }
+      });
+
+      // even though we run a query on the collection, the returned data
+      // (the checkInsData to be more specific) will still include
+      // unwanted checkins, because the query is run on the documents, not
+      // on the array of objects. So, we will have to filter the list ourselves.
+      let normalizedCheckIns: ICheckInData[] = [];
+      checkIns.forEach((elem: ICheckIn) =>
+        normalizedCheckIns.push(...elem.checkInsData)
+      );
+      normalizedCheckIns = normalizedCheckIns.filter(
+        (elem: ICheckInData) =>
+          // eslint-disable-next-line eqeqeq
+          elem.email == attendeeEmail &&
+          startDate <= elem.checkOutTime &&
+          elem.checkOutTime <= endDate
       );
 
       return sendResponse(res, normalizedCheckIns, 200);
@@ -89,7 +161,7 @@ class CheckInController {
 
       const checkInTime = new Date(Date.now());
       log.debug(`checkInTime: ${checkInTime}`);
-      const checkOutTime = new Date(endTime);
+      const checkOutTime = convertUTCToLocalDateIgnoringTimezone(endTime);
       log.debug(`checkOutTime: ${checkOutTime}`);
       const checkInDay = new Date(checkInTime)
         .toLocaleString('de-DE')
@@ -129,22 +201,26 @@ class CheckInController {
    * @param res - express.Response
    * @param next - express.NextFunction
    */
-  public async getCheckIns(
+  public async traceContacts(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ): Promise<any> {
     try {
       const validate = CheckInValidator.contactTracingSchema.validate(
-        req.body,
+        req.query,
         { abortEarly: false }
       );
       if (validate.error) {
         throw validate.error;
       }
       const { attendeeEmail } = validate.value;
-      const startDate = new Date(validate.value.startDate);
-      const endDate = new Date(validate.value.endDate);
+      const startDate = convertUTCToLocalDateIgnoringTimezone(
+        validate.value.startDate
+      );
+      const endDate = convertUTCToLocalDateIgnoringTimezone(
+        validate.value.endDate
+      );
 
       const checkIns = await checkInModel.find({
         'checkInsData.email': attendeeEmail,
@@ -200,7 +276,11 @@ class CheckInController {
                 }
               ]
             }
-          ]);
+          ])
+          .populate({
+            path: 'checkInsData.eventId',
+            select: 'eventName'
+          });
         contactCheckIns.push(...result);
       }
 
