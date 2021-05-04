@@ -23,12 +23,18 @@ export default class CheckInRouter {
       CheckInController.getCurrentCheckIns
     );
 
+    this.router.get(
+      '/checkIns',
+      [authHandler, infectionReportManager],
+      CheckInController.getCheckIns
+    );
+
     this.router.post('/checkIns', CheckInController.postCheckIn);
 
     this.router.get(
-      '/checkins/trace',
+      '/checkIns/trace',
       [authHandler, infectionReportManager],
-      CheckInController.getCheckIns
+      CheckInController.traceContacts
     );
   }
 }
