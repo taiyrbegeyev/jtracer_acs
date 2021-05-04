@@ -137,9 +137,8 @@ const CreateNewEvent = ({
     setOrganizers(event.target.value);
   };
 
-  console.log(isEdit);
   return (
-    <div>
+    <React.Fragment>
       <Snackbar
         open={snackBarOpen}
         autoHideDuration={2000}
@@ -241,7 +240,7 @@ const CreateNewEvent = ({
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </React.Fragment>
   );
 };
 

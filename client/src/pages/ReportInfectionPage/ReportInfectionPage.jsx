@@ -8,11 +8,18 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from '@material-ui/pickers';
+import DisplayContacts from 'components/DisplayContacts/DisplayContacts';
+import { contactTrace, getCheckIns } from 'services/contact_tracing_service';
+import DisplayCheckIns from 'components/DisplayCheckIns/DisplayCheckIns';
 
 const ReportInfectionPage = () => {
-  const [email, setEmail] = useState();
-  const [startDate, setStartDate] = useState();
+  const [attendeeEmail, setAttendeeEmail] = useState();
+  const [startDate, setStartDate] = useState(new Date(Date.now()));
   const [endDate, setEndDate] = useState(new Date(Date.now()));
+  const [loading_1, setLoading_1] = useState(false);
+  const [loading_2, setLoading_2] = useState(false);
+  const [contacts, setContacts] = useState([]);
+  const [checkIns, setCheckIns] = useState([]);
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -24,10 +31,36 @@ const ReportInfectionPage = () => {
 
   const handleOnChange = (e) => {
     const { value } = e.target;
-    setEmail(value);
+    setAttendeeEmail(value);
   };
 
-  console.log(email);
+  const handleTrace = async () => {
+    try {
+      setLoading_1(true);
+      setLoading_2(true);
+
+      const params = {
+        attendeeEmail,
+        startDate: new Date(startDate.setUTCHours(0, 0, 0, 0)).toISOString(),
+        endDate: new Date(endDate.setUTCHours(23, 59, 59, 999)).toISOString()
+      };
+      const res_1 = await contactTrace(params);
+      const res_2 = await getCheckIns(params);
+      const { data_1 } = res_1.data;
+      const { data_2 } = res_2.data;
+      console.log(data_2);
+
+      setContacts(data_1);
+      setCheckIns(data_2);
+      setLoading_1(false);
+      setLoading_2(false);
+    } catch (err) {
+      console.log(err);
+      setLoading_1(false);
+      setLoading_2(false);
+    }
+  };
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around" alignItems="center">
@@ -70,10 +103,17 @@ const ReportInfectionPage = () => {
             'aria-label': 'change date'
           }}
         />
-        <Button variant="contained" color="secondary" style={{ height: 50 }}>
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ height: 50 }}
+          onClick={handleTrace}
+        >
           Trace
         </Button>
       </Grid>
+      <DisplayContacts loading={loading_1} contacts={contacts} />
+      <DisplayCheckIns loading={loading_2} checkIns={checkIns} />
     </MuiPickersUtilsProvider>
   );
 };
