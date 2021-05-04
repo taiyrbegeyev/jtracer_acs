@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -157,14 +159,12 @@ const SignInPage = ({ t }) => {
             >
               {t('sign_in_page_sign_in')}
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  {t('sign_in_page_forgot_password')}
-                </Link>
-              </Grid>
+            <Grid container justify="center">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  href={`mailto:${process.env.REACT_APP_admin_email}`}
+                  variant="body2"
+                >
                   {t('sign_in_page_contact_admin')}
                 </Link>
               </Grid>
