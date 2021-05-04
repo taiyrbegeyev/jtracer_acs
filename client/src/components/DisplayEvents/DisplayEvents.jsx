@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Row(props) {
-  const { event } = props;
+  const { event, disabled } = props;
   const [dialogOpen, setdialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const rowClasses = useRowStyles();
@@ -102,7 +102,11 @@ function Row(props) {
         <TableCell align="right">{event.eventCapacity}</TableCell>
         <TableCell align="right">{event.currentCheckIns?.length}</TableCell>
         <TableCell align="center" size="small" padding="none">
-          <IconButton size="small" style={{ marginRight: '10px' }}>
+          <IconButton
+            size="small"
+            style={{ marginRight: '10px' }}
+            disabled={disabled}
+          >
             <PDFDownloadLink
               document={
                 <RenderPDF eventName={event.eventName} qrCode={event.qrCode} />
@@ -123,10 +127,15 @@ function Row(props) {
             size="small"
             onClick={handleClickOpen}
             style={{ marginRight: '10px' }}
+            disabled={disabled}
           >
             <EditIcon />
           </IconButton>
-          <IconButton size="small" onClick={() => handleOnRemoval(event._id)}>
+          <IconButton
+            size="small"
+            onClick={() => handleOnRemoval(event._id)}
+            disabled={disabled}
+          >
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -176,7 +185,7 @@ function Row(props) {
   );
 }
 
-const DisplayEvents = ({ t }) => {
+const DisplayEvents = ({ t, disabled }) => {
   const isLoading = useSelector((state) => state.moderatorManagement.isLoading);
   const { events } = useSelector((state) => state.event);
 
@@ -202,7 +211,7 @@ const DisplayEvents = ({ t }) => {
             </TableHead>
             <TableBody>
               {events.map((event) => (
-                <Row key={event._id} event={event} />
+                <Row key={event._id} event={event} disabled={disabled} />
               ))}
             </TableBody>
           </Table>
@@ -213,10 +222,12 @@ const DisplayEvents = ({ t }) => {
 };
 
 DisplayEvents.propTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired
 };
 
 Row.propTypes = {
+  disabled: PropTypes.bool.isRequired,
   event: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     eventName: PropTypes.string.isRequired,
