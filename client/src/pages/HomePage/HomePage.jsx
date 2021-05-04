@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth
+    marginLeft: drawerWidth,
+    color: '#FFFFFF'
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
