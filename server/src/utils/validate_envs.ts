@@ -25,8 +25,6 @@ const validateEnv = (): void => {
     ACCESS_TOKEN_LIFE: num(),
     REFRESH_TOKEN_SECRET: nonEmptryStr(),
     REFRESH_TOKEN_LIFE: num(),
-    EMAIL_TOKEN_SECRET: nonEmptryStr(),
-    EMAIL_TOKEN_LIFE: num(),
     MAILGUN_API_KEY: nonEmptryStr(),
     DOMAIN_NAME: nonEmptryStr()
   });

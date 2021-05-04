@@ -11,11 +11,15 @@ class AuthValidator {
 
   registerSchema = Joi.object({
     emailToken: Joi.string().token().required(),
-    // https://www.ocpsoft.org/tutorials/regular-expressions/password-regular-expression/
+    // https://stackoverflow.com/a/19605207/13278127
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .trim()
+      .required(),
     password: Joi.string()
       .pattern(
         new RegExp(
-          '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$'
+          '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
         )
       )
       .required()

@@ -27,5 +27,10 @@ export const AuthErrors = {
     code: 'AUTH_WEAK_PASSWORD',
     message: 'The given password is easy to guess, provide strong password.',
     statusCode: 400
+  },
+  REGISTER_EMAIL_TOKEN_NOT_EXISTS: {
+    ...CommonError.UNAUTHORIZED,
+    code: 'REGISTER_EMAIL_TOKEN_NOT_EXISTS',
+    message: 'The email token is expired or does not exist'
   }
 };

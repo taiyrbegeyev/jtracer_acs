@@ -22,7 +22,6 @@ export default class AuthRouter {
       AuthController.refreshToken
     );
 
-    // this.router.post('/verify/email/:token', AuthController.verifyEmail);
     // this.router.post('/forgotPassword', AuthController.forgotPassword);
     // this.router.post('/reset/:token', AuthController.resetPassword);
   }
