@@ -4,11 +4,11 @@ import express from 'express';
 import { checkInModel, ICheckIn, ICheckInData } from 'models/checkIns';
 import { eventModel } from 'models/events';
 import { Role } from 'models/moderators';
+import moment from 'moment';
 import mongoose from 'mongoose';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
 import { sendResponse } from 'services/error_hanlding/app_response_schema';
-import { convertUTCToLocalDateIgnoringTimezone } from 'utils/date';
 import { log } from 'utils/logger';
 import CheckInValidator from 'validators/checkIn_validator';
 
@@ -43,13 +43,13 @@ class CheckInController {
         }
       }
 
-      const currentDate = new Date(Date.now());
-      const checkInDay = currentDate.toLocaleString('de-DE').split(',')[0];
+      const currentDate = moment.utc();
+      const checkInDay = currentDate.format('YYYY-MM-DD');
 
       const checkIns = await checkInModel.find({
         checkInDay,
         'checkInsData.checkOutTime': {
-          $gte: currentDate
+          $gte: currentDate.toDate()
         }
       });
       let normalizedCheckIns: ICheckInData[] = [];
@@ -59,7 +59,7 @@ class CheckInController {
       normalizedCheckIns = normalizedCheckIns.filter(
         (elem: ICheckInData) =>
           // eslint-disable-next-line eqeqeq
-          elem.eventId == eventId && elem.checkOutTime >= currentDate
+          elem.eventId == eventId && elem.checkOutTime >= currentDate.toDate()
       );
 
       return sendResponse(res, normalizedCheckIns, 200);
@@ -92,12 +92,8 @@ class CheckInController {
       }
 
       const { attendeeEmail } = validate.value;
-      const startDate = convertUTCToLocalDateIgnoringTimezone(
-        validate.value.startDate
-      );
-      const endDate = convertUTCToLocalDateIgnoringTimezone(
-        validate.value.endDate
-      );
+      const startDate = moment.utc(validate.value.startDate).toDate();
+      const endDate = moment.utc(validate.value.endDate).toDate();
 
       const checkIns = await checkInModel
         .find({
@@ -167,13 +163,11 @@ class CheckInController {
         throw new AppError(EventErrors.EVENT_NOT_EXISTS);
       }
 
-      const checkInTime = new Date(Date.now());
+      const checkInTime = moment.utc();
       log.debug(`checkInTime: ${checkInTime}`);
-      const checkOutTime = convertUTCToLocalDateIgnoringTimezone(endTime);
+      const checkOutTime = moment.utc(endTime);
       log.debug(`checkOutTime: ${checkOutTime}`);
-      const checkInDay = new Date(checkInTime)
-        .toLocaleString('de-DE')
-        .split(',')[0];
+      const checkInDay = checkInTime.format('YYYY-MM-DD');
       log.debug(`checkInDay: ${checkInDay}`);
 
       await checkInModel.findOneAndUpdate(
@@ -186,8 +180,8 @@ class CheckInController {
               isGuest,
               phoneNumber,
               zipCode,
-              checkInTime,
-              checkOutTime
+              checkInTime: checkInTime.toDate(),
+              checkOutTime: checkOutTime.toDate()
             }
           }
         },
@@ -223,12 +217,8 @@ class CheckInController {
         throw validate.error;
       }
       const { attendeeEmail } = validate.value;
-      const startDate = convertUTCToLocalDateIgnoringTimezone(
-        validate.value.startDate
-      );
-      const endDate = convertUTCToLocalDateIgnoringTimezone(
-        validate.value.endDate
-      );
+      const startDate = moment.utc(validate.value.startDate).toDate();
+      const endDate = moment.utc(validate.value.endDate).toDate();
 
       const checkIns = await checkInModel.find({
         'checkInsData.email': attendeeEmail,

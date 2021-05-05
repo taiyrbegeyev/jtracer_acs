@@ -21,8 +21,8 @@ export function viewerOrEventManager(
   next: express.NextFunction
 ) {
   if (
-    !res.locals.roles.includes(Role.Viewer) ||
-    !res.locals.roles.includes(Role.EventManager)
+    res.locals.roles.includes(Role.Viewer) ||
+    res.locals.roles.includes(Role.EventManager)
   )
     return next();
 
