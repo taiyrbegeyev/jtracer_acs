@@ -75,8 +75,8 @@ const CreateNewEvent = ({
   const classes = useStyles();
   const theme = useTheme();
 
-  const [eventName, setEventName] = useState();
-  const [eventCapacity, setEventCapacity] = useState();
+  const [eventName, setEventName] = useState(defaultEventName);
+  const [eventCapacity, setEventCapacity] = useState(defaultEventCapacity);
   const [organizers, setOrganizers] = useState(isEdit ? defaultOrganizers : []);
   const [eventCreationSuccessful, setEventCreationSuccessful] = useState(true);
   const [snackBarOpen, setsnackBarOpen] = useState(false);
