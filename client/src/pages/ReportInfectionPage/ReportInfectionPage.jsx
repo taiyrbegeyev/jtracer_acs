@@ -13,7 +13,7 @@ import DisplayContacts from 'components/DisplayContacts/DisplayContacts';
 import { contactTrace, getCheckIns } from 'services/contact_tracing_service';
 import DisplayCheckIns from 'components/DisplayCheckIns/DisplayCheckIns';
 
-const ReportInfectionPage = () => {
+const ReportInfectionPage = ({ t }) => {
   const [attendeeEmail, setAttendeeEmail] = useState();
   const [startDate, setStartDate] = useState(moment().subtract(30, 'days'));
   const [endDate, setEndDate] = useState(moment());
@@ -84,7 +84,7 @@ const ReportInfectionPage = () => {
           format="L"
           margin="normal"
           id="date-picker-inline"
-          label="Date picker inline"
+          label={t('report_infection_page_start_date')}
           value={startDate}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
@@ -97,7 +97,7 @@ const ReportInfectionPage = () => {
           format="L"
           margin="normal"
           id="date-picker-inline"
-          label="Date picker inline"
+          label={t('report_infection_page_end_date')}
           value={endDate}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
@@ -110,7 +110,7 @@ const ReportInfectionPage = () => {
           style={{ height: 50 }}
           onClick={() => handleTrace()}
         >
-          Trace
+          {t('report_infection_page_trace')}
         </Button>
       </Grid>
       <DisplayContacts loading={loading_1} contacts={contacts} />

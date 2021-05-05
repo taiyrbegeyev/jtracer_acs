@@ -137,9 +137,13 @@ const DisplayModerators = ({ t }) => {
         onClose={handleSnackBarClose}
       >
         {resendSuccessful ? (
-          <Alert severity="success">Resend is successful</Alert>
+          <Alert severity="success">
+            {t('moderators_management_page_successful_resend')}
+          </Alert>
         ) : (
-          <Alert severity="error">Resend has failed</Alert>
+          <Alert severity="error">
+            {t('moderators_management_page_failed_resend')}
+          </Alert>
         )}
       </Snackbar>
       <Box mt={4}>
