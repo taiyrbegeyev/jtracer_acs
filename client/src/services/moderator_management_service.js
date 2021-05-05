@@ -9,6 +9,7 @@ import { RoleToString } from 'constants/index';
 
 const rootUrl = 'api/v1/';
 const moderatorsUrl = rootUrl + 'moderators';
+const resendInvitationLinkUrl = rootUrl + 'moderators/resendInvitationLink';
 
 export const getModerators = () => async (dispatch) => {
   try {
@@ -33,6 +34,17 @@ export const createModerator = async (data) => {
 
 export const removeModerator = async (moderatorId) => {
   return await axios.delete(moderatorsUrl + `/${moderatorId}`);
+};
+
+export const resendInvitationLink = async (moderatorId) => {
+  return await axios.post(
+    resendInvitationLinkUrl,
+    { moderatorId },
+    {
+      // include the access token from a http-only cookie
+      withCredentials: true
+    }
+  );
 };
 
 export const formatModerator = (moderators) => {
