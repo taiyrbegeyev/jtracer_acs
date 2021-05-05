@@ -1,8 +1,9 @@
-import 'date-fns';
+import 'moment';
 import React, { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 import { Button, Grid, TextField } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -12,10 +13,10 @@ import DisplayContacts from 'components/DisplayContacts/DisplayContacts';
 import { contactTrace, getCheckIns } from 'services/contact_tracing_service';
 import DisplayCheckIns from 'components/DisplayCheckIns/DisplayCheckIns';
 
-const ReportInfectionPage = () => {
+const ReportInfectionPage = ({ t }) => {
   const [attendeeEmail, setAttendeeEmail] = useState();
-  const [startDate, setStartDate] = useState(new Date(Date.now()));
-  const [endDate, setEndDate] = useState(new Date(Date.now()));
+  const [startDate, setStartDate] = useState(moment().subtract(30, 'days'));
+  const [endDate, setEndDate] = useState(moment());
   const [loading_1, setLoading_1] = useState(false);
   const [loading_2, setLoading_2] = useState(false);
   const [contacts, setContacts] = useState([]);
@@ -41,17 +42,17 @@ const ReportInfectionPage = () => {
 
       const params = {
         attendeeEmail,
-        startDate: new Date(startDate.setUTCHours(0, 0, 0, 0)).toISOString(),
-        endDate: new Date(endDate.setUTCHours(23, 59, 59, 999)).toISOString()
+        startDate: startDate
+          .startOf('day')
+          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        endDate: endDate.endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
       };
       const res_1 = await contactTrace(params);
       const res_2 = await getCheckIns(params);
-      const { data_1 } = res_1.data;
-      const { data_2 } = res_2.data;
-      console.log(data_2);
 
-      setContacts(data_1);
-      setCheckIns(data_2);
+      setContacts(res_1);
+      setCheckIns(res_2);
+
       setLoading_1(false);
       setLoading_2(false);
     } catch (err) {
@@ -62,7 +63,7 @@ const ReportInfectionPage = () => {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
       <Grid container justify="space-around" alignItems="center">
         <TextField
           size="medium"
@@ -80,10 +81,10 @@ const ReportInfectionPage = () => {
         <KeyboardDatePicker
           disableToolbar
           variant="inline"
-          format="dd/MM/yyyy"
+          format="L"
           margin="normal"
           id="date-picker-inline"
-          label="Date picker inline"
+          label={t('report_infection_page_start_date')}
           value={startDate}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
@@ -93,10 +94,10 @@ const ReportInfectionPage = () => {
         <KeyboardDatePicker
           disableToolbar
           variant="inline"
-          format="dd/MM/yyyy"
+          format="L"
           margin="normal"
           id="date-picker-inline"
-          label="Date picker inline"
+          label={t('report_infection_page_end_date')}
           value={endDate}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
@@ -107,9 +108,9 @@ const ReportInfectionPage = () => {
           variant="contained"
           color="secondary"
           style={{ height: 50 }}
-          onClick={handleTrace}
+          onClick={() => handleTrace()}
         >
-          Trace
+          {t('report_infection_page_trace')}
         </Button>
       </Grid>
       <DisplayContacts loading={loading_1} contacts={contacts} />

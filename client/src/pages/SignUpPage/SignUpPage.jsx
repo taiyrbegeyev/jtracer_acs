@@ -80,9 +80,7 @@ const SignUpPage = ({ t }) => {
       return alert(t('fill_all_the_form'));
     }
     if (!validatePassword()) {
-      return setError(
-        'The password is invalid. At least 8 characters, one lowercase character, one uppercase character, one special character required.'
-      );
+      return setError(t('sign_up_page_password_error'));
     }
 
     try {
@@ -116,7 +114,7 @@ const SignUpPage = ({ t }) => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign up
+              {t('sign_up_page_sign_up')}
             </Typography>
             <form className={classes.form} noValidate>
               <Grid container spacing={2}>
@@ -156,7 +154,7 @@ const SignUpPage = ({ t }) => {
                 className={classes.submit}
                 onClick={handleOnSubmit}
               >
-                Sign Up
+                {t('sign_up_page_sign_up')}
               </Button>
             </form>
             {loading && (

@@ -32,6 +32,12 @@ export default class ModeratorRouter {
       ModeratorController.postModerator
     );
 
+    this.router.post(
+      '/moderators/resendInvitationLink',
+      [authHandler, moderatorManager],
+      ModeratorController.resendInvitationLink
+    );
+
     this.router.patch(
       '/moderators/:moderatorId',
       [authHandler, moderatorManager],

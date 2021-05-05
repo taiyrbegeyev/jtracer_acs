@@ -12,6 +12,10 @@ class ModeratorValidator {
     roles: Joi.array().items(Joi.string().required()).unique().required(),
     inviteeId: Joi.string().required()
   });
+
+  resendInvitationLinkSchema = Joi.object({
+    moderatorId: Joi.string().required()
+  });
 }
 
 export default new ModeratorValidator();

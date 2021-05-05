@@ -1,3 +1,4 @@
+import moment from 'moment';
 import config from 'config';
 import { ModeratorErrors } from 'controllers/moderator_controller/moderator_errors';
 import * as express from 'express';
@@ -142,7 +143,7 @@ class AuthController {
         {
           $set: {
             isRegistered: true,
-            registrationDate: new Date(Date.now()),
+            registrationDate: moment.utc().toDate(),
             hash
           }
         }

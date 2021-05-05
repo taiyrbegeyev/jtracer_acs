@@ -102,6 +102,44 @@ class ModeratorController {
   }
 
   /**
+   * Resend an invitation link
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async resendInvitationLink(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = ModeratorValidator.resendInvitationLinkSchema.validate(
+        req.body,
+        {
+          abortEarly: false
+        }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+
+      const { moderatorId } = validate.value;
+      const moderator = await moderatorModel.findOne({ _id: moderatorId });
+      if (!moderator) {
+        throw new AppError(ModeratorErrors.MODERATOR_EXISTS);
+      }
+
+      await AuthService.resendInvitationEmail(moderator);
+      return sendResponse(res, {
+        message: 'Moderation creation is successful'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
    * Edit a moderator
    *
    * @param req - express.Request

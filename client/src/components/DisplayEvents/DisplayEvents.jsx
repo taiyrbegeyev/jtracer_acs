@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Row(props) {
-  const { event, disabled } = props;
+  const { t, event, disabled } = props;
   const [dialogOpen, setdialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const rowClasses = useRowStyles();
@@ -146,7 +146,7 @@ function Row(props) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Organizers
+                {t('display_events_organizers')}
               </Typography>
               <Paper component="ul" className={classes.paper}>
                 {event.organizers.map((organizer) => (
@@ -156,14 +156,14 @@ function Row(props) {
                 ))}
               </Paper>
               <Typography variant="h6" gutterBottom component="div">
-                Check-ins
+                {t('display_events_checkins')}
               </Typography>
               <Table size="small" aria-label="checkIns">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Check-in Time</TableCell>
-                    <TableCell>Check-out Time</TableCell>
+                    <TableCell>{t('display_events_email')}</TableCell>
+                    <TableCell>{t('display_events_checkin_time')}</TableCell>
+                    <TableCell>{t('display_events_checkout_time')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -212,15 +212,19 @@ const DisplayEvents = ({ t, disabled }) => {
             <TableHead>
               <TableRow>
                 <TableCell size="small" padding="none" />
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Capacity</TableCell>
-                <TableCell align="right">Current Check-ins</TableCell>
+                <TableCell>{t('display_events_name')}</TableCell>
+                <TableCell align="right">
+                  {t('display_events_capacity')}
+                </TableCell>
+                <TableCell align="right">
+                  {t('display_events_current_checkins')}
+                </TableCell>
                 <TableCell size="small" padding="none" />
               </TableRow>
             </TableHead>
             <TableBody>
               {events.map((event) => (
-                <Row key={event._id} event={event} disabled={disabled} />
+                <Row key={event._id} event={event} disabled={disabled} t={t} />
               ))}
             </TableBody>
           </Table>
@@ -236,6 +240,7 @@ DisplayEvents.propTypes = {
 };
 
 Row.propTypes = {
+  t: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   event: PropTypes.shape({
     _id: PropTypes.string.isRequired,
