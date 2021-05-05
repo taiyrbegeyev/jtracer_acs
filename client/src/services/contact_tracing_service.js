@@ -6,19 +6,21 @@ const getCheckInsUrl = rootUrl + 'checkIns';
 const contactTracingUrl = rootUrl + 'checkIns/trace';
 
 export const contactTrace = async (data) => {
-  return await axios.get(contactTracingUrl, {
+  const res = await axios.get(contactTracingUrl, {
     params: data,
     // include the access token from a http-only cookie
     withCredentials: true
   });
+  return res.data.data;
 };
 
 export const getCheckIns = async (data) => {
-  return await axios.get(getCheckInsUrl, {
+  const res = await axios.get(getCheckInsUrl, {
     params: data,
     // include the access token from a http-only cookie
     withCredentials: true
   });
+  return res.data.data;
 };
 
 export const formatContactTrace = (contacts = []) => {

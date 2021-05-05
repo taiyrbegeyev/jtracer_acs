@@ -49,12 +49,10 @@ const ReportInfectionPage = () => {
       };
       const res_1 = await contactTrace(params);
       const res_2 = await getCheckIns(params);
-      const { data_1 } = res_1.data;
-      const { data_2 } = res_2.data;
-      console.log(data_2);
 
-      setContacts(data_1);
-      setCheckIns(data_2);
+      setContacts(res_1);
+      setCheckIns(res_2);
+
       setLoading_1(false);
       setLoading_2(false);
     } catch (err) {
@@ -110,7 +108,7 @@ const ReportInfectionPage = () => {
           variant="contained"
           color="secondary"
           style={{ height: 50 }}
-          onClick={handleTrace}
+          onClick={() => handleTrace()}
         >
           Trace
         </Button>
