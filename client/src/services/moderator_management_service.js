@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import {
   getModeratorsFail,
   getModeratorsPending,
@@ -35,9 +36,12 @@ export const removeModerator = async (moderatorId) => {
 };
 
 export const formatModerator = (moderators) => {
-  // _id => id, and convert roles enums to strings
-  return moderators.map(({ roles, _id: id, ...rest }) => ({
+  // _id => id, convert roles enums to strings, and convert time to local
+  return moderators.map(({ registrationDate, roles, _id: id, ...rest }) => ({
     roles: roles.map((role) => RoleToString[role]),
+    registrationDate: moment(registrationDate)
+      .local()
+      .format('YYYY-MM-DD HH:mm:ss'),
     id,
     ...rest
   }));

@@ -54,8 +54,5 @@ export const refreshAcessToken = async () => {
 
 export const isAccessTokenExpired = () => {
   const accessTokenExpiry = localStorage.getItem('accessTokenExpiry');
-  return (
-    new Date(accessTokenExpiry).toISOString() <
-    new Date(Date.now()).toISOString()
-  );
+  return new Date(accessTokenExpiry) < new Date(Date.now());
 };

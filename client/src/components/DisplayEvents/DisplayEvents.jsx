@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -171,8 +172,16 @@ function Row(props) {
                       <TableCell component="th" scope="row">
                         {checkIn.email}
                       </TableCell>
-                      <TableCell>{checkIn.checkInTime}</TableCell>
-                      <TableCell>{checkIn.checkOutTime}</TableCell>
+                      <TableCell>
+                        {moment(checkIn.checkInTime)
+                          .local()
+                          .format('YYYY-MM-DD HH:mm:ss')}
+                      </TableCell>
+                      <TableCell>
+                        {moment(checkIn.checkOutTime)
+                          .local()
+                          .format('YYYY-MM-DD HH:mm:ss')}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

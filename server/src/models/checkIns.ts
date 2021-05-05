@@ -28,7 +28,7 @@ const checkInSchema: mongoose.Schema = new mongoose.Schema({
       isGuest: Boolean,
       phoneNumber: String,
       zipCode: String,
-      checkInTime: { type: Date, expires: '43200m', default: moment.utc() }, // expires in 30 days
+      checkInTime: { type: Date, expires: '30d', default: moment.utc() }, // expires in 30 days
       checkOutTime: Date
     }
   ]
