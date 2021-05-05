@@ -23,6 +23,7 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "i18next": "^20.2.2",
+    "i18next-browser-languagedetector": "^6.1.0",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

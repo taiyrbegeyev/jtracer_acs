@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -11,8 +11,7 @@ import {
   Divider,
   ListItem,
   ListItemIcon,
-  ListItemText,
-  Switch
+  ListItemText
 } from '@material-ui/core';
 import PeopleIcon from '@material-ui/icons/People';
 import ReportIcon from '@material-ui/icons/Report';
@@ -47,19 +46,12 @@ const renderIcons = (index) => {
   }
 };
 
-const JTracerDrawer = ({ t, i18n }) => {
+const JTracerDrawer = ({ t }) => {
   const classes = useStyles();
-  const [state, setState] = useState({
-    checked: false
-  });
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
   const roles = useSelector((state) => state.moderator.moderator.roles) || [];
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
 
   const handleEvents = () => {
     return roles.includes(Role.Viewer) || roles.includes(Role.EventManager);
@@ -81,12 +73,6 @@ const JTracerDrawer = ({ t, i18n }) => {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    const { checked } = state;
-    if (checked) i18n.changeLanguage('de-DE');
-    else i18n.changeLanguage('en-US');
-  }, [state.checked]);
 
   return (
     <Drawer
@@ -153,17 +139,6 @@ const JTracerDrawer = ({ t, i18n }) => {
       </List>
       <List style={{ position: 'absolute', bottom: '0', width: '100%' }}>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
-          <label>English</label>
-          <Switch
-            checked={state.checked}
-            onChange={handleChange}
-            color="default"
-            name="checked"
-            inputProps={{ 'aria-label': 'primary checkbox' }}
-          />
-          <label>Deutsch</label>
-        </ListItem>
-        <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
           <Button color="primary" onClick={handleLogOut}>
             Log out
           </Button>
@@ -174,8 +149,7 @@ const JTracerDrawer = ({ t, i18n }) => {
 };
 
 JTracerDrawer.propTypes = {
-  t: PropTypes.func.isRequired,
-  i18n: PropTypes.object.isRequired
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(JTracerDrawer);
