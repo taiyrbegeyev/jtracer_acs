@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
+import moment from 'moment';
 
 export interface ICheckIn extends mongoose.Document {
-  checkInDay: String; // expected output: 25.04.2021, new Date(Date.now()).toLocaleString('de-DE').split(',')[0];
+  checkInDay: string; // expected output: YYYY-MM-DD, moment().format("YYYY-MM-DD")
   checkInsData: Array<ICheckInData>;
 }
 
@@ -16,7 +17,7 @@ export interface ICheckInData {
 }
 
 const checkInSchema: mongoose.Schema = new mongoose.Schema({
-  checkInDay: String,
+  checkInDay: { type: String, unique: true },
   checkInsData: [
     {
       eventId: {
@@ -27,7 +28,7 @@ const checkInSchema: mongoose.Schema = new mongoose.Schema({
       isGuest: Boolean,
       phoneNumber: String,
       zipCode: String,
-      checkInTime: { type: Date, default: Date.now },
+      checkInTime: { type: Date, expires: '30d', default: moment.utc() }, // expires in 30 days
       checkOutTime: Date
     }
   ]
@@ -37,9 +38,7 @@ checkInSchema.pre<ICheckIn>('save', function save(next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const checkIn = this;
   // eslint-disable-next-line prefer-destructuring
-  checkIn.checkInDay = new Date(Date.now())
-    .toLocaleString('de-DE')
-    .split(',')[0];
+  checkIn.checkInDay = moment.utc().format('YYYY-MM-DD');
 
   return next();
 });

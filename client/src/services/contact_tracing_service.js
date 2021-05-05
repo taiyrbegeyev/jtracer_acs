@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 const rootUrl = 'api/v1/';
 const getCheckInsUrl = rootUrl + 'checkIns';
@@ -22,9 +23,13 @@ export const getCheckIns = async (data) => {
 
 export const formatContactTrace = (contacts = []) => {
   // _id => id
-  return contacts.map(({ eventId, _id: id, ...rest }) => ({
-    eventName: eventId.eventName,
-    id,
-    ...rest
-  }));
+  return contacts.map(
+    ({ checkInTime, checkOutTime, eventId, _id: id, ...rest }) => ({
+      checkInTime: moment(checkInTime).local().format('YYYY-MM-DD HH:mm:ss'),
+      checkOutTime: moment(checkOutTime).local().format('YYYY-MM-DD HH:mm:ss'),
+      eventName: eventId.eventName,
+      id,
+      ...rest
+    })
+  );
 };

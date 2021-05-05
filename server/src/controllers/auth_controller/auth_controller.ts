@@ -1,6 +1,7 @@
 import config from 'config';
 import { ModeratorErrors } from 'controllers/moderator_controller/moderator_errors';
 import * as express from 'express';
+import { invitationTokenModel } from 'models/invitationToken';
 import { moderatorModel } from 'models/moderators';
 import { AppError } from 'services/error_hanlding/app_error';
 import { createError } from 'services/error_hanlding/app_error_factory';
@@ -125,28 +126,19 @@ class AuthController {
       if (validate.error) {
         throw validate.error;
       }
-      const { emailToken, password } = validate.value;
+      const { emailToken, email, password } = validate.value;
 
-      const { id } = AuthService.decodeJWTtoken(
-        emailToken,
-        config.auth.email_token_secret
-      ) as any;
-      const isModeratorExists = await moderatorModel.findOne({ _id: id });
-      if (!isModeratorExists) {
-        throw new AppError(ModeratorErrors.MODERATOR_NOT_EXISTS);
-      }
-
-      const isModeratorRegistered = await moderatorModel.findOne({
-        _id: id,
-        isRegistered: true
+      const invitationToken = await invitationTokenModel.findOne({
+        email,
+        token: emailToken
       });
-      if (isModeratorRegistered) {
-        throw new AppError(ModeratorErrors.MODERATOR_EXISTS);
+      if (!invitationToken) {
+        throw new AppError(AuthErrors.REGISTER_EMAIL_TOKEN_NOT_EXISTS);
       }
 
       const hash = AuthService.hashPassword(password);
       await moderatorModel.updateOne(
-        { _id: id },
+        { email },
         {
           $set: {
             isRegistered: true,
@@ -156,8 +148,51 @@ class AuthController {
         }
       );
 
+      // deactivate the token
+      await invitationToken.remove();
+
       return sendResponse(res, {
         message: 'Registration is successful'
+      });
+    } catch (err) {
+      return next(createError(err));
+    }
+  }
+
+  /**
+   * Verify if the email token is valid and associated with the moderator
+   *
+   * @param req - express.Request
+   * @param res - express.Response
+   * @param next - express.NextFunction
+   */
+  public async verifyEmailToken(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<any> {
+    try {
+      const validate = AuthValidator.verifyEmailTokenSchema.validate(
+        req.query,
+        {
+          abortEarly: false
+        }
+      );
+      if (validate.error) {
+        throw validate.error;
+      }
+      const { emailToken, email } = validate.value;
+
+      const invitationToken = await invitationTokenModel.findOne({
+        email,
+        token: emailToken
+      });
+      if (!invitationToken) {
+        throw new AppError(AuthErrors.REGISTER_EMAIL_TOKEN_NOT_EXISTS);
+      }
+
+      return sendResponse(res, {
+        message: 'The email token is valid'
       });
     } catch (err) {
       return next(createError(err));

@@ -1,4 +1,5 @@
 import { Box, Grid, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
@@ -29,7 +30,7 @@ const PageNotFound = ({ t }) => {
         </Box>
         <Box>
           <Typography variant="subtitle2" align="center">
-            Home Page
+            <Link to="/">Go to Home Page</Link>
           </Typography>
         </Box>
       </Grid>

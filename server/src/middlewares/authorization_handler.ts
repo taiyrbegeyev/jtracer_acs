@@ -15,6 +15,20 @@ export function viewer(
   next();
 }
 
+export function viewerOrEventManager(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  if (
+    res.locals.roles.includes(Role.Viewer) ||
+    res.locals.roles.includes(Role.EventManager)
+  )
+    return next();
+
+  return next(createError(AuthErrors.MODERATOR_ACCESS_DENIED));
+}
+
 export function eventManager(
   req: express.Request,
   res: express.Response,
