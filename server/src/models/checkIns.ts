@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import encrypt from 'mongoose-encryption';
 import moment from 'moment';
 
 export interface ICheckIn extends mongoose.Document {
@@ -41,6 +42,23 @@ checkInSchema.pre<ICheckIn>('save', function save(next) {
   checkIn.checkInDay = moment.utc().format('YYYY-MM-DD');
 
   return next();
+});
+
+const encryptionKey = process.env.ENCRYPTION_KEY;
+const signingKey = process.env.SIGNING_KEY;
+
+// This adds _ct and _ac fields to the schema, as well as pre 'init' and pre 'save' middleware,
+// and encrypt, decrypt, sign, and authenticate instance methods.
+checkInSchema.plugin(encrypt, {
+  encryptionKey,
+  signingKey,
+  excludeFromEncryption: [
+    'checkInDay',
+    'checkInsData.checkInTime',
+    'checkInsData.checkOutTime',
+    'checkInsData.email',
+    'checkInsData.eventId'
+  ]
 });
 
 export const checkInModel = mongoose.model<ICheckIn & mongoose.Document>(

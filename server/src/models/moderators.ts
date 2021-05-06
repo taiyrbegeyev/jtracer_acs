@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import encrypt from 'mongoose-encryption';
 import * as mongoose from 'mongoose';
 
 export enum Role {
@@ -55,6 +56,17 @@ moderatorSchema.methods.comparePassword = function (
 ): void {
   bcrypt.compare(password, this.hash, (err, isMatch) => callback(err, isMatch));
 };
+
+const encryptionKey = process.env.ENCRYPTION_KEY;
+const signingKey = process.env.SIGNING_KEY;
+
+// This adds _ct and _ac fields to the schema, as well as pre 'init' and pre 'save' middleware,
+// and encrypt, decrypt, sign, and authenticate instance methods.
+moderatorSchema.plugin(encrypt, {
+  encryptionKey,
+  signingKey,
+  excludeFromEncryption: ['email', 'hash', 'isRegistered', 'token']
+});
 
 export const moderatorModel = mongoose.model<IModerator & mongoose.Document>(
   'Moderator',
