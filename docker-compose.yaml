@@ -1,15 +1,28 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: $CLIENT_CONTAINER_NAME
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "1337:80"
+    networks:
+      - jtracer-network
+    links:
+      - api
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: server/Dockerfile
     container_name: $API_CONTAINER_NAME
     restart: unless-stopped
     env_file: .env
     ports:
-      - '$API_PORT:$API_PORT'
+      - "$API_PORT:$API_PORT"
     networks:
       - jtracer-network
     links:
