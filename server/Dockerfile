@@ -2,8 +2,8 @@
 
 FROM node:12.17.0-alpine
 WORKDIR /usr/src/app
-COPY package*.json ./
-COPY . .
+COPY ./server/package*.json ./
+COPY ./server .
 RUN npm install
 RUN npm run build
 
@@ -12,7 +12,8 @@ RUN npm run build
 FROM node:12.17.0-alpine
 
 WORKDIR /usr/src/app
-COPY package*.json ./
+COPY ./server/package*.json ./
+COPY ./server/.env ./
 RUN npm install --only=production
 COPY --from=0 /usr/src/app/dist ./dist
 EXPOSE 3000

@@ -1,6 +1,6 @@
 #!/bin/bash
-cd ../../..
+cd ..
 
 docker-compose down
-docker-compose build --no-cache api
+docker-compose build --no-cache client
 docker-compose up -d
