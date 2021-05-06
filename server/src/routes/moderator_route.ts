@@ -22,7 +22,7 @@ export default class ModeratorRouter {
 
     this.router.get(
       '/moderators',
-      [authHandler, moderatorManager],
+      [authHandler],
       ModeratorController.getModerators
     );
 
