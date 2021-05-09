@@ -12,6 +12,7 @@ export default function CheckInForm({
   setZipCode,
   setCheckOutTime,
   isGuest,
+  checkOutTime,
 }) {
   const handleOnChange = (e) => {
     const { name, value, checked } = e.target;
@@ -93,7 +94,7 @@ export default function CheckInForm({
             name="checkOutTime"
             label="Check Out"
             type="time"
-            defaultValue="07:30"
+            value={checkOutTime.format("LT")}
             InputLabelProps={{
               shrink: true,
             }}

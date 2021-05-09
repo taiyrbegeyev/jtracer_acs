@@ -1,8 +1,15 @@
+import axios from "axios";
 import React, { useState } from "react";
 import QrReader from "react-qr-reader";
 
-export default function QRScanner() {
-  const [result, setResult] = useState("No Result");
+export default function QRScanner({
+  email,
+  isGuest,
+  phoneNumber,
+  zipCode,
+  checkOutTime,
+}) {
+  const [scanSuccessful, setScanSuccessful] = useState(false);
 
   const previewStyle = {
     height: 200,
@@ -10,14 +17,48 @@ export default function QRScanner() {
     marginBottom: "50px",
   };
 
-  const handleScan = (data) => {
-    setResult(data);
+  const handleScan = async (data) => {
+    if (data) {
+      try {
+        const url = "/api/v1/checkIns";
+
+        const payload = {
+          eventId: data,
+          endTime: checkOutTime.format(),
+          email: email,
+          isGuest: isGuest,
+        };
+
+        if (isGuest) {
+          payload.phoneNumber = phoneNumber;
+          payload.zipCode = zipCode;
+        }
+
+        await axios.post(url, payload);
+        setScanSuccessful(true);
+      } catch (err) {
+        console.log(err);
+        setScanSuccessful(false);
+      }
+    }
   };
 
   return (
     <React.Fragment>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <QrReader delay={100} style={previewStyle} onScan={handleScan} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <QrReader delay={5000} style={previewStyle} onScan={handleScan} />
+        {scanSuccessful && (
+          <div>
+            <p>The scan was successful ✅</p>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );
