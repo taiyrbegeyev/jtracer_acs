@@ -91,7 +91,7 @@ export default function CheckInForm({
           <TextField
             id="checkOutTime"
             name="checkOutTime"
-            label="Check Out Time"
+            label="Check Out"
             type="time"
             defaultValue="07:30"
             InputLabelProps={{

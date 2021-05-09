@@ -119,14 +119,16 @@ export default function CheckIn() {
                       Back
                     </Button>
                   )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? "Confirm" : "Next"}
-                  </Button>
+                  {activeStep === 0 && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      Next
+                    </Button>
+                  )}
                 </div>
               </React.Fragment>
             )}
