@@ -28,6 +28,7 @@ import RenderPDF from 'components/RenderPDF/RenderPDF';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { getAllEvents, removeEvent } from 'services/event_service';
 import CreateNewEvent from 'components/CreateNewEvent/CreateNewEvent';
+import { Role } from 'constants/index';
 
 const useRowStyles = makeStyles({
   root: {
@@ -58,6 +59,7 @@ function Row(props) {
   const rowClasses = useRowStyles();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
 
   const handleClickOpen = () => {
     setdialogOpen(true);
@@ -155,37 +157,45 @@ function Row(props) {
                   </li>
                 ))}
               </Paper>
-              <Typography variant="h6" gutterBottom component="div">
-                {t('display_events_checkins')}
-              </Typography>
-              <Table size="small" aria-label="checkIns">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t('display_events_email')}</TableCell>
-                    <TableCell>{t('display_events_checkin_time')}</TableCell>
-                    <TableCell>{t('display_events_checkout_time')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {event.currentCheckIns.map((checkIn) => (
-                    <TableRow key={checkIn.email}>
-                      <TableCell component="th" scope="row">
-                        {checkIn.email}
-                      </TableCell>
-                      <TableCell>
-                        {moment(checkIn.checkInTime)
-                          .local()
-                          .format('YYYY-MM-DD HH:mm:ss')}
-                      </TableCell>
-                      <TableCell>
-                        {moment(checkIn.checkOutTime)
-                          .local()
-                          .format('YYYY-MM-DD HH:mm:ss')}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {(roles.includes(Role.Viewer) ||
+                roles.includes(Role.InfectionReportManager)) && (
+                  <Typography variant="h6" gutterBottom component="div">
+                    {t('display_events_checkins')}
+                  </Typography>
+                ) && (
+                  <Table size="small" aria-label="checkIns">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>{t('display_events_email')}</TableCell>
+                        <TableCell>
+                          {t('display_events_checkin_time')}
+                        </TableCell>
+                        <TableCell>
+                          {t('display_events_checkout_time')}
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {event.currentCheckIns.map((checkIn) => (
+                        <TableRow key={checkIn.email}>
+                          <TableCell component="th" scope="row">
+                            {checkIn.email}
+                          </TableCell>
+                          <TableCell>
+                            {moment(checkIn.checkInTime)
+                              .local()
+                              .format('YYYY-MM-DD HH:mm:ss')}
+                          </TableCell>
+                          <TableCell>
+                            {moment(checkIn.checkOutTime)
+                              .local()
+                              .format('YYYY-MM-DD HH:mm:ss')}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
             </Box>
           </Collapse>
         </TableCell>
