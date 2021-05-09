@@ -88,13 +88,14 @@ export default function CheckInForm({
             />
           </Grid>
         )}
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12}>
           <TextField
             id="checkOutTime"
             name="checkOutTime"
             label="Check Out"
             type="time"
-            value={checkOutTime.format("LT")}
+            value={checkOutTime}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}

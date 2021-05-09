@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 import React, { useState } from "react";
 import QrReader from "react-qr-reader";
 
@@ -24,7 +25,7 @@ export default function QRScanner({
 
         const payload = {
           eventId: data,
-          endTime: checkOutTime.format(),
+          endTime: moment(checkOutTime, "HH:mm").toISOString(),
           email: email,
           isGuest: isGuest,
         };
@@ -53,7 +54,7 @@ export default function QRScanner({
           alignItems: "center",
         }}
       >
-        <QrReader delay={5000} style={previewStyle} onScan={handleScan} />
+        <QrReader delay={1000} style={previewStyle} onScan={handleScan} />
         {scanSuccessful && (
           <div>
             <p>The scan was successful ✅</p>

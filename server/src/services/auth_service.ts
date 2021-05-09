@@ -31,7 +31,7 @@ class AuthService {
   async sendInvitationEmail(moderator: IModerator) {
     const token = uuidv4();
 
-    const link = `http://localhost:3000/signup?token=${token}&email=${moderator.email}`;
+    const link = `http://localhost:1337/signup?token=${token}&email=${moderator.email}`;
     const data: MailgunFactory.messages.SendData = {
       from: 'JTracer<noreply@jtracer.codes>',
       to: moderator.email,

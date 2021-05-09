@@ -35,11 +35,9 @@ const EventsPage = ({ t }) => {
         color="secondary"
         aria-label="contained primary button group"
       >
-        {
-          <Button onClick={handleClickOpen} disabled={!handleEvents()}>
-            {t('events_page_create_new_event')}
-          </Button>
-        }
+        <Button onClick={handleClickOpen} disabled={!handleEvents()}>
+          {t('events_page_create_new_event')}
+        </Button>
       </ButtonGroup>
       <DisplayEvents disabled={!handleEvents()} />
     </div>
