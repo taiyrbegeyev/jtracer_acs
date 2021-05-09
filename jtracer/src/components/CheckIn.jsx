@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -50,20 +50,14 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ["Check In", "Scan QR Code"];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <CheckInForm />;
-    case 1:
-      return <QRScanner />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
-
 export default function CheckIn() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [email, setEmail] = useState();
+  const [isGuest, setIsGuest] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [zipCode, setZipCode] = useState();
+  const [checkOutTime, setCheckOutTime] = useState();
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -73,6 +67,11 @@ export default function CheckIn() {
     setActiveStep(activeStep - 1);
   };
 
+  console.log(`email: ${email}`);
+  console.log(`isGuest: ${isGuest}`);
+  console.log(`phoneNumber: ${phoneNumber}`);
+  console.log(`zipCode: ${zipCode}`);
+  console.log(`checkOutTime: ${checkOutTime}`);
   return (
     <React.Fragment>
       <AppBar position="absolute" color="default" className={classes.appBar}>
@@ -103,7 +102,17 @@ export default function CheckIn() {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {activeStep === 0 && (
+                  <CheckInForm
+                    setEmail={setEmail}
+                    setIsGuest={setIsGuest}
+                    setPhoneNumber={setPhoneNumber}
+                    setZipCode={setZipCode}
+                    setCheckOutTime={setCheckOutTime}
+                    isGuest={isGuest}
+                  />
+                )}
+                {activeStep === 1 && <QRScanner />}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
