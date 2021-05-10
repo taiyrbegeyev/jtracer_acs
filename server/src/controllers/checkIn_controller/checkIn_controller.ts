@@ -246,6 +246,7 @@ class CheckInController {
 
       // iterate through the List of the potential infected person's checkins
       const contactCheckIns: ICheckIn[] = [];
+      const eventIds: String[] = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const elem of normalizedCheckIns) {
         // eslint-disable-next-line no-await-in-loop
@@ -280,6 +281,7 @@ class CheckInController {
             select: 'eventName'
           });
         contactCheckIns.push(...result);
+        eventIds.push(elem.eventId.toString());
       }
 
       // restructure contactCheckIns into one array of objects
@@ -288,15 +290,36 @@ class CheckInController {
         normalizedContactsCheckIns.push(...elem.checkInsData)
       );
       normalizedContactsCheckIns = normalizedContactsCheckIns.filter(
-        (elem: ICheckInData) =>
-          startDate <= elem.checkOutTime &&
-          elem.checkOutTime <= endDate &&
+        (elem: any) =>
+          eventIds.includes(elem.eventId._id.toString()) &&
           // eslint-disable-next-line eqeqeq
           elem.email != attendeeEmail
       );
+
+      const updatedNormalizedContactsCheckIns: ICheckInData[] = [];
+      for (const normalizedCheckIn of normalizedCheckIns) {
+        for (const normalizedContactsCheckIn of normalizedContactsCheckIns) {
+          if (
+            (normalizedContactsCheckIn.checkInTime >=
+              normalizedCheckIn.checkInTime &&
+              normalizedContactsCheckIn.checkInTime <=
+                normalizedCheckIn.checkOutTime) ||
+            (normalizedContactsCheckIn.checkOutTime >=
+              normalizedCheckIn.checkInTime &&
+              normalizedContactsCheckIn.checkOutTime <=
+                normalizedCheckIn.checkOutTime)
+          ) {
+            updatedNormalizedContactsCheckIns.push(normalizedContactsCheckIn);
+          }
+        }
+      }
+
       const uniqueNormalizedContactsCheckIns = [
         ...new Map(
-          normalizedContactsCheckIns.map((item) => [JSON.stringify(item), item])
+          updatedNormalizedContactsCheckIns.map((item) => [
+            JSON.stringify(item),
+            item
+          ])
         ).values()
       ];
 

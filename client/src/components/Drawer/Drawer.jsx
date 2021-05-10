@@ -11,7 +11,8 @@ import {
   Divider,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Typography
 } from '@material-ui/core';
 import PeopleIcon from '@material-ui/icons/People';
 import ReportIcon from '@material-ui/icons/Report';
@@ -49,6 +50,7 @@ const renderIcons = (index) => {
 const JTracerDrawer = ({ t }) => {
   const classes = useStyles();
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+  const email = useSelector((state) => state.moderator.moderator.email);
   const roles = useSelector((state) => state.moderator.moderator.roles) || [];
   const dispatch = useDispatch();
   const history = useHistory();
@@ -138,6 +140,9 @@ const JTracerDrawer = ({ t }) => {
         ))}
       </List>
       <List style={{ position: 'absolute', bottom: '0', width: '100%' }}>
+        <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
+          <Typography>{email}</Typography>
+        </ListItem>
         <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
           <Button color="primary" onClick={handleLogOut}>
             Log out
