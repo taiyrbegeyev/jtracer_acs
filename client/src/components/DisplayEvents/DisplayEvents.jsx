@@ -72,7 +72,7 @@ function Row(props) {
   const handleOnRemoval = async (eventId) => {
     try {
       await removeEvent(eventId);
-      dispatch(getAllEvents());
+      dispatch(getAllEvents(roles));
     } catch (err) {
       console.log(err);
     }
@@ -176,23 +176,25 @@ function Row(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {event.currentCheckIns.map((checkIn) => (
-                        <TableRow key={checkIn.email}>
-                          <TableCell component="th" scope="row">
-                            {checkIn.email}
-                          </TableCell>
-                          <TableCell>
-                            {moment(checkIn.checkInTime)
-                              .local()
-                              .format('YYYY-MM-DD HH:mm:ss')}
-                          </TableCell>
-                          <TableCell>
-                            {moment(checkIn.checkOutTime)
-                              .local()
-                              .format('YYYY-MM-DD HH:mm:ss')}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {event.currentCheckIns &&
+                        event.currentCheckIns.length !== 0 &&
+                        event.currentCheckIns.map((checkIn) => (
+                          <TableRow key={checkIn.email}>
+                            <TableCell component="th" scope="row">
+                              {checkIn.email}
+                            </TableCell>
+                            <TableCell>
+                              {moment(checkIn.checkInTime)
+                                .local()
+                                .format('YYYY-MM-DD HH:mm:ss')}
+                            </TableCell>
+                            <TableCell>
+                              {moment(checkIn.checkOutTime)
+                                .local()
+                                .format('YYYY-MM-DD HH:mm:ss')}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 )}
