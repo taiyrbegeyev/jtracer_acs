@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ["Check In", "Scan QR Code"];
+const steps = ["Check In", "Scan QR Code", "Confimation"];
 
 export default function CheckIn() {
   const classes = useStyles();
@@ -92,53 +92,49 @@ export default function CheckIn() {
             ))}
           </Stepper>
           <React.Fragment>
-            {activeStep === steps.length ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Your check-in is successful
-                </Typography>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {activeStep === 0 && (
-                  <CheckInForm
-                    setEmail={setEmail}
-                    setIsGuest={setIsGuest}
-                    setPhoneNumber={setPhoneNumber}
-                    setZipCode={setZipCode}
-                    setCheckOutTime={setCheckOutTime}
-                    isGuest={isGuest}
-                    checkOutTime={checkOutTime}
-                  />
-                )}
-                {activeStep === 1 && (
-                  <QRScanner
-                    email={email}
-                    isGuest={isGuest}
-                    phoneNumber={phoneNumber}
-                    zipCode={zipCode}
-                    checkOutTime={checkOutTime}
-                  />
-                )}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
-                  {activeStep === 0 && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleNext}
-                      className={classes.button}
-                    >
-                      Next
-                    </Button>
-                  )}
-                </div>
-              </React.Fragment>
+            {activeStep === 0 && (
+              <CheckInForm
+                setEmail={setEmail}
+                setIsGuest={setIsGuest}
+                setPhoneNumber={setPhoneNumber}
+                setZipCode={setZipCode}
+                setCheckOutTime={setCheckOutTime}
+                isGuest={isGuest}
+                checkOutTime={checkOutTime}
+              />
             )}
+            {activeStep === 1 && (
+              <QRScanner
+                email={email}
+                isGuest={isGuest}
+                phoneNumber={phoneNumber}
+                zipCode={zipCode}
+                checkOutTime={checkOutTime}
+                handleNext={handleNext}
+              />
+            )}
+            {activeStep === 2 && (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <p>The scan was successful ✅</p>
+              </div>
+            )}
+            <div className={classes.buttons}>
+              {activeStep !== 0 && (
+                <Button onClick={handleBack} className={classes.button}>
+                  Back
+                </Button>
+              )}
+              {activeStep === 0 && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  Next
+                </Button>
+              )}
+            </div>
           </React.Fragment>
         </Paper>
       </main>

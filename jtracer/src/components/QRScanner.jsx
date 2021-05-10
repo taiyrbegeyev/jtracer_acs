@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import React, { useState } from "react";
+import React from "react";
 import QrReader from "react-qr-reader";
 
 export default function QRScanner({
@@ -9,9 +9,8 @@ export default function QRScanner({
   phoneNumber,
   zipCode,
   checkOutTime,
+  handleNext,
 }) {
-  const [scanSuccessful, setScanSuccessful] = useState(false);
-
   const previewStyle = {
     height: 200,
     width: 200,
@@ -36,10 +35,9 @@ export default function QRScanner({
         }
 
         await axios.post(url, payload);
-        setScanSuccessful(true);
+        handleNext();
       } catch (err) {
         console.log(err);
-        setScanSuccessful(false);
       }
     }
   };
@@ -55,11 +53,6 @@ export default function QRScanner({
         }}
       >
         <QrReader delay={1000} style={previewStyle} onScan={handleScan} />
-        {scanSuccessful && (
-          <div>
-            <p>The scan was successful ✅</p>
-          </div>
-        )}
       </div>
     </React.Fragment>
   );
