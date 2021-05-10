@@ -4,11 +4,12 @@ import {
   getEventsPending,
   getEventsSuccess
 } from 'reducers/event_slice';
+import { Role } from 'constants/index';
 
 const rootUrl = 'api/v1/';
 const eventsUrl = rootUrl + 'events';
 
-export const getAllEvents = () => async (dispatch) => {
+export const getAllEvents = (roles) => async (dispatch) => {
   try {
     dispatch(getEventsPending());
     const res = await axios.get(eventsUrl, {
@@ -16,13 +17,21 @@ export const getAllEvents = () => async (dispatch) => {
       withCredentials: true
     });
     const { data } = res.data;
-    const newData = await Promise.all(
-      data.map(async (event) => {
-        event['currentCheckIns'] = await getCurrentCheckIns(event._id);
-        return event;
-      })
-    );
-    dispatch(getEventsSuccess(newData));
+
+    if (
+      roles.includes(Role.Viewer) ||
+      roles.includes(Role.InfectionReportManager)
+    ) {
+      const newData = await Promise.all(
+        data.map(async (event) => {
+          event['currentCheckIns'] = await getCurrentCheckIns(event._id);
+          return event;
+        })
+      );
+      dispatch(getEventsSuccess(newData));
+    } else {
+      dispatch(getEventsSuccess(data));
+    }
   } catch (err) {
     dispatch(getEventsFail(err));
   }

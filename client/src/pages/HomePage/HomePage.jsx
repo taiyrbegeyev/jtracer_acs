@@ -36,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
 const HomePage = ({ t }) => {
   const classes = useStyles();
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
+  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getModerators());
-    dispatch(getAllEvents());
+    dispatch(getAllEvents(roles));
   }, []);
 
   const getCurrentAppBarText = (selectedInxex) => {
