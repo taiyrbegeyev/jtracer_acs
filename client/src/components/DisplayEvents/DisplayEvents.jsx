@@ -59,7 +59,7 @@ function Row(props) {
   const rowClasses = useRowStyles();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
+  const roles = useSelector((state) => state.moderator.moderator.roles);
 
   const handleClickOpen = () => {
     setdialogOpen(true);

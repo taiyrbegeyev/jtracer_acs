@@ -27,6 +27,7 @@
     "func-names": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-restricted-syntax": "off"
   }
 }

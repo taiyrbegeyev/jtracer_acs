@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Button, ButtonGroup } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
@@ -7,9 +6,8 @@ import CreateNewEvent from 'components/CreateNewEvent/CreateNewEvent';
 import DisplayEvents from 'components/DisplayEvents/DisplayEvents';
 import { Role } from 'constants/index';
 
-const EventsPage = ({ t }) => {
+const EventsPage = ({ t, roles }) => {
   const [dialogOpen, setdialogOpen] = useState(false);
-  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
 
   const handleClickOpen = () => {
     setdialogOpen(true);
@@ -20,7 +18,7 @@ const EventsPage = ({ t }) => {
   };
 
   const handleEvents = () => {
-    return roles.includes(Role.EventManager);
+    return roles?.includes(Role.EventManager);
   };
 
   return (
@@ -45,7 +43,8 @@ const EventsPage = ({ t }) => {
 };
 
 EventsPage.propTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  roles: PropTypes.array.isRequired
 };
 
 export default withNamespaces()(EventsPage);

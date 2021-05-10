@@ -82,7 +82,7 @@ const CreateNewEvent = ({
   const [snackBarOpen, setsnackBarOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
+  const roles = useSelector((state) => state.moderator.moderator.roles);
   const moderators = useSelector(
     (state) => state.moderatorManagement.moderators
   );

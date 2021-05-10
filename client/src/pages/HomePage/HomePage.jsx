@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const HomePage = ({ t }) => {
   const classes = useStyles();
   const selectedIndex = useSelector((state) => state.drawer.selectedIndex);
-  const roles = useSelector((state) => state.moderator.moderator.roles) || [];
+  const roles = useSelector((state) => state.moderator.moderator.roles);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -60,7 +60,7 @@ const HomePage = ({ t }) => {
   const getCurrentScreen = (selectedInxex) => {
     switch (selectedInxex) {
       case 0:
-        return <EventsPage />;
+        return <EventsPage roles={roles} />;
       case 1:
         return <ReportInfectionPage />;
       case 2:
