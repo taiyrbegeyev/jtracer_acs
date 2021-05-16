@@ -1,8 +1,4 @@
-## Docker
-
-Docker is one of the prerequisites to make the application up and running. Make sure to install on your machine. We used the following guide to install Docker on our Digital Ocean droplet:
-
-- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+## Env variables
 
 Create a file `.env` with the following variables:
 
@@ -31,41 +27,6 @@ REFRESH_TOKEN_LIFE=
 MAILGUN_API_KEY=
 DOMAIN_NAME=
 ```
-
-In order to run all components of the system run:
-
-```
-$ docker-compose up -d
-
-```
-
-It will run the ReactJS, Express.js, and MongoDB containers in the background.
-
-Create a username and password for the `jtracer_mongodb` MongoDB container:
-
-```
-$ docker exec -it jtracer_mongodb mongo -u root -p --authenticationDatabase admin
-
-$ use admin
-
-$ db.createUser(
-  {
-    user: "ENTER_YOUR_USERNAME",
-    pwd: "ENTER_YOUR_PWD",
-    roles: [
-      { role: "readWrite", db: "jtracer" }
-    ]
-  }
-)
-
-$ exit
-
-```
-
-Assign `ENTER_YOUR_USERNAME` and `ENTER_YOUR_PWD` to the `APP_USER` and `APP_PWD` env variables accordingly.
-
-- https://offhourscoding.com/secure-mongodb-with-docker/
-- https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019
 
 ## Linter and Formatter
 
@@ -132,11 +93,3 @@ We employ security ESLint plugin such as [eslint-plugin-security](https://github
 You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin-security#rules).
 
 - [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
-
-```
-
-```
-
-```
-
-```

@@ -24,4 +24,6 @@ db.createUser(
 exit
 EOF
 
+npm install -g typescript
+
 NODE_PATH=./src npx ts-node-dev src/scripts/mongodb/create_root_user.ts
