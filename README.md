@@ -160,8 +160,30 @@ Obviously, feel free to change any of these variables according to your preferen
 
 ## Usage
 
+### JTracer
+
+Execute `yarn start` in the `jtracer` directory to run the app in a development mode. The app is not containerized since JTracer was not a part of the scope. So, you will have to run it manually.
+
+### JTracer ACS
+
 - The client application is exposed at http://localhost:1337
-- The server application is exposed at http://localhost:[API_PORT]
+- The server application is exposed at http://localhost:API_PORT
+
+In case you want to run the `client` and `server` apps in a development mode, then you will have to change the configurations in the `server/.env` file. `MONGO_HOSTNAME` should be set to `127.0.0.1` in order to be accessed from the localhost.
+
+### How to access the MongoDB Database?
+
+Execute the following command to access the MongoDB as an admin:
+
+```
+docker exec -it DB_CONTAINER_NAME mongo -u MONGO_INITDB_ROOT_USERNAME --authenticationDatabase admin -p MONGO_INITDB_ROOT_PASSWORD
+```
+
+Execute the following command to access the MongoDB as a user:
+
+```
+docker exec -it DB_CONTAINER_NAME mongo -u APP_USER --authenticationDatabase admin  -p APP_PWD
+```
 
 ## Contact
 

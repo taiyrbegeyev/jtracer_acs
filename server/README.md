@@ -1,33 +1,3 @@
-## Env variables
-
-Create a file `.env` with the following variables:
-
-```
-API_PORT=
-
-MONGO_INITDB_ROOT_USERNAME=
-MONGO_INITDB_ROOT_PASSWORD=
-APP_USER=
-APP_PWD=
-DB_NAME=
-JTRACER_ROOT_EMAIL=
-JTRACER_ROOT_PWD=
-JTRACER_ROOT_FIRST_NAME=
-JTRACER_ROOT_LAST_NAME=
-MONGO_HOSTNAME=
-MONGO_PORT=
-API_CONTAINER_NAME
-DB_CONTAINER_NAME=
-
-ACCESS_TOKEN_SECRET=
-ACCESS_TOKEN_LIFE=
-REFRESH_TOKEN_SECRET=
-REFRESH_TOKEN_LIFE=
-
-MAILGUN_API_KEY=
-DOMAIN_NAME=
-```
-
 ## Linter and Formatter
 
 We use [ESLint](https://eslint.org) to enforce a set of style, formatting, and coding standards for our codebase.
@@ -93,3 +63,39 @@ We employ security ESLint plugin such as [eslint-plugin-security](https://github
 You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin-security#rules).
 
 - [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
+
+## API
+
+All the API endpoints have the common prefix `/api/v1`.
+Here is a list of all available endpoints:
+
+Authentication
+
+- POST `/api/v1/auth/login`
+- POST `/api/v1/auth/logout`
+- POST `/api/v1/auth/register`
+- GET `/api/v1/auth/verify/emailToken`
+- POST `/api/v1/auth/refreshToken`
+
+Events
+
+- GET `/api/v1/events`
+- POST `/api/v1/events`
+- PATCH `/api/v1/events/:eventId`
+- DELETE `/api/v1/events/:eventId`
+
+Moderators
+
+- GET `/api/v1/moderator`
+- GET `/api/v1/moderators`
+- POST `/api/v1/moderators`
+- POST `/api/v1/moderators/resendInvitationLink`
+- PATCH `/api/v1/moderators/:moderatorId`
+- DELETE `/api/v1/moderators/:moderatorId`
+
+Check-ins
+
+- GET `api/v1/events/:eventId/checkIns`
+- GET `api/v1/checkIns`
+- POST `api/v1/checkIns`
+- GET `api/v1/checkIns/trace`
