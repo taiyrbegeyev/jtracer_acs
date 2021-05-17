@@ -14,9 +14,9 @@
     <img src="assets/logos/logo_transparent.png" alt="Logo" width="160" height="160">
   </a>
 
-  <h3 align="center">JTracer ACS</h3>
+  <!-- <h3 align="center">JTracer ACS</h3> -->
 
-  <p align="center">
+  <!-- <p align="center">
     The earlier we can reach people who might have been exposed to COVID-19, the faster we may avoid the transmission of the virus.
     <br />
     <a href="https://github.com/taiyrbegeyev/jtracer_acs/blob/develop/README.md"><strong>Explore the docs »</strong></a>
@@ -27,7 +27,7 @@
     <a href="https://github.com/taiyrbegeyev/jtracer_acs/issues">Report Bug</a>
     ·
     <a href="https://github.com/taiyrbegeyev/jtracer_acs/issues">Request Feature</a>
-  </p>
+  </p> -->
 </p>
 
 <!-- TABLE OF CONTENTS -->
@@ -60,7 +60,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img width="1440" alt="JTracer ACS" src="https://user-images.githubusercontent.com/44882080/118392369-b02c0c80-b639-11eb-9ead-c1b0baa41477.png">
 
 Complementary Access Management System for JTracer - a contact-tracing application that provides a safe and easy way to record interactions in public spaces by scanning QR codes. The purpose is of the access management system is to help the response team to identify and notify people who may have been exposed to the virus. The earlier we can reach people who might have been exposed to COVID-19, the faster we may avoid the transmission of the virus. The access management system provides features such as the generation and management of QR codes, reconstruction of infection chains, and many more.
 
@@ -68,7 +68,9 @@ Complementary Access Management System for JTracer - a contact-tracing applicati
 
 - Client application
 
-  -
+  - [React](https://reactjs.org)
+  - [Redux](https://redux.js.org)
+  - [Material-UI](https://material-ui.com)
 
 - Server application
 
@@ -79,79 +81,115 @@ Complementary Access Management System for JTracer - a contact-tracing applicati
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+### Docker
 
-### Prerequisites
+Docker is one of the prerequisites to make the application up and running. Make sure to install on your machine. Follow this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) to install Docker on your Linux machine.
 
-This is an example of how to list things you need to use the software and how to install them.
+### Docker Compose
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+It will run the client(ReactJS), server(Express.js), and database(MongoDB) containers in the background. Follow this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-18-04) to install Docker Compose on your Linux machine.
+
+### Node.js and npm
+
+Install Node.js and npm
+
+### TypeScript
+
+`npm install -g typescript`
+
+### Environmental Variables
+
+Create a file `.env` in the root direcotry with the following variables:
+
+```
+API_PORT=8000
+API_CONTAINER_NAME=api
+DB_CONTAINER_NAME=jtracer_mongodb
+MONGO_HOSTNAME=mongo
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=root_password
+DB_NAME=jtracer
+CLIENT_CONTAINER_NAME=client
+```
+
+and another `.env` file in the `server` directory:
+
+```
+API_PORT=8000
+
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=root_password
+APP_USER=jtracer_user
+APP_PWD=fne4njg7
+DB_NAME=jtracer
+JTRACER_ROOT_EMAIL=admin@jacobs-university.de
+JTRACER_ROOT_PWD=Qwerty12345
+JTRACER_ROOT_FIRST_NAME=Admin
+JTRACER_ROOT_LAST_NAME=Admin
+MONGO_HOSTNAME=mongo
+MONGO_PORT=27017
+API_CONTAINER_NAME=api
+DB_CONTAINER_NAME=jtracer_mongodb
+
+ACCESS_TOKEN_SECRET=
+ACCESS_TOKEN_LIFE=600
+REFRESH_TOKEN_SECRET=
+REFRESH_TOKEN_LIFE=86400
+
+MAILGUN_API_KEY=
+
+ENCRYPTION_KEY=
+SIGNING_KEY=
+```
+
+Obviously, feel free to change any of these variables according to your preferences.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/taiyrbegeyev/jtracer_acs.git
    ```
-3. Install NPM packages
+2. Run the setup script
    ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+   cd scripts
+   ./setup.sh
    ```
 
 <!-- USAGE EXAMPLES -->
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### JTracer
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Execute `yarn start` in the `jtracer` directory to run the app in a development mode. The app is not containerized since JTracer was not a part of the scope. So, you will have to run it manually.
 
-<!-- ROADMAP -->
+### JTracer ACS
 
-## Roadmap
+- The client application is exposed at http://localhost:1337
+- The server application is exposed at http://localhost:API_PORT
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+In case you want to run the `client` and `server` apps in a development mode, then you will have to change the configurations in the `server/.env` file. `MONGO_HOSTNAME` should be set to `127.0.0.1` in order to be accessed from the localhost.
 
-<!-- CONTRIBUTING -->
+### How to access the MongoDB Database?
 
-## Contributing
+Execute the following command to access the MongoDB as an admin:
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```
+docker exec -it DB_CONTAINER_NAME mongo -u MONGO_INITDB_ROOT_USERNAME --authenticationDatabase admin -p MONGO_INITDB_ROOT_PASSWORD
+```
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Execute the following command to access the MongoDB as a user:
 
-<!-- LICENSE -->
-
-## License
-
-Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
-
-<!-- CONTACT -->
+```
+docker exec -it DB_CONTAINER_NAME mongo -u APP_USER --authenticationDatabase admin  -p APP_PWD
+```
 
 ## Contact
 
 Taiyr Begeyev - taiyrbegeyev@gmail.com
 
 Project Link: [https://github.com/taiyrbegeyev/jtracer_acs](https://github.com/taiyrbegeyev/jtracer_acs)
-
-<!-- ACKNOWLEDGEMENTS -->
-
-## Acknowledgements
-
--
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

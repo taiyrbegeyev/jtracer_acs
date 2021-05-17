@@ -1,72 +1,3 @@
-## Docker
-
-Docker is one of the prerequisites to make the application up and running. Make sure to install on your machine. We used the following guide to install Docker on our Digital Ocean droplet:
-
-- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
-
-Create a file `.env` with the following variables:
-
-```
-API_PORT=
-
-MONGO_INITDB_ROOT_USERNAME=
-MONGO_INITDB_ROOT_PASSWORD=
-APP_USER=
-APP_PWD=
-DB_NAME=
-JTRACER_ROOT_EMAIL=
-JTRACER_ROOT_PWD=
-JTRACER_ROOT_FIRST_NAME=
-JTRACER_ROOT_LAST_NAME=
-MONGO_HOSTNAME=
-MONGO_PORT=
-API_CONTAINER_NAME
-DB_CONTAINER_NAME=
-
-ACCESS_TOKEN_SECRET=
-ACCESS_TOKEN_LIFE=
-REFRESH_TOKEN_SECRET=
-REFRESH_TOKEN_LIFE=
-
-MAILGUN_API_KEY=
-DOMAIN_NAME=
-```
-
-In order to run all components of the system run:
-
-```
-$ docker-compose up -d
-
-```
-
-It will run the ReactJS, Express.js, and MongoDB containers in the background.
-
-Create a username and password for the `jtracer_mongodb` MongoDB container:
-
-```
-$ docker exec -it jtracer_mongodb mongo -u root -p --authenticationDatabase admin
-
-$ use admin
-
-$ db.createUser(
-  {
-    user: "ENTER_YOUR_USERNAME",
-    pwd: "ENTER_YOUR_PWD",
-    roles: [
-      { role: "readWrite", db: "jtracer" }
-    ]
-  }
-)
-
-$ exit
-
-```
-
-Assign `ENTER_YOUR_USERNAME` and `ENTER_YOUR_PWD` to the `APP_USER` and `APP_PWD` env variables accordingly.
-
-- https://offhourscoding.com/secure-mongodb-with-docker/
-- https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019
-
 ## Linter and Formatter
 
 We use [ESLint](https://eslint.org) to enforce a set of style, formatting, and coding standards for our codebase.
@@ -133,10 +64,38 @@ You can check all the rules [here](https://github.com/nodesecurity/eslint-plugin
 
 - [Embrace linter security rules](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/security/lintrules.md)
 
-```
+## API
 
-```
+All the API endpoints have the common prefix `/api/v1`.
+Here is a list of all available endpoints:
 
-```
+Authentication
 
-```
+- POST `/api/v1/auth/login`
+- POST `/api/v1/auth/logout`
+- POST `/api/v1/auth/register`
+- GET `/api/v1/auth/verify/emailToken`
+- POST `/api/v1/auth/refreshToken`
+
+Events
+
+- GET `/api/v1/events`
+- POST `/api/v1/events`
+- PATCH `/api/v1/events/:eventId`
+- DELETE `/api/v1/events/:eventId`
+
+Moderators
+
+- GET `/api/v1/moderator`
+- GET `/api/v1/moderators`
+- POST `/api/v1/moderators`
+- POST `/api/v1/moderators/resendInvitationLink`
+- PATCH `/api/v1/moderators/:moderatorId`
+- DELETE `/api/v1/moderators/:moderatorId`
+
+Check-ins
+
+- GET `api/v1/events/:eventId/checkIns`
+- GET `api/v1/checkIns`
+- POST `api/v1/checkIns`
+- GET `api/v1/checkIns/trace`
