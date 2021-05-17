@@ -1,0 +1,49 @@
+version: "3.3"
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: $CLIENT_CONTAINER_NAME
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "1337:80"
+    networks:
+      - jtracer-network
+    links:
+      - api
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: $API_CONTAINER_NAME
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "$API_PORT:$API_PORT"
+    networks:
+      - jtracer-network
+    links:
+      - mongo
+  mongo:
+    image: mongo
+    container_name: $DB_CONTAINER_NAME
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+      - DB_NAME=$DB_NAME
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+    volumes:
+      - ~/data/db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - jtracer-network
+
+networks:
+  jtracer-network:
+    driver: bridge

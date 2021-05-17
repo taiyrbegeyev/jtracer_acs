@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-tsdoc",
+    "prettier",
+    "security"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:security/recommended",
+    "airbnb-typescript/base",
+    "prettier"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "tsdoc/syntax": "warn",
+    "radix": "off",
+    "prettier/prettier": 2,
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "func-names": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-restricted-syntax": "off"
+  }
+}
